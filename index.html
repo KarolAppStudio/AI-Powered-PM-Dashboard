@@ -87,7 +87,7 @@
 <body class="bg-appDark text-slate-100 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
 
   <!-- Mobile Sidebar Backdrop Overlay -->
-  <div id="mobileSidebarBackdrop" onclick="toggleSidebarMobile(false)" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 hidden transition-opacity duration-200" aria-hidden="true"></div>
+  <div id="mobileSidebarBackdrop" onclick="toggleSidebarMobile(false)" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 hidden transition-opacity duration-200"></div>
 
   <!-- Header Navigation -->
   <header class="h-14 border-b border-appBorder bg-appDark/90 backdrop-blur-md sticky top-0 z-40 px-2 sm:px-4 flex items-center justify-between gap-2">
@@ -96,7 +96,7 @@
         <i class="ph-bold ph-list text-xl"></i>
       </button>
       <div class="flex items-center space-x-2">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-purple-500/20 font-black text-xs select-none shrink-0" aria-hidden="true">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-purple-500/20 font-black text-xs select-none shrink-0">
           AI
         </div>
         <div class="min-w-0">
@@ -108,42 +108,42 @@
 
     <!-- Center Dynamic Island Pomodoro Focus Widget with Live Clock -->
     <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
-      <div id="dynamicIslandFocus" class="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-inner text-xs transition-all duration-300" role="timer" aria-label="Pomodoro focus timer">
-        <div class="w-2 h-2 rounded-full bg-slate-500" id="focusPulseDot" aria-hidden="true"></div>
+      <div id="dynamicIslandFocus" class="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-inner text-xs transition-all duration-300">
+        <div class="w-2 h-2 rounded-full bg-slate-500" id="focusPulseDot"></div>
         <span class="hidden sm:inline text-slate-400 font-mono text-[10px]" id="focusTimerLabel">FOCUS</span>
         <span class="text-white font-mono font-bold text-[11px] sm:text-xs" id="focusTimerDisplay">25:00</span>
-        <button onclick="togglePomodoroTimer()" id="focusTimerToggleBtn" class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition active:scale-90" aria-label="Start or pause Pomodoro timer" title="Start / Pause Pomodoro">
+        <button onclick="togglePomodoroTimer()" id="focusTimerToggleBtn" class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition active:scale-90" title="Start / Pause Pomodoro">
           <i class="ph-fill ph-play text-[11px] sm:text-xs" id="focusTimerIcon"></i>
         </button>
       </div>
 
       <!-- Real-time Live Header Clock Badge -->
-      <div class="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300" aria-label="Current system time">
-        <i class="ph-bold ph-clock text-purple-400 text-xs" aria-hidden="true"></i>
+      <div class="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300">
+        <i class="ph-bold ph-clock text-purple-400 text-xs"></i>
         <span id="liveHeaderClock">--:--:--</span>
       </div>
     </div>
 
     <!-- Header Actions & Utility Controls -->
     <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
-      <button onclick="toggleAiCopilot()" class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-purple-500/20 transition cursor-pointer active:scale-95" aria-label="Open AI Copilot drawer">
-        <i class="ph-bold ph-sparkle text-sm animate-pulse" aria-hidden="true"></i>
+      <button onclick="toggleAiCopilot()" class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-purple-500/20 transition cursor-pointer active:scale-95">
+        <i class="ph-bold ph-sparkle text-sm animate-pulse"></i>
         <span class="hidden md:inline">AI Copilot</span>
         <kbd class="hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded bg-black/30 text-purple-200">⌘J</kbd>
       </button>
 
-      <button onclick="openCommandPalette()" class="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-appBorder text-xs text-slate-400 hover:border-slate-700 hover:text-white transition cursor-pointer" aria-label="Open search command palette">
-        <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
+      <button onclick="openCommandPalette()" class="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-appBorder text-xs text-slate-400 hover:border-slate-700 hover:text-white transition cursor-pointer">
+        <i class="ph-bold ph-magnifying-glass"></i>
         <span class="hidden lg:inline">Search</span>
         <kbd class="text-[9px] font-mono px-1 py-0.5 rounded bg-slate-800 text-slate-400">⌘K</kbd>
       </button>
 
-      <button onclick="openUniversalAddModal()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95" aria-label="Create new task" title="Quick Add Task">
+      <button onclick="openUniversalAddModal()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95" title="Quick Add Task">
         <i class="ph-bold ph-plus text-sm"></i>
       </button>
 
-      <button onclick="downloadGitHubRepositoryZip()" class="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-appBorder hover:border-slate-700 text-slate-300 text-xs font-medium transition cursor-pointer" aria-label="Export project as ZIP file" title="Export Deployment Zip">
-        <i class="ph-bold ph-file-zip text-sm text-blue-400" aria-hidden="true"></i>
+      <button onclick="downloadGitHubRepositoryZip()" class="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-appBorder hover:border-slate-700 text-slate-300 text-xs font-medium transition cursor-pointer" title="Export Deployment Zip">
+        <i class="ph-bold ph-file-zip text-sm text-blue-400"></i>
         <span>Export</span>
       </button>
     </div>
@@ -155,24 +155,24 @@
     <aside id="mainSidebar" class="shrink-0 bg-appDark border-r border-appBorder flex flex-col justify-between transition-all duration-200" style="width: var(--sidebar-width);">
       <div class="p-3 space-y-6 overflow-y-auto flex-1 no-scrollbar">
         <!-- Main Navigation Links -->
-        <nav class="space-y-1" aria-label="Main Navigation">
+        <nav class="space-y-1">
           <button onclick="navigateView('home')" id="nav-btn-home" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-house text-base text-slate-300" aria-hidden="true"></i>
+              <i class="ph-bold ph-house text-base text-slate-300"></i>
               <span>Home Dashboard</span>
             </span>
           </button>
           
           <button onclick="navigateView('executive')" id="nav-btn-executive" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-presentation-chart text-base text-amber-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-presentation-chart text-base text-amber-400"></i>
               <span>Executive Dashboard</span>
             </span>
           </button>
 
           <button onclick="navigateView('tasks')" id="nav-btn-tasks" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-kanban text-base text-blue-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-kanban text-base text-blue-400"></i>
               <span>Tasks & Kanban</span>
             </span>
             <span id="navBadgeTasksCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">0</span>
@@ -180,7 +180,7 @@
 
           <button onclick="navigateView('projects')" id="nav-btn-projects" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-folder-notch-open text-base text-purple-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-folder-notch-open text-base text-purple-400"></i>
               <span>Active Projects</span>
             </span>
             <span id="navBadgeProjectsCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">6</span>
@@ -188,21 +188,21 @@
 
           <button onclick="navigateView('calendar')" id="nav-btn-calendar" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-calendar-blank text-base text-emerald-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-calendar-blank text-base text-emerald-400"></i>
               <span>Calendar Schedule</span>
             </span>
           </button>
 
           <button onclick="navigateView('insights')" id="nav-btn-insights" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-chart-donut text-base text-cyan-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-chart-donut text-base text-cyan-400"></i>
               <span>Insights & Velocity</span>
             </span>
           </button>
 
           <button onclick="navigateView('team')" id="nav-btn-team" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-users-three text-base text-pink-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-users-three text-base text-pink-400"></i>
               <span>Team Directory</span>
             </span>
             <span id="navBadgeTeamCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400">7</span>
@@ -211,7 +211,7 @@
           <!-- Deleted Items Tab -->
           <button onclick="navigateView('trash')" id="nav-btn-trash" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-trash text-base text-rose-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-trash text-base text-rose-400"></i>
               <span>Deleted Items</span>
             </span>
             <span id="navBadgeTrashCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold">0</span>
@@ -219,7 +219,7 @@
 
           <button onclick="navigateView('settings')" id="nav-btn-settings" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-gear text-base text-slate-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-gear text-base text-slate-400"></i>
               <span>Workspace Settings</span>
             </span>
           </button>
@@ -242,7 +242,7 @@
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2.5 min-w-0">
             <div class="relative group/avatar cursor-pointer shrink-0" onclick="openProfilePictureMenu(event, 'sidebar')">
-              <img id="sidebarUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6366f1/ffffff?text=KM'" class="w-8 h-8 rounded-full object-cover object-top border border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews avatar">
+              <img id="sidebarUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6366f1/ffffff?text=KM'" class="w-8 h-8 rounded-full object-cover object-top border border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews">
               <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition">
                 <i class="ph-bold ph-camera text-white text-xs"></i>
               </div>
@@ -252,7 +252,7 @@
               <div class="text-[10px] text-slate-400 truncate" id="sidebarUserRoleDisplay">Project Manager</div>
             </div>
           </div>
-          <button onclick="navigateView('settings')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" aria-label="Open Workspace Settings" title="Profile & Preferences">
+          <button onclick="navigateView('settings')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="Profile & Preferences">
             <i class="ph-bold ph-sliders text-sm"></i>
           </button>
         </div>
@@ -279,11 +279,11 @@
           </div>
           <div class="flex items-center space-x-2 sm:space-x-3 z-10 shrink-0">
             <button onclick="navigateView('executive')" class="px-3 py-2 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
-              <i class="ph-bold ph-presentation-chart text-sm" aria-hidden="true"></i>
+              <i class="ph-bold ph-presentation-chart text-sm"></i>
               <span>Executive Briefing</span>
             </button>
             <button onclick="openUniversalAddModal()" class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-blue-500/20 cursor-pointer active:scale-95">
-              <i class="ph-bold ph-plus text-sm" aria-hidden="true"></i>
+              <i class="ph-bold ph-plus text-sm"></i>
               <span>New Task</span>
             </button>
           </div>
@@ -294,7 +294,7 @@
           <!-- Concentric SVG Rings Card -->
           <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col items-center justify-center text-center relative">
             <div class="relative w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Activity completion breakdown">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
                 <!-- Outer Ring: Tasks Done -->
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="8" />
                 <circle id="ringTasksCircle" cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="314.15" stroke-dashoffset="69.11" stroke-linecap="round" class="transition-all duration-700" />
@@ -333,19 +333,19 @@
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Active Initiatives</span>
               <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400">
-                <i class="ph-bold ph-rocket-launch text-base" aria-hidden="true"></i>
+                <i class="ph-bold ph-rocket-launch text-base"></i>
               </div>
             </div>
             <div>
               <div class="text-xl sm:text-2xl font-black text-white" id="homeKpiActiveProjects">6 Projects</div>
               <div class="text-[11px] text-emerald-400 flex items-center space-x-1 mt-0.5">
-                <i class="ph-bold ph-check-circle" aria-hidden="true"></i>
+                <i class="ph-bold ph-check-circle"></i>
                 <span id="homeKpiProjectHealthLabel">100% On-Track</span>
               </div>
             </div>
             <button onclick="navigateView('projects')" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>View Roadmap</span>
-              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+              <i class="ph-bold ph-arrow-right"></i>
             </button>
           </div>
 
@@ -354,7 +354,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Resource Allocation</span>
               <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400">
-                <i class="ph-bold ph-users-three text-base" aria-hidden="true"></i>
+                <i class="ph-bold ph-users-three text-base"></i>
               </div>
             </div>
             <div>
@@ -363,7 +363,7 @@
             </div>
             <button onclick="navigateView('team')" class="text-[11px] text-blue-400 hover:text-blue-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>View Directory</span>
-              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+              <i class="ph-bold ph-arrow-right"></i>
             </button>
           </div>
 
@@ -372,7 +372,7 @@
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Nearest Milestone</span>
               <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-                <i class="ph-bold ph-flag-banner text-base" aria-hidden="true"></i>
+                <i class="ph-bold ph-flag-banner text-base"></i>
               </div>
             </div>
             <div>
@@ -381,7 +381,7 @@
             </div>
             <button onclick="navigateView('calendar')" class="text-[11px] text-amber-400 hover:text-amber-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>Inspect Calendar</span>
-              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+              <i class="ph-bold ph-arrow-right"></i>
             </button>
           </div>
         </div>
@@ -395,7 +395,7 @@
             </div>
             <button onclick="navigateView('projects')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer self-start xs:self-auto">
               <span>Manage all</span>
-              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
+              <i class="ph-bold ph-arrow-right"></i>
             </button>
           </div>
           <div id="homeProjectsProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
@@ -417,8 +417,8 @@
             <p class="text-xs sm:text-sm text-slate-400 max-w-2xl">Structured 3-bullet execution updates, dynamic project progress bars, and strategic portfolio tracking powered by Gemini AI.</p>
           </div>
           <div class="flex items-center space-x-2.5 shrink-0">
-            <button onclick="copyExecutiveBriefing()" class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs font-semibold flex items-center justify-center space-x-2 transition cursor-pointer active:scale-95" aria-label="Copy executive briefing to clipboard">
-              <i class="ph-bold ph-copy text-sm text-amber-400" aria-hidden="true"></i>
+            <button onclick="copyExecutiveBriefing()" class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs font-semibold flex items-center justify-center space-x-2 transition cursor-pointer active:scale-95">
+              <i class="ph-bold ph-copy text-sm text-amber-400"></i>
               <span>Copy Exec Summary</span>
             </button>
           </div>
@@ -435,15 +435,15 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 class="text-lg sm:text-xl font-black text-white">Tasks & Deliverables</h1>
-            <p class="text-xs text-slate-400">Drag cards or tap the advance arrow to move stages. Click any task to inspect its parent project.</p>
+            <p class="text-xs text-slate-400">Drag cards between stages or click any task to inspect directly inside its parent project.</p>
           </div>
           <div class="flex items-center space-x-2 self-start sm:self-auto">
-            <div class="flex rounded-xl bg-slate-900 p-1 border border-slate-800" role="group" aria-label="Task view mode selector">
+            <div class="flex rounded-xl bg-slate-900 p-1 border border-slate-800">
               <button onclick="setTaskViewMode('kanban')" id="taskViewModeKanbanBtn" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer">Board</button>
               <button onclick="setTaskViewMode('list')" id="taskViewModeListBtn" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer">List</button>
             </div>
-            <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Add task">
-              <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+            <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
+              <i class="ph-bold ph-plus text-xs"></i>
               <span>Add Task</span>
             </button>
           </div>
@@ -455,7 +455,7 @@
           <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'todo')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-slate-500" aria-hidden="true"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">To Do</span>
               </div>
               <span id="badgeCountTodo" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">0</span>
@@ -467,7 +467,7 @@
           <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_progress')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" aria-hidden="true"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">In Progress</span>
               </div>
               <span id="badgeCountInProgress" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">0</span>
@@ -479,7 +479,7 @@
           <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_review')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">In Review</span>
               </div>
               <span id="badgeCountInReview" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">0</span>
@@ -491,7 +491,7 @@
           <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'done')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">Completed</span>
               </div>
               <span id="badgeCountDone" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">0</span>
@@ -512,7 +512,6 @@
                   <th class="p-3">Due Date</th>
                   <th class="p-3">Assignee</th>
                   <th class="p-3">Status</th>
-                  <th class="p-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody id="tasksTableBody" class="divide-y divide-appBorder"></tbody>
@@ -529,12 +528,12 @@
             <p class="text-xs text-slate-400">Direct in-card status switcher, SharePoint document link, and dedicated weekly/monthly status notes.</p>
           </div>
           <div class="flex items-center space-x-2 self-start sm:self-auto">
-            <button onclick="openStatusDigestModal()" class="px-3 py-1.5 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Open portfolio status digest">
-              <i class="ph-bold ph-newspaper text-xs" aria-hidden="true"></i>
+            <button onclick="openStatusDigestModal()" class="px-3 py-1.5 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
+              <i class="ph-bold ph-newspaper text-xs"></i>
               <span>Status Digest</span>
             </button>
-            <button onclick="openComprehensiveAddProjectModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95" aria-label="Open comprehensive add project intake modal">
-              <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+            <button onclick="openComprehensiveAddProjectModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95">
+              <i class="ph-bold ph-plus text-xs"></i>
               <span>Add Project</span>
             </button>
           </div>
@@ -550,7 +549,7 @@
       <section id="view-project-detail" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
         <div class="flex items-center space-x-2 text-xs text-slate-400">
           <button onclick="navigateView('projects')" class="hover:text-white transition flex items-center space-x-1 cursor-pointer">
-            <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
+            <i class="ph-bold ph-arrow-left"></i>
             <span>Back to Projects</span>
           </button>
           <span>/</span>
@@ -562,7 +561,7 @@
           <div class="space-y-2">
             <div class="flex flex-wrap items-center gap-2 sm:gap-3">
               <span id="detailProjBadgeTag" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">PROJECT 1</span>
-              <select id="detailProjStatusSelect" onchange="handleDetailStatusSelectChange(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer" aria-label="Update project status">
+              <select id="detailProjStatusSelect" onchange="updateProjectStatusDirect(event, activeCockpitProjectId, this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer">
                 <option value="planning">📋 Planning</option>
                 <option value="in_progress">⚡ In progress</option>
                 <option value="in_review">🔍 In review</option>
@@ -579,7 +578,7 @@
               <div id="detailProjPct" class="text-xl sm:text-2xl font-black text-white">85%</div>
             </div>
             <div class="w-12 h-12 sm:w-14 sm:h-14 relative flex items-center justify-center">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36" aria-hidden="true">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36">
                 <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1e293b" stroke-width="3" />
                 <circle id="detailProjSvgRing" cx="18" cy="18" r="15.9" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="15" stroke-linecap="round" />
               </svg>
@@ -597,8 +596,8 @@
                   <h2 class="text-sm font-bold text-white">Project Tasks & Stage Checklists</h2>
                   <p class="text-xs text-slate-400">Click checkboxes to toggle completion</p>
                 </div>
-                <button onclick="openNewTaskModalForCurrentProject()" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1 transition cursor-pointer active:scale-95" aria-label="Add task for this project">
-                  <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+                <button onclick="openNewTaskModalForCurrentProject()" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1 transition cursor-pointer active:scale-95">
+                  <i class="ph-bold ph-plus text-xs"></i>
                   <span>Add Task</span>
                 </button>
               </div>
@@ -612,12 +611,12 @@
             <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
               <div class="flex items-center justify-between">
                 <span class="text-xs font-bold text-white flex items-center space-x-1.5">
-                  <i class="ph-bold ph-note-pencil text-purple-400" aria-hidden="true"></i>
+                  <i class="ph-bold ph-note-pencil text-purple-400"></i>
                   <span>Project Status Note (Weekly / Monthly Rollup)</span>
                 </span>
                 <span id="detailNoteSavedTimestamp" class="text-[10px] text-slate-400 font-mono">Updated today</span>
               </div>
-              <textarea id="detailProjStatusNoteArea" rows="3" placeholder="Provide notes on achievements, blockers, decisions or risks..." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-purple-500" aria-label="Project status note"></textarea>
+              <textarea id="detailProjStatusNoteArea" rows="3" placeholder="Provide notes on achievements, blockers, decisions or risks..." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-purple-500"></textarea>
               <div class="flex justify-end">
                 <button onclick="saveDetailProjectNote()" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition cursor-pointer active:scale-95">
                   Save Note
@@ -632,11 +631,11 @@
               <h3 class="text-xs font-bold text-white uppercase tracking-wider">SharePoint Workspace</h3>
               <p class="text-[11px] text-slate-400">Connected enterprise document library & Microsoft 365 hub.</p>
               <div class="flex items-center space-x-2">
-                <input type="text" id="detailProjSharepointUrl" placeholder="https://company.sharepoint.com/..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" aria-label="SharePoint document URL">
+                <input type="text" id="detailProjSharepointUrl" placeholder="https://company.sharepoint.com/..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none">
                 <button onclick="saveDetailProjectSharepoint()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition cursor-pointer">Save</button>
               </div>
-              <a id="detailProjSharepointLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 hover:bg-blue-600/20 flex items-center justify-center space-x-1.5 text-xs font-semibold transition" aria-label="Open SharePoint workspace in new tab">
-                <i class="ph-bold ph-arrow-square-out text-sm" aria-hidden="true"></i>
+              <a id="detailProjSharepointLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 hover:bg-blue-600/20 flex items-center justify-center space-x-1.5 text-xs font-semibold transition">
+                <i class="ph-bold ph-arrow-square-out text-sm"></i>
                 <span>Open in SharePoint</span>
               </a>
             </div>
@@ -644,11 +643,11 @@
             <!-- Drag & Drop Artefacts -->
             <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
               <h3 class="text-xs font-bold text-white uppercase tracking-wider">Project Artefacts</h3>
-              <div id="detailArtefactDropzone" class="border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-4 text-center cursor-pointer transition" onclick="document.getElementById('detailFileInput').click()" role="button" aria-label="Upload project files">
-                <i class="ph-bold ph-cloud-arrow-up text-2xl text-slate-400 mb-1" aria-hidden="true"></i>
+              <div id="detailArtefactDropzone" class="border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-4 text-center cursor-pointer transition" onclick="document.getElementById('detailFileInput').click()">
+                <i class="ph-bold ph-cloud-arrow-up text-2xl text-slate-400 mb-1"></i>
                 <div class="text-xs text-slate-300 font-medium">Click to upload or drag & drop files</div>
                 <div class="text-[10px] text-slate-500 mt-0.5">PDF, Figma, Excel, Docs up to 25MB</div>
-                <input type="file" id="detailFileInput" class="hidden" multiple onchange="handleDetailFileSelect(event)" aria-label="Select files to upload">
+                <input type="file" id="detailFileInput" class="hidden" multiple onchange="handleDetailFileSelect(event)">
               </div>
               <div id="detailArtefactsList" class="space-y-1.5 pt-1"></div>
             </div>
@@ -663,8 +662,8 @@
             <h1 class="text-lg sm:text-xl font-black text-white">Calendar & Milestones</h1>
             <p class="text-xs text-slate-400">Monthly schedule synchronized with your device's active calendar.</p>
           </div>
-          <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Add new calendar event task">
-            <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+          <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95">
+            <i class="ph-bold ph-plus text-xs"></i>
             <span>New Task Event</span>
           </button>
         </div>
@@ -710,8 +709,8 @@
             <h1 class="text-lg sm:text-xl font-black text-white">Insights & Velocity Analytics</h1>
             <p class="text-xs text-slate-400">Predictive burnup, team throughput, and AI-powered project risk audit.</p>
           </div>
-          <button onclick="runAiVelocityAudit()" id="btnAiRiskAudit" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-purple-500/20 cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Run velocity risk audit with AI">
-            <i class="ph-bold ph-sparkle text-xs animate-pulse" aria-hidden="true"></i>
+          <button onclick="runAiVelocityAudit()" id="btnAiRiskAudit" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-purple-500/20 cursor-pointer self-start sm:self-auto active:scale-95">
+            <i class="ph-bold ph-sparkle text-xs animate-pulse"></i>
             <span>Run AI Risk Audit</span>
           </button>
         </div>
@@ -719,10 +718,10 @@
         <div id="aiRiskAuditResultsCard" class="hidden rounded-2xl bg-purple-950/30 border border-purple-500/40 p-4 space-y-2">
           <div class="flex items-center justify-between">
             <span class="text-xs font-bold text-purple-300 flex items-center space-x-1.5">
-              <i class="ph-bold ph-shield-check" aria-hidden="true"></i>
+              <i class="ph-bold ph-shield-check"></i>
               <span>Gemini AI Velocity Risk Assessment</span>
             </span>
-            <button onclick="document.getElementById('aiRiskAuditResultsCard').classList.add('hidden')" class="text-slate-400 hover:text-white text-xs cursor-pointer" aria-label="Dismiss AI audit card">Dismiss</button>
+            <button onclick="document.getElementById('aiRiskAuditResultsCard').classList.add('hidden')" class="text-slate-400 hover:text-white text-xs cursor-pointer">Dismiss</button>
           </div>
           <div id="aiRiskAuditResultsContent" class="text-xs text-slate-300 leading-relaxed space-y-1"></div>
         </div>
@@ -768,8 +767,8 @@
             <h1 class="text-lg sm:text-xl font-black text-white">Deleted Items (Trash)</h1>
             <p class="text-xs text-slate-400">Safely recover archived or deleted initiatives back into the active workspace.</p>
           </div>
-          <button onclick="emptyAllTrashItems()" class="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Empty trash permanently">
-            <i class="ph-bold ph-trash text-xs" aria-hidden="true"></i>
+          <button onclick="emptyAllTrashItems()" class="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95">
+            <i class="ph-bold ph-trash text-xs"></i>
             <span>Empty Trash</span>
           </button>
         </div>
@@ -791,7 +790,7 @@
           <h2 class="text-xs font-bold text-white uppercase tracking-wider">User Profile & Role</h2>
           <div class="flex flex-col sm:flex-row sm:items-center gap-4">
             <div class="relative group/avatar cursor-pointer self-start shrink-0" onclick="openProfilePictureMenu(event, 'settings')">
-              <img id="settingsUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/96x96/6366f1/ffffff?text=KM'" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover object-top border-2 border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews avatar">
+              <img id="settingsUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/96x96/6366f1/ffffff?text=KM'" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover object-top border-2 border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews">
               <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition">
                 <i class="ph-bold ph-camera text-white text-base"></i>
               </div>
@@ -800,7 +799,7 @@
               <div class="text-sm sm:text-base font-bold text-white">Karol Mathews</div>
               <div class="flex flex-wrap items-center gap-2">
                 <span class="text-xs text-slate-400">Role:</span>
-                <select id="userRoleSelect" onchange="updateUserRole(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer" aria-label="Select user role">
+                <select id="userRoleSelect" onchange="updateUserRole(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer">
                   <option value="Project Manager" selected>Project Manager</option>
                   <option value="Program Manager">Program Manager</option>
                 </select>
@@ -824,16 +823,16 @@
   </div>
 
   <!-- Comprehensive Add Project Intake Modal (Multi-Tab) -->
-  <div id="comprehensiveAddProjectModal" onclick="if(event.target === this) closeComprehensiveAddProjectModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="addProjectModalTitle">
+  <div id="comprehensiveAddProjectModal" onclick="if(event.target === this) closeComprehensiveAddProjectModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
     <div class="bg-appCard border border-appBorder rounded-t-2xl sm:rounded-2xl w-full max-w-3xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
       <!-- Modal Header -->
       <div class="p-3 sm:p-4 border-b border-appBorder bg-slate-950/70 flex items-center justify-between">
         <div class="flex items-center space-x-2 sm:space-x-2.5 min-w-0">
           <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
-            <i class="ph-bold ph-folder-plus text-sm sm:text-base" aria-hidden="true"></i>
+            <i class="ph-bold ph-folder-plus text-sm sm:text-base"></i>
           </div>
           <div class="min-w-0">
-            <h3 id="addProjectModalTitle" class="text-xs sm:text-sm font-bold text-white truncate">Create Enterprise Project</h3>
+            <h3 class="text-xs sm:text-sm font-bold text-white truncate">Create Enterprise Project</h3>
             <p class="text-[10px] sm:text-[11px] text-slate-400 truncate hidden xs:block">Intake charter, billing terms, team assignments, and RAID log</p>
           </div>
         </div>
@@ -841,43 +840,43 @@
           <button onclick="autoFillSampleProject()" class="text-[10px] text-purple-400 hover:text-purple-300 font-mono bg-purple-500/10 px-2 py-1 rounded-lg border border-purple-500/20 cursor-pointer active:scale-95">
             Auto-fill
           </button>
-          <button onclick="closeComprehensiveAddProjectModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer" aria-label="Close add project modal">
+          <button onclick="closeComprehensiveAddProjectModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer" aria-label="Close modal">
             <i class="ph-bold ph-x text-base"></i>
           </button>
         </div>
       </div>
 
       <!-- Navigation Tabs -->
-      <div class="flex border-b border-appBorder bg-slate-900/60 text-xs px-2 sm:px-4 overflow-x-auto no-scrollbar" role="tablist" aria-label="Add project steps">
-        <button onclick="switchAddProjectTab('general')" id="tabBtn-general" role="tab" aria-selected="true" class="px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-purple-400 border-b-2 border-purple-500 transition shrink-0 cursor-pointer text-xs">1. General</button>
-        <button onclick="switchAddProjectTab('financial')" id="tabBtn-financial" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">2. Financial</button>
-        <button onclick="switchAddProjectTab('team')" id="tabBtn-team" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">3. Team</button>
-        <button onclick="switchAddProjectTab('tracking')" id="tabBtn-tracking" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">4. Tracking & RAID</button>
+      <div class="flex border-b border-appBorder bg-slate-900/60 text-xs px-2 sm:px-4 overflow-x-auto no-scrollbar">
+        <button onclick="switchAddProjectTab('general')" id="tabBtn-general" class="px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-purple-400 border-b-2 border-purple-500 transition shrink-0 cursor-pointer text-xs">1. General</button>
+        <button onclick="switchAddProjectTab('financial')" id="tabBtn-financial" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">2. Financial</button>
+        <button onclick="switchAddProjectTab('team')" id="tabBtn-team" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">3. Team</button>
+        <button onclick="switchAddProjectTab('tracking')" id="tabBtn-tracking" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">4. Tracking & RAID</button>
       </div>
 
       <!-- Modal Body (Tab Panels) -->
       <div class="flex-1 overflow-y-auto p-4 sm:p-5 text-xs text-slate-300 space-y-4">
         
         <!-- Tab 1: General Details -->
-        <div id="addProjTab-general" role="tabpanel" class="space-y-4">
+        <div id="addProjTab-general" class="space-y-4">
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="sm:col-span-2 space-y-1">
-              <label for="newProjTitle" class="font-semibold text-slate-300">Project Name / Title <span class="text-rose-400">*</span></label>
+              <label class="font-semibold text-slate-300">Project Name / Title <span class="text-rose-400">*</span></label>
               <input type="text" id="newProjTitle" placeholder="e.g. AI NextGen Platform Rollout" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
             <div class="space-y-1">
-              <label for="newProjCode" class="font-semibold text-slate-300">Project Code / ID</label>
+              <label class="font-semibold text-slate-300">Project Code / ID</label>
               <input type="text" id="newProjCode" placeholder="e.g. PRJ-701" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
             </div>
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1">
-              <label for="newProjClient" class="font-semibold text-slate-300">Client / Account / Internal Department</label>
+              <label class="font-semibold text-slate-300">Client / Account / Internal Department</label>
               <input type="text" id="newProjClient" placeholder="e.g. Global Retail Banking or Enterprise Core" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
             <div class="space-y-1">
-              <label for="newProjTag" class="font-semibold text-slate-300">Domain / Category Tag</label>
+              <label class="font-semibold text-slate-300">Domain / Category Tag</label>
               <select id="newProjTag" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
                 <option value="INFRA">INFRA (Infrastructure)</option>
                 <option value="MOBILE">MOBILE (iOS / Android)</option>
@@ -892,15 +891,15 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
             <div class="space-y-1">
-              <label for="newProjStartDate" class="font-semibold text-slate-300">Kickoff / Start Date</label>
+              <label class="font-semibold text-slate-300">Kickoff / Start Date</label>
               <input type="date" id="newProjStartDate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
             <div class="space-y-1">
-              <label for="newProjDueDate" class="font-semibold text-slate-300">Target Delivery / Due Date</label>
+              <label class="font-semibold text-slate-300">Target Delivery / Due Date</label>
               <input type="date" id="newProjDueDate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
             <div class="space-y-1">
-              <label for="newProjStatus" class="font-semibold text-slate-300">Initial Project Status</label>
+              <label class="font-semibold text-slate-300">Initial Project Status</label>
               <select id="newProjStatus" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
                 <option value="planning" selected>📋 Planning / Not Started</option>
                 <option value="in_progress">⚡ In Progress (Active)</option>
@@ -911,12 +910,12 @@
           </div>
 
           <div class="space-y-1">
-            <label for="newProjMilestone" class="font-semibold text-slate-300">Primary Milestone Target</label>
+            <label class="font-semibold text-slate-300">Primary Milestone Target</label>
             <input type="text" id="newProjMilestone" placeholder="e.g. Architecture V1 Sign-off & Alpha Cluster" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
           </div>
 
           <div class="space-y-1">
-            <span class="font-semibold text-slate-300 block">Color Accent Theme</span>
+            <label class="font-semibold text-slate-300">Color Accent Theme</label>
             <div class="flex items-center space-x-3 pt-1" id="newProjColorPicker">
               <button type="button" onclick="selectNewProjColor('purple')" data-color="purple" class="w-7 h-7 rounded-full bg-purple-500 ring-2 ring-white transition cursor-pointer" aria-label="Purple"></button>
               <button type="button" onclick="selectNewProjColor('blue')" data-color="blue" class="w-7 h-7 rounded-full bg-blue-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Blue"></button>
@@ -929,17 +928,17 @@
         </div>
 
         <!-- Tab 2: Financial & Billing -->
-        <div id="addProjTab-financial" role="tabpanel" class="space-y-4 hidden">
+        <div id="addProjTab-financial" class="space-y-4 hidden">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1">
-              <label for="newProjBudget" class="font-semibold text-slate-300">Total Budget (USD / Spending Cap)</label>
+              <label class="font-semibold text-slate-300">Total Budget (USD / Spending Cap)</label>
               <div class="relative">
-                <span class="absolute left-3 top-2 text-slate-500 font-mono" aria-hidden="true">$</span>
+                <span class="absolute left-3 top-2 text-slate-500 font-mono">$</span>
                 <input type="text" id="newProjBudget" placeholder="125,000" class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-7 pr-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
               </div>
             </div>
             <div class="space-y-1">
-              <label for="newProjBillingType" class="font-semibold text-slate-300">Billing Type</label>
+              <label class="font-semibold text-slate-300">Billing Type</label>
               <select id="newProjBillingType" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
                 <option value="Fixed Fee" selected>Fixed Fee / Milestone</option>
                 <option value="Time & Materials">Time & Materials (T&M)</option>
@@ -951,18 +950,18 @@
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1">
-              <label for="newProjBillingRate" class="font-semibold text-slate-300">Default Labor / Billing Rate</label>
+              <label class="font-semibold text-slate-300">Default Labor / Billing Rate</label>
               <input type="text" id="newProjBillingRate" placeholder="e.g. $175 / hr blended" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
             </div>
             <div class="space-y-1">
-              <label for="newProjBillingContact" class="font-semibold text-slate-300">Billing Contact / Finance Sign-off</label>
+              <label class="font-semibold text-slate-300">Billing Contact / Finance Sign-off</label>
               <input type="text" id="newProjBillingContact" placeholder="e.g. Sarah Jenkins (billing@enterprise.com)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
           </div>
 
           <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800 text-[11px] text-slate-400 space-y-1">
             <span class="font-semibold text-slate-300 flex items-center space-x-1.5">
-              <i class="ph-bold ph-receipt text-purple-400" aria-hidden="true"></i>
+              <i class="ph-bold ph-receipt text-purple-400"></i>
               <span>Budget Governance Policy</span>
             </span>
             <p>Spending velocity will trigger automatic C-Suite notifications when 80% and 95% budget utilization thresholds are crossed.</p>
@@ -970,10 +969,10 @@
         </div>
 
         <!-- Tab 3: Team & Ownership -->
-        <div id="addProjTab-team" role="tabpanel" class="space-y-4 hidden">
+        <div id="addProjTab-team" class="space-y-4 hidden">
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
             <div class="space-y-1">
-              <label for="newProjOwner" class="font-semibold text-slate-300">Project Manager / Owner <span class="text-rose-400">*</span></label>
+              <label class="font-semibold text-slate-300">Project Manager / Owner <span class="text-rose-400">*</span></label>
               <select id="newProjOwner" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
                 <option value="Karol Mathews" selected>Karol Mathews (Project Manager)</option>
                 <option value="Siddharth Rao">Siddharth Rao (Growth PM)</option>
@@ -981,13 +980,13 @@
               </select>
             </div>
             <div class="space-y-1">
-              <label for="newProjSponsor" class="font-semibold text-slate-300">Executive Sponsor / Stakeholder</label>
+              <label class="font-semibold text-slate-300">Executive Sponsor / Stakeholder</label>
               <input type="text" id="newProjSponsor" placeholder="e.g. VP Engineering / Chief Product Officer" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
             </div>
           </div>
 
           <div class="space-y-1.5">
-            <span class="font-semibold text-slate-300 block">Allocated Team Members / Resources</span>
+            <label class="font-semibold text-slate-300">Allocated Team Members / Resources</label>
             <div id="newProjTeamMembersList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-900 border border-slate-800 p-3 rounded-xl max-h-48 overflow-y-auto">
               <!-- Dynamically populated checkboxes -->
             </div>
@@ -995,36 +994,36 @@
         </div>
 
         <!-- Tab 4: Tracking, RAID & Docs -->
-        <div id="addProjTab-tracking" role="tabpanel" class="space-y-4 hidden">
+        <div id="addProjTab-tracking" class="space-y-4 hidden">
           <!-- Deliverables -->
           <div class="space-y-2">
             <div class="flex items-center justify-between">
-              <span class="font-semibold text-slate-300">Initial Deliverables / Milestones (Kanban Items)</span>
-              <button type="button" onclick="addNewDeliverableRow()" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer" aria-label="Add deliverable row">
-                <i class="ph-bold ph-plus" aria-hidden="true"></i>
+              <label class="font-semibold text-slate-300">Initial Deliverables / Milestones (Kanban Items)</label>
+              <button type="button" onclick="addNewDeliverableRow()" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer">
+                <i class="ph-bold ph-plus"></i>
                 <span>Add Row</span>
               </button>
             </div>
             <div id="newProjDeliverablesContainer" class="space-y-2">
               <div class="flex items-center space-x-2">
-                <input type="text" placeholder="Deliverable 1 (e.g. Core Architecture Setup)" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none" aria-label="Deliverable 1">
+                <input type="text" placeholder="Deliverable 1 (e.g. Core Architecture Setup)" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none">
               </div>
             </div>
           </div>
 
           <!-- RAID Log -->
           <div class="space-y-2 pt-2 border-t border-slate-800">
-            <span class="font-semibold text-slate-300 flex items-center space-x-1.5">
-              <i class="ph-bold ph-shield-warning text-amber-400" aria-hidden="true"></i>
+            <label class="font-semibold text-slate-300 flex items-center space-x-1.5">
+              <i class="ph-bold ph-shield-warning text-amber-400"></i>
               <span>RAID Log (Risks, Assumptions, Issues, Dependencies)</span>
-            </span>
+            </label>
             <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
               <div>
-                <label for="newProjRaidRisk" class="text-[10px] text-rose-400 font-mono font-bold block">Key Risk:</label>
+                <span class="text-[10px] text-rose-400 font-mono font-bold">Key Risk:</span>
                 <input type="text" id="newProjRaidRisk" placeholder="e.g. Multi-region latency overhead" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white text-xs mt-0.5 focus:outline-none">
               </div>
               <div>
-                <label for="newProjRaidDep" class="text-[10px] text-blue-400 font-mono font-bold block">Critical Dependency:</label>
+                <span class="text-[10px] text-blue-400 font-mono font-bold">Critical Dependency:</span>
                 <input type="text" id="newProjRaidDep" placeholder="e.g. Identity provider migration sign-off" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white text-xs mt-0.5 focus:outline-none">
               </div>
             </div>
@@ -1032,13 +1031,13 @@
 
           <!-- Documents & Workspace Settings -->
           <div class="space-y-2 pt-2 border-t border-slate-800">
-            <label for="newProjSharepoint" class="font-semibold text-slate-300 block">SharePoint Workspace / Document URL</label>
+            <label class="font-semibold text-slate-300">SharePoint Workspace / Document URL</label>
             <input type="text" id="newProjSharepoint" placeholder="https://company.sharepoint.com/teams/project-..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
           </div>
 
           <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
             <div>
-              <label for="newProjTemplate" class="font-semibold text-slate-300 block">Governance Template</label>
+              <label class="font-semibold text-slate-300">Governance Template</label>
               <select id="newProjTemplate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer">
                 <option value="Agile Scrum">Enterprise Agile Scrum</option>
                 <option value="Continuous Flow">Continuous Kanban Flow</option>
@@ -1046,7 +1045,7 @@
               </select>
             </div>
             <div>
-              <label for="newProjInitialNote" class="font-semibold text-slate-300 block">Initial Executive Status Note</label>
+              <label class="font-semibold text-slate-300">Initial Executive Status Note</label>
               <input type="text" id="newProjInitialNote" placeholder="Kickoff alignment complete. Scope signed off." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
             </div>
           </div>
@@ -1060,7 +1059,7 @@
           Cancel
         </button>
         <button onclick="saveComprehensiveNewProject()" class="px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold transition shadow-lg shadow-purple-500/20 flex items-center space-x-1.5 cursor-pointer active:scale-95">
-          <i class="ph-bold ph-check text-xs" aria-hidden="true"></i>
+          <i class="ph-bold ph-check text-xs"></i>
           <span>Create Project</span>
         </button>
       </div>
@@ -1068,24 +1067,24 @@
   </div>
 
   <!-- Universal Add Task Modal with AI Decomposition -->
-  <div id="universalAddModal" onclick="if(event.target === this) closeUniversalAddModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="addTaskModalTitle">
+  <div id="universalAddModal" onclick="if(event.target === this) closeUniversalAddModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden">
     <div class="bg-appCard border border-appBorder rounded-t-2xl sm:rounded-2xl w-full max-w-md p-4 sm:p-5 space-y-4 shadow-2xl animate-fadeIn" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between">
-        <h3 id="addTaskModalTitle" class="text-sm font-bold text-white">Create New Task</h3>
-        <button onclick="closeUniversalAddModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close add task modal"><i class="ph-bold ph-x text-base"></i></button>
+        <h3 class="text-sm font-bold text-white">Create New Task</h3>
+        <button onclick="closeUniversalAddModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close modal"><i class="ph-bold ph-x text-base"></i></button>
       </div>
       <div class="space-y-3 text-xs">
         <div>
-          <label for="newTaskTitleInput" class="block text-slate-400 mb-1">Task Title <span class="text-rose-400">*</span></label>
+          <label class="block text-slate-400 mb-1">Task Title <span class="text-rose-400">*</span></label>
           <input type="text" id="newTaskTitleInput" placeholder="e.g. Conduct compliance audit" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
         </div>
         <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
           <div>
-            <label for="newTaskProjectSelect" class="block text-slate-400 mb-1">Project</label>
+            <label class="block text-slate-400 mb-1">Project</label>
             <select id="newTaskProjectSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer"></select>
           </div>
           <div>
-            <label for="newTaskPrioritySelect" class="block text-slate-400 mb-1">Priority</label>
+            <label class="block text-slate-400 mb-1">Priority</label>
             <select id="newTaskPrioritySelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer">
               <option value="high">High</option>
               <option value="medium" selected>Medium</option>
@@ -1094,13 +1093,13 @@
           </div>
         </div>
         <div>
-          <label for="newTaskAssigneeSelect" class="block text-slate-400 mb-1">Assignee</label>
+          <label class="block text-slate-400 mb-1">Assignee</label>
           <select id="newTaskAssigneeSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer"></select>
         </div>
       </div>
       <div class="pt-2 flex items-center justify-between border-t border-slate-800 gap-2">
-        <button onclick="aiDecomposeCurrentModalTask()" id="btnAiDecomposeTask" class="px-3 py-2 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Decompose task into subtasks using AI">
-          <i class="ph-bold ph-sparkle text-xs" aria-hidden="true"></i>
+        <button onclick="aiDecomposeCurrentModalTask()" id="btnAiDecomposeTask" class="px-3 py-2 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
+          <i class="ph-bold ph-sparkle text-xs"></i>
           <span>AI Decompose</span>
         </button>
         <button onclick="saveNewModalTask()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition cursor-pointer active:scale-95">
@@ -1111,10 +1110,10 @@
   </div>
 
   <!-- AI Copilot Drawer -->
-  <aside id="aiCopilotDrawer" class="fixed top-14 right-0 w-full sm:w-96 bottom-0 bg-appDark border-l border-appBorder z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl" aria-label="AI Project Copilot drawer">
+  <aside id="aiCopilotDrawer" class="fixed top-14 right-0 w-full sm:w-96 bottom-0 bg-appDark border-l border-appBorder z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl">
     <div class="p-3.5 border-b border-appBorder flex items-center justify-between bg-slate-950/60">
       <div class="flex items-center space-x-2">
-        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white text-xs" aria-hidden="true">
+        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white text-xs">
           <i class="ph-bold ph-sparkle"></i>
         </div>
         <div>
@@ -1122,16 +1121,16 @@
           <span class="text-[9px] text-purple-400 font-mono">A Smarter Way to Get Things Done.</span>
         </div>
       </div>
-      <button onclick="toggleAiCopilot()" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" aria-label="Close AI Copilot">
+      <button onclick="toggleAiCopilot()" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" aria-label="Close Copilot">
         <i class="ph-bold ph-x text-sm"></i>
       </button>
     </div>
 
     <!-- Copilot Conversation Log -->
-    <div id="aiCopilotMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs" aria-live="polite">
+    <div id="aiCopilotMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs">
       <div class="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 text-slate-300 space-y-1.5">
         <div class="font-bold text-purple-300 flex items-center space-x-1.5">
-          <i class="ph-bold ph-sparkle" aria-hidden="true"></i>
+          <i class="ph-bold ph-sparkle"></i>
           <span>Welcome, Karol!</span>
         </div>
         <p>I'm your AI project intelligence partner inside the AI Powered Project Management Dashboard. Ask me about milestone risks, team allocations, blockers, or request draft standup updates.</p>
@@ -1147,19 +1146,19 @@
 
     <!-- Copilot Input Field -->
     <form onsubmit="handleCopilotSubmit(event)" class="p-3 border-t border-appBorder bg-slate-950/80 flex items-center space-x-2">
-      <input type="text" id="aiCopilotInput" placeholder="Ask anything about your projects..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500" aria-label="AI Copilot input prompt">
-      <button type="submit" id="aiCopilotSendBtn" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white transition cursor-pointer active:scale-95" aria-label="Send query to Copilot">
+      <input type="text" id="aiCopilotInput" placeholder="Ask anything about your projects..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500">
+      <button type="submit" id="aiCopilotSendBtn" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white transition cursor-pointer active:scale-95" aria-label="Send query">
         <i class="ph-bold ph-paper-plane-right text-xs"></i>
       </button>
     </form>
   </aside>
 
   <!-- Command Palette Modal (⌘K) -->
-  <div id="commandPaletteModal" onclick="if(event.target === this) document.getElementById('commandPaletteModal').classList.add('hidden')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-start justify-center pt-14 sm:pt-20 p-3 sm:p-4 hidden" role="dialog" aria-modal="true" aria-label="Command palette">
+  <div id="commandPaletteModal" onclick="if(event.target === this) document.getElementById('commandPaletteModal').classList.add('hidden')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-start justify-center pt-14 sm:pt-20 p-3 sm:p-4 hidden">
     <div class="bg-appCard border border-appBorder rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
       <div class="p-3 border-b border-appBorder flex items-center space-x-2">
-        <i class="ph-bold ph-magnifying-glass text-slate-400" aria-hidden="true"></i>
-        <input type="text" id="commandPaletteInput" oninput="handleCommandPaletteSearch(this.value)" placeholder="Search tasks, projects, actions..." class="w-full bg-transparent text-xs sm:text-sm text-white focus:outline-none" aria-label="Search items in dashboard">
+        <i class="ph-bold ph-magnifying-glass text-slate-400"></i>
+        <input type="text" id="commandPaletteInput" oninput="handleCommandPaletteSearch(this.value)" placeholder="Search tasks, projects, actions..." class="w-full bg-transparent text-xs sm:text-sm text-white focus:outline-none">
         <kbd class="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">ESC</kbd>
       </div>
       <div id="commandPaletteResults" class="p-2 max-h-72 overflow-y-auto space-y-1 text-xs"></div>
@@ -1167,32 +1166,32 @@
   </div>
 
   <!-- Profile Picture Edit Menu Popover -->
-  <div id="profilePictureMenu" class="fixed bg-slate-900 border border-slate-700 rounded-2xl p-1.5 shadow-2xl z-50 hidden space-y-1 text-xs min-w-[160px]" role="menu" aria-label="Profile photo options">
-    <button onclick="triggerAvatarUpload()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-200 hover:text-white hover:bg-slate-800 transition text-left cursor-pointer" role="menuitem">
-      <i class="ph-bold ph-upload-simple text-sm text-purple-400" aria-hidden="true"></i>
+  <div id="profilePictureMenu" class="fixed bg-slate-900 border border-slate-700 rounded-2xl p-1.5 shadow-2xl z-50 hidden space-y-1 text-xs min-w-[160px]">
+    <button onclick="triggerAvatarUpload()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-200 hover:text-white hover:bg-slate-800 transition text-left cursor-pointer">
+      <i class="ph-bold ph-upload-simple text-sm text-purple-400"></i>
       <span>Upload photo</span>
     </button>
-    <button onclick="removeUserAvatar()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition text-left cursor-pointer" role="menuitem">
-      <i class="ph-bold ph-trash text-sm" aria-hidden="true"></i>
+    <button onclick="removeUserAvatar()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition text-left cursor-pointer">
+      <i class="ph-bold ph-trash text-sm"></i>
       <span>Remove photo</span>
     </button>
   </div>
-  <input type="file" id="hiddenAvatarFileInput" class="hidden" accept="image/*" onchange="handleAvatarFileChosen(event)" aria-label="Upload profile photo">
+  <input type="file" id="hiddenAvatarFileInput" class="hidden" accept="image/*" onchange="handleAvatarFileChosen(event)">
 
   <!-- Status Digest Modal -->
-  <div id="statusDigestModal" onclick="if(event.target === this) closeStatusDigestModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="statusDigestTitle">
+  <div id="statusDigestModal" onclick="if(event.target === this) closeStatusDigestModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden">
     <div class="bg-appCard border border-appBorder rounded-2xl w-full max-w-2xl p-4 sm:p-5 space-y-4 shadow-2xl max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
       <div class="flex items-center justify-between">
         <div>
-          <h3 id="statusDigestTitle" class="text-xs sm:text-sm font-bold text-white">AI Powered Project Management Dashboard · Status Digest</h3>
+          <h3 class="text-xs sm:text-sm font-bold text-white">AI Powered Project Management Dashboard · Status Digest</h3>
           <p class="text-[11px] sm:text-xs text-purple-400">A Smarter Way to Get Things Done.</p>
         </div>
-        <button onclick="closeStatusDigestModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close digest modal"><i class="ph-bold ph-x text-base"></i></button>
+        <button onclick="closeStatusDigestModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close dialog"><i class="ph-bold ph-x text-base"></i></button>
       </div>
       <div class="flex-1 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-xs font-mono text-slate-200 space-y-3 whitespace-pre-wrap select-all" id="statusDigestContent"></div>
       <div class="flex justify-end space-x-2 pt-2 border-t border-slate-800">
-        <button onclick="copyStatusDigestToClipboard()" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Copy status digest">
-          <i class="ph-bold ph-copy text-xs" aria-hidden="true"></i>
+        <button onclick="copyStatusDigestToClipboard()" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
+          <i class="ph-bold ph-copy text-xs"></i>
           <span>Copy Digest</span>
         </button>
       </div>
@@ -1200,7 +1199,7 @@
   </div>
 
   <!-- Notification Toast Container -->
-  <div id="toastContainer" class="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 space-y-2 pointer-events-none max-w-[calc(100vw-24px)]" aria-live="assertive"></div>
+  <div id="toastContainer" class="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 space-y-2 pointer-events-none max-w-[calc(100vw-24px)]"></div>
 
   <script>
     const KAROL_AVATAR = 'Profile Pic 3.jpeg';
@@ -1398,49 +1397,33 @@
     function getISODateOffset(daysOffset) {
       const d = new Date();
       d.setDate(d.getDate() + daysOffset);
-      try {
-        return d.toISOString().split('T')[0];
-      } catch (e) {
-        return '';
-      }
-    }
-
-    /* Helper to convert stage name to DOM column ID safe PascalCase */
-    function getStageElementId(stage) {
-      if (stage === 'todo') return 'colTodoCards';
-      if (stage === 'in_progress') return 'colInProgressCards';
-      if (stage === 'in_review') return 'colInReviewCards';
-      if (stage === 'done') return 'colDoneCards';
-      return 'colTodoCards';
-    }
-
-    function getNextStage(currentStage) {
-      const flow = ['todo', 'in_progress', 'in_review', 'done'];
-      const idx = flow.indexOf(currentStage);
-      if (idx === -1 || idx === flow.length - 1) return flow[0];
-      return flow[idx + 1];
+      return d.toISOString().split('T')[0];
     }
 
     /* Live Real-time System Time & Greeting Engine */
     function updateSystemTimeDisplay() {
       const now = new Date();
 
+      // Formatted Date String: e.g. "Friday, October 23, 2026"
       const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
       const formattedDate = now.toLocaleDateString(undefined, dateOptions);
       
       const dateEl = document.getElementById('currentDateDisplay');
       if (dateEl) dateEl.textContent = formattedDate;
 
+      // Real-time Header Clock: e.g. "09:34:20 AM"
       const clockEl = document.getElementById('liveHeaderClock');
       if (clockEl) {
         clockEl.textContent = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
       }
 
+      // Executive Briefing date tag
       const execDateBadge = document.getElementById('executiveBriefingDateBadge');
       if (execDateBadge) {
         execDateBadge.textContent = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) + ' Briefing';
       }
 
+      // Dynamic Greeting based on real-time hour
       const hour = now.getHours();
       let greeting = 'Good morning';
       if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
@@ -1454,6 +1437,7 @@
 
     function initLiveClockTicker() {
       updateSystemTimeDisplay();
+      // Tick every second to guarantee real-time synchronization
       setInterval(updateSystemTimeDisplay, 1000);
     }
 
@@ -1472,66 +1456,51 @@
       if (!grid) return;
       grid.innerHTML = '';
 
+      // Day column headers
       const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
       daysOfWeek.forEach(d => {
         const header = document.createElement('div');
-        header.className = 'text-slate-500 font-bold py-1 uppercase font-mono text-[10px] tracking-wider';
+        header.className = 'text-slate-500 font-bold';
         header.textContent = d;
         grid.appendChild(header);
       });
 
+      // Calculate starting day offset (0 = Sunday, 1 = Monday ...)
       const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
       const startOffset = (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
       const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
       const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
 
+      // Prepend trailing days of previous month
       for (let i = startOffset - 1; i >= 0; i--) {
         const prevDay = prevMonthDays - i;
         const cell = document.createElement('div');
-        cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/30 text-slate-600 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
-        cell.innerHTML = `<span class="text-[11px] font-mono">${prevDay}</span>`;
+        cell.className = 'p-3 rounded-xl bg-slate-900/30 text-slate-600';
+        cell.textContent = prevDay;
         grid.appendChild(cell);
       }
 
+      // Populate current month's active days
       for (let day = 1; day <= daysInMonth; day++) {
         const cell = document.createElement('div');
         const isToday = day === todayDate;
 
-        const matchedProjects = PaneStore.projects.filter(p => {
-          const pDate = new Date(p.targetDate);
-          return !isNaN(pDate.getTime()) && pDate.getFullYear() === currentYear && pDate.getMonth() === currentMonth && pDate.getDate() === day;
-        });
-
         if (isToday) {
-          cell.className = 'p-2 sm:p-3 rounded-xl bg-purple-600/20 border border-purple-500/50 text-white font-bold relative shadow-md shadow-purple-500/10 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
+          cell.className = 'p-3 rounded-xl bg-purple-600/20 border border-purple-500/40 text-white font-bold relative shadow-md shadow-purple-500/10';
           cell.innerHTML = `
-            <div class="flex items-center justify-between">
-              <span class="text-xs font-mono font-bold">${day}</span>
-              <span class="text-[9px] text-purple-300 font-mono uppercase bg-purple-500/30 px-1 py-0.2 rounded">TODAY</span>
-            </div>
-            ${matchedProjects.length ? `<span class="text-[9px] text-purple-200 truncate mt-1 block font-normal">🚩 ${sanitize(matchedProjects[0].name)}</span>` : '<span class="text-[9px] text-purple-300/70 font-normal mt-1 block">Standup active</span>'}
+            <span>${day}</span>
+            <span class="block text-[9px] text-purple-300 font-mono mt-0.5 uppercase">TODAY</span>
           `;
-        } else if (matchedProjects.length) {
-          const p = matchedProjects[0];
-          cell.className = 'p-2 sm:p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left cursor-pointer hover:bg-amber-500/20 transition';
-          cell.onclick = () => openProjectDetailView(p.id);
+        } else if (day === todayDate + 4) {
+          cell.className = 'p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold';
           cell.innerHTML = `
-            <span class="text-xs font-mono">${day}</span>
-            <span class="text-[8px] sm:text-[9px] truncate mt-1 block text-amber-200">🚩 ${sanitize(p.milestone)}</span>
+            <span>${day}</span>
+            <span class="block text-[8px] truncate mt-0.5">Project 1 GA</span>
           `;
         } else {
-          cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/60 text-slate-300 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left hover:bg-slate-900 transition';
-          cell.innerHTML = `<span class="text-xs font-mono text-slate-400">${day}</span>`;
+          cell.className = 'p-3 rounded-xl bg-slate-900/60 text-slate-300';
+          cell.textContent = day;
         }
-        grid.appendChild(cell);
-      }
-
-      const totalRendered = startOffset + daysInMonth;
-      const nextMonthDays = (7 - (totalRendered % 7)) % 7;
-      for (let n = 1; n <= nextMonthDays; n++) {
-        const cell = document.createElement('div');
-        cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/30 text-slate-600 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
-        cell.innerHTML = `<span class="text-[11px] font-mono">${n}</span>`;
         grid.appendChild(cell);
       }
     }
@@ -1557,6 +1526,7 @@
       return '#';
     }
 
+    // Explicit color theme token resolver
     function getColorTokens(color) {
       const map = {
         purple: { text: 'text-purple-400', bgBadge: 'bg-purple-500/10', borderBadge: 'border-purple-500/20', bar: 'from-purple-500 to-indigo-500', dot: 'bg-purple-400' },
@@ -1569,6 +1539,7 @@
       return map[color] || map.purple;
     }
 
+    // Safe clipboard copy utility bypassing iframe restrictions
     function copyTextSafely(text) {
       return new Promise((resolve) => {
         try {
@@ -1590,7 +1561,7 @@
             return;
           }
         } catch (e) {
-          console.warn('execCommand fallback issue:', e);
+          console.warn('execCommand copy fallback encountered issue:', e);
         }
 
         if (navigator.clipboard && navigator.clipboard.writeText) {
@@ -1614,7 +1585,7 @@
       if (nextState) {
         s.classList.add('sidebar-open');
         b?.classList.remove('hidden');
-        document.body.style.overflow = 'hidden';
+        document.body.style.overflow = 'hidden'; // lock background scrolling on mobile
       } else {
         s.classList.remove('sidebar-open');
         b?.classList.add('hidden');
@@ -1630,6 +1601,7 @@
         if (el) el.classList.toggle('hidden', v !== viewId);
       });
 
+      // Update Sidebar Nav styles
       document.querySelectorAll('.nav-item').forEach(btn => {
         btn.classList.remove('bg-slate-900', 'text-white');
         btn.classList.add('text-slate-400');
@@ -1640,13 +1612,16 @@
         activeNavBtn.classList.add('bg-slate-900', 'text-white');
       }
 
+      // Automatically close mobile sidebar when a view is tapped
       if (window.innerWidth < 1024) {
         toggleSidebarMobile(false);
       }
 
+      // Scroll canvas back to top
       const canvas = document.getElementById('mainCanvas');
       if (canvas) canvas.scrollTop = 0;
 
+      // Render corresponding view data
       if (viewId === 'home') syncGlobalState();
       if (viewId === 'executive') renderExecutiveDashboard();
       if (viewId === 'tasks') renderTasksBoard();
@@ -1658,6 +1633,7 @@
     }
 
     function syncGlobalState() {
+      // Re-evaluate project progresses based on actual associated tasks
       PaneStore.projects.forEach(p => {
         const pTasks = PaneStore.tasks.filter(t => t.project === p.name);
         if (pTasks.length > 0) {
@@ -1694,6 +1670,7 @@
       const homeTeamKpi = document.getElementById('homeKpiTeammatesCount');
       if (homeTeamKpi) homeTeamKpi.textContent = `${PaneStore.team.length} Teammates`;
 
+      // Update Nearest Milestone on Home
       if (PaneStore.projects.length > 0) {
         const sorted = [...PaneStore.projects].sort((a, b) => new Date(a.targetDate) - new Date(b.targetDate));
         const nearest = sorted[0];
@@ -1703,6 +1680,7 @@
         if (mDate) mDate.textContent = nearest.targetDate;
       }
 
+      // Activity Rings SVG
       const ringTasks = document.getElementById('ringTasksCircle');
       if (ringTasks) {
         const circ = 314.15;
@@ -1710,6 +1688,7 @@
         ringTasks.style.strokeDashoffset = offset;
       }
 
+      // Populate Home Projects Progression List
       const homeProjContainer = document.getElementById('homeProjectsProgressContainer');
       if (homeProjContainer) {
         homeProjContainer.innerHTML = '';
@@ -1806,12 +1785,12 @@
             <div class="space-y-1.5 pt-1">
               <div class="flex items-center justify-between">
                 <span class="text-[10px] font-mono uppercase text-slate-400 font-bold">Strategic Status (3 Bullets)</span>
-                <button onclick="aiDraftProjectBullets('${p.id}')" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer active:scale-95" aria-label="Generate bullets with AI">
+                <button onclick="aiDraftProjectBullets('${p.id}')" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer active:scale-95">
                   <i class="ph-bold ph-sparkle"></i>
                   <span>AI Draft</span>
                 </button>
               </div>
-              <textarea id="execBullets_${p.id}" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500 font-sans leading-relaxed" placeholder="• Bullet 1\n• Bullet 2\n• Bullet 3" aria-label="Strategic 3-bullet update">${sanitize(bulletsText)}</textarea>
+              <textarea id="execBullets_${p.id}" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500 font-sans leading-relaxed" placeholder="• Bullet 1\n• Bullet 2\n• Bullet 3">${sanitize(bulletsText)}</textarea>
             </div>
           </div>
 
@@ -1832,21 +1811,15 @@
     function saveProjectClubbedBullets(projId) {
       const p = PaneStore.projects.find(x => x.id === projId);
       if (!p) return;
-      const textarea = document.getElementById('execBullets_' + projId);
+      const textarea = document.getElementById(`execBullets_${projId}`);
       if (!textarea) return;
 
       const lines = textarea.value.split('\n')
-        .map(l => {
-          let str = l.trim();
-          while (str.startsWith('•') || str.startsWith('-') || str.startsWith('*')) {
-            str = str.substring(1).trim();
-          }
-          return str;
-        })
+        .map(l => l.replace(/^[•\-\*]\s*/, '').trim())
         .filter(l => l.length > 0);
 
       p.bullets = lines;
-      showToast('Saved', 'Strategic bullets updated for ' + p.name);
+      showToast('Saved', `Strategic bullets updated for ${p.name}`);
     }
 
     function copyExecutiveBriefing() {
@@ -1871,7 +1844,7 @@
     function renderTasksBoard() {
       const stages = ['todo', 'in_progress', 'in_review', 'done'];
       stages.forEach(s => {
-        const col = document.getElementById(getStageElementId(s));
+        const col = document.getElementById(`col${s.replace(/_([a-z])/g, g => g[1].toUpperCase()).replace(/^\w/, c => c.toUpperCase())}Cards`);
         if (col) col.innerHTML = '';
       });
 
@@ -1879,28 +1852,23 @@
 
       PaneStore.tasks.forEach(t => {
         counts[t.stage] = (counts[t.stage] || 0) + 1;
-        const col = document.getElementById(getStageElementId(t.stage));
+        const col = document.getElementById(`col${t.stage.replace(/_([a-z])/g, g => g[1].toUpperCase()).replace(/^\w/, c => c.toUpperCase())}Cards`);
         if (!col) return;
 
         const card = document.createElement('div');
         card.draggable = true;
-        card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', t.id); };
+        card.ondragstart = (e) => e.dataTransfer.setData('text/plain', t.id);
+        card.onclick = () => handleTaskCardClick(t.id);
         card.className = 'p-3 rounded-xl bg-appCard border border-appBorder hover:border-purple-500/80 transition cursor-pointer space-y-2 group shadow-sm active:scale-[0.98]';
         card.innerHTML = `
           <div class="flex items-center justify-between text-[10px]">
             <span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-bold">${sanitize(t.project)}</span>
-            <div class="flex items-center space-x-1.5">
-              <span class="font-mono uppercase text-slate-500">${sanitize(t.priority)}</span>
-              <!-- Quick Stage Advance Button for Mobile/Touch -->
-              <button onclick="advanceTaskStage(event, '${t.id}')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white transition" title="Move to next stage" aria-label="Advance task stage">
-                <i class="ph-bold ph-arrow-right text-[11px]"></i>
-              </button>
-            </div>
+            <span class="font-mono uppercase text-slate-500">${sanitize(t.priority)}</span>
           </div>
-          <div onclick="handleTaskCardClick('${t.id}')" class="text-xs font-semibold text-white group-hover:text-purple-300 transition">${sanitize(t.title)}</div>
+          <div class="text-xs font-semibold text-white group-hover:text-purple-300 transition">${sanitize(t.title)}</div>
           <div class="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-400">
             <span>${sanitize(t.assignee)}</span>
-            <span onclick="handleTaskCardClick('${t.id}')" class="font-mono text-purple-400 hover:underline">View in Proj &rarr;</span>
+            <span class="font-mono text-purple-400">View in Proj →</span>
           </div>
         `;
         col.appendChild(card);
@@ -1914,37 +1882,25 @@
       renderTasksTable();
     }
 
-    function advanceTaskStage(event, taskId) {
-      if (event) event.stopPropagation();
-      const task = PaneStore.tasks.find(t => t.id === taskId);
-      if (!task) return;
-      task.stage = getNextStage(task.stage);
-      renderTasksBoard();
-      syncGlobalState();
-      showToast('Stage Updated', `Moved to ${task.stage.replace('_', ' ')}`);
-    }
-
     function renderTasksTable() {
       const tbody = document.getElementById('tasksTableBody');
       if (!tbody) return;
       tbody.innerHTML = '';
       if (PaneStore.tasks.length === 0) {
-        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No deliverables found.</td></tr>`;
+        tbody.innerHTML = `<tr><td colspan="6" class="p-4 text-center text-slate-500">No deliverables found.</td></tr>`;
         return;
       }
       PaneStore.tasks.forEach(t => {
         const tr = document.createElement('tr');
-        tr.className = 'hover:bg-slate-900/60 transition';
+        tr.onclick = () => handleTaskCardClick(t.id);
+        tr.className = 'hover:bg-slate-900/60 cursor-pointer transition';
         tr.innerHTML = `
-          <td class="p-3 font-semibold text-white cursor-pointer" onclick="handleTaskCardClick('${t.id}')">${sanitize(t.title)}</td>
+          <td class="p-3 font-semibold text-white">${sanitize(t.title)}</td>
           <td class="p-3 text-slate-400">${sanitize(t.project)}</td>
           <td class="p-3 uppercase font-mono text-[10px] text-slate-400">${sanitize(t.priority)}</td>
           <td class="p-3 font-mono text-slate-400">${sanitize(t.dueDate)}</td>
           <td class="p-3 text-slate-300">${sanitize(t.assignee)}</td>
-          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px]">${sanitize(t.stage.replace('_', ' '))}</span></td>
-          <td class="p-3 text-right">
-            <button onclick="advanceTaskStage(event, '${t.id}')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition" title="Advance Stage">Next Stage &rarr;</button>
-          </td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px]">${sanitize(t.stage)}</span></td>
         `;
         tbody.appendChild(tr);
       });
@@ -1991,7 +1947,6 @@
         kbBtn.className = isKanban ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer' : 'px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer';
         lstBtn.className = !isKanban ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer' : 'px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer';
       }
-      if (!isKanban) renderTasksTable();
     }
 
     function renderProjectsCards() {
@@ -2020,7 +1975,7 @@
               </div>
 
               <!-- Direct In-Card Status Selector -->
-              <select onchange="updateProjectStatusDirect(event, '${p.id}', this.value)" class="bg-slate-900 border border-slate-700 text-[11px] text-white rounded-lg px-2 py-0.5 focus:outline-none cursor-pointer" aria-label="Change status for ${sanitize(p.name)}">
+              <select onchange="updateProjectStatusDirect(event, '${p.id}', this.value)" class="bg-slate-900 border border-slate-700 text-[11px] text-white rounded-lg px-2 py-0.5 focus:outline-none cursor-pointer">
                 <option value="planning" ${p.status === 'planning' ? 'selected' : ''}>📋 Planning</option>
                 <option value="in_progress" ${p.status === 'in_progress' ? 'selected' : ''}>⚡ In progress</option>
                 <option value="in_review" ${p.status === 'in_review' ? 'selected' : ''}>🔍 In review</option>
@@ -2043,7 +1998,7 @@
 
             <!-- In-Card Status Note Box -->
             <div class="space-y-1 pt-1">
-              <label for="cardNote_${p.id}" class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Status Note (Weekly / Monthly Rollup)</label>
+              <label class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Status Note (Weekly / Monthly Rollup)</label>
               <textarea id="cardNote_${p.id}" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500" placeholder="Add status notes...">${sanitize(p.statusNote || '')}</textarea>
             </div>
           </div>
@@ -2053,7 +2008,7 @@
               Save Note
             </button>
             <div class="flex items-center space-x-2">
-              <button onclick="softDeleteProject('${p.id}')" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 transition cursor-pointer active:scale-95" aria-label="Delete ${sanitize(p.name)}" title="Delete Project">
+              <button onclick="softDeleteProject('${p.id}')" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 transition cursor-pointer active:scale-95" title="Delete Project">
                 <i class="ph-bold ph-trash"></i>
               </button>
               <button onclick="openProjectDetailView('${p.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 font-semibold transition text-[11px] cursor-pointer active:scale-95">
@@ -2073,14 +2028,6 @@
       p.status = newStatus;
       showToast('Status Updated', `${p.name} is now ${newStatus.replace('_', ' ')}`);
       syncGlobalState();
-      if (PaneStore.currentView === 'project-detail' && activeCockpitProjectId === projId) {
-        const sel = document.getElementById('detailProjStatusSelect');
-        if (sel) sel.value = newStatus;
-      }
-    }
-
-    function handleDetailStatusSelectChange(newStatus) {
-      updateProjectStatusDirect(null, activeCockpitProjectId, newStatus);
     }
 
     function saveCardStatusNote(projId) {
@@ -2144,7 +2091,7 @@
         item.className = `p-3 rounded-xl border ${isDone ? 'bg-slate-950/40 border-slate-900 opacity-60' : 'bg-slate-900 border-slate-800'} flex items-center justify-between text-xs transition`;
         item.innerHTML = `
           <div class="flex items-center space-x-3 min-w-0 pr-2">
-            <button onclick="toggleTaskCompletion('${t.id}')" class="w-4 h-4 rounded border ${isDone ? 'bg-emerald-500 border-emerald-400 text-white' : 'border-slate-700 hover:border-slate-500'} flex items-center justify-center transition cursor-pointer shrink-0" aria-label="Toggle completion for ${sanitize(t.title)}">
+            <button onclick="toggleTaskCompletion('${t.id}')" class="w-4 h-4 rounded border ${isDone ? 'bg-emerald-500 border-emerald-400 text-white' : 'border-slate-700 hover:border-slate-500'} flex items-center justify-center transition cursor-pointer shrink-0" aria-label="Toggle task status">
               ${isDone ? '<i class="ph-bold ph-check text-[10px]"></i>' : ''}
             </button>
             <span class="${isDone ? 'line-through text-slate-500' : 'text-white font-medium'} truncate">${sanitize(t.title)}</span>
@@ -2164,15 +2111,7 @@
       task.stage = task.stage === 'done' ? 'in_progress' : 'done';
       
       const p = PaneStore.projects.find(x => x.name === task.project);
-      if (p) {
-        renderDetailProjectTasks(p.name);
-        const pTasks = PaneStore.tasks.filter(t => t.project === p.name);
-        const doneCount = pTasks.filter(t => t.stage === 'done').length;
-        p.progress = Math.round((doneCount / pTasks.length) * 100);
-        document.getElementById('detailProjPct').textContent = `${p.progress}%`;
-        const ring = document.getElementById('detailProjSvgRing');
-        if (ring) ring.style.strokeDashoffset = 100 - p.progress;
-      }
+      if (p) renderDetailProjectTasks(p.name);
       syncGlobalState();
     }
 
@@ -2378,27 +2317,6 @@
       }
     }
 
-    async function callGeminiApi(promptText, isJson = false) {
-      try {
-        const payload = {
-          contents: [{ parts: [{ text: promptText }] }]
-        };
-        if (isJson) {
-          payload.generationConfig = { responseMimeType: "application/json" };
-        }
-        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent', {
-          method: 'POST',
-          headers: { 'Content-Type': 'application/json' },
-          body: JSON.stringify(payload)
-        });
-        if (!res.ok) throw new Error('API Offline');
-        const data = await res.json();
-        return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
-      } catch (err) {
-        return null;
-      }
-    }
-
     async function handleCopilotSubmit(e) {
       if (e && e.preventDefault) e.preventDefault();
       if (PaneStore.copilotInProgress) return;
@@ -2422,25 +2340,19 @@
           tasks: PaneStore.tasks.map(t => ({ title: t.title, project: t.project, stage: t.stage, priority: t.priority, dueDate: t.dueDate }))
         };
 
-        const prompt = `You are the AI Project Copilot inside "AI Powered Project Management Dashboard" with the tagline "A Smarter Way to Get Things Done."\nWorkspace Context:\n${JSON.stringify(workspaceContext)}\n\nUser Question: ${query}`;
-        const reply = await callGeminiApi(prompt);
-        
-        if (reply) {
-          updateLastCopilotMessage(reply);
-        } else {
-          const q = query.toLowerCase();
-          let localReply = `Here is an assessment of your active workspace: Across your ${PaneStore.projects.length} initiatives, average progress is tracking at ${document.getElementById('overallCompletionRateDisplay')?.textContent || '78%'}.`;
-          if (q.includes('blocker') || q.includes('risk')) {
-            localReply = `Current Risk & Blocker Assessment:\n• Project 1 has an upcoming milestone (${PaneStore.projects[0]?.milestone || 'GA Release'}) on ${PaneStore.projects[0]?.targetDate || 'schedule'}. Final security sign-off is pending.\n• Team capacity across Product & Engineering is running at nominal 38.5h/week bounds with zero critical path regressions.`;
-          } else if (q.includes('standup') || q.includes('draft')) {
-            localReply = `Draft Standup for Karol Mathews:\n1. Yesterday: Coordinated cross-platform milestone telemetry and verified staging cluster benchmark pass rates.\n2. Today: Reviewing iOS build distribution and aligning design token releases with Marcus and Aria.\n3. Blockers: Awaiting final compliance sign-off on mobile gateway components.`;
-          } else if (q.includes('team') || q.includes('capacity')) {
-            localReply = `Team Allocation Summary:\n• 7 teammates active across Product, Engineering, Design, and Data.\n• Engineering leads (Marcus Vance, Elena Rostova, Chloe Bennett) are fully allocated to Project 1 & Project 2.\n• Design & Growth capacity available for sprint planning.`;
-          }
-          updateLastCopilotMessage(localReply);
-        }
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `You are the AI Project Copilot inside "AI Powered Project Management Dashboard" with the tagline "A Smarter Way to Get Things Done."\nWorkspace Context:\n${JSON.stringify(workspaceContext)}\n\nUser Question: ${query}` }] }]
+          })
+        });
+
+        const data = await res.json();
+        const reply = data.candidates?.[0]?.content?.parts?.[0]?.text || 'No response returned from copilot engine.';
+        updateLastCopilotMessage(reply);
       } catch (err) {
-        updateLastCopilotMessage('All project systems nominal. Local intelligence ready.');
+        updateLastCopilotMessage('Unable to reach AI copilot currently. All local systems remain nominal.');
       } finally {
         PaneStore.copilotInProgress = false;
       }
@@ -2471,16 +2383,24 @@
       if (!p) return;
 
       const textarea = document.getElementById(`execBullets_${projId}`);
-      if (textarea) textarea.value = '• Generating strategic bullet points...';
+      if (textarea) textarea.value = '• Generating strategic bullet points with Gemini...';
 
-      const prompt = `Generate exactly 3 concise, high-impact C-suite executive status bullet points for project "${p.name}".\nMilestone: ${p.milestone}, Target Date: ${p.targetDate}, Status: ${p.status}, Progress: ${p.progress}%. Output each on a new line prefixed with •.`;
-      const reply = await callGeminiApi(prompt);
-      
-      if (reply && textarea) {
-        textarea.value = reply.trim();
-        saveProjectClubbedBullets(projId);
-      } else if (textarea) {
-        textarea.value = `• Milestone delivery tracking on schedule for ${p.targetDate}.\n• Core validation suites performing within target latency bounds with zero regressions.\n• Strategic dependencies aligned with engineering leadership.`;
+      try {
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `Generate exactly 3 concise, high-impact C-suite executive status bullet points for project "${p.name}".\nMilestone: ${p.milestone}, Target Date: ${p.targetDate}, Status: ${p.status}, Progress: ${p.progress}%. Output each on a new line prefixed with •.` }] }]
+          })
+        });
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        if (text && textarea) {
+          textarea.value = text.trim();
+          saveProjectClubbedBullets(projId);
+        }
+      } catch (e) {
+        if (textarea) textarea.value = `• Milestone delivery tracking on schedule for ${p.targetDate}.\n• Core validation suites performing within target latency bounds.\n• No critical path blockers reported.`;
         saveProjectClubbedBullets(projId);
       }
     }
@@ -2495,23 +2415,30 @@
       card.classList.remove('hidden');
       content.innerHTML = `<i class="ph-bold ph-spinner animate-spin mr-1"></i> Running multi-project risk and velocity analysis...`;
 
-      const payload = PaneStore.projects.map(p => ({
-        name: p.name,
-        progress: p.progress,
-        milestone: p.milestone,
-        targetDate: p.targetDate,
-        tasksCount: PaneStore.tasks.filter(t => t.project === p.name).length
-      }));
+      try {
+        const payload = PaneStore.projects.map(p => ({
+          name: p.name,
+          progress: p.progress,
+          milestone: p.milestone,
+          targetDate: p.targetDate,
+          tasksCount: PaneStore.tasks.filter(t => t.project === p.name).length
+        }));
 
-      const prompt = `Analyze the delivery health and capacity risks across these projects: ${JSON.stringify(payload)}. Provide 3 crisp, executive risk audit findings with specific action items.`;
-      const reply = await callGeminiApi(prompt);
-
-      if (reply) {
-        content.innerHTML = sanitize(reply).replace(/\n/g, '<br>');
-      } else {
-        content.innerHTML = `• All ${PaneStore.projects.length} initiatives currently tracking within standard sprint velocity bounds.<br>• Resource allocations across Project 1 (Infra) and Project 2 (Mobile) are optimal with 85%+ deliverable burn-down.<br>• Recommendation: Monitor QA cluster availability ahead of Friday milestone cutoff.`;
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `Analyze the delivery health and capacity risks across these projects: ${JSON.stringify(payload)}. Provide 3 crisp, executive risk audit findings with specific action items.` }] }]
+          })
+        });
+        const data = await res.json();
+        const result = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        content.innerHTML = sanitize(result || 'All initiatives operating within standard velocity bounds.').replace(/\n/g, '<br>');
+      } catch (err) {
+        content.innerHTML = `• All ${PaneStore.projects.length} projects currently tracking within confidence intervals.<br>• Resource allocations in Project 1 and Project 2 optimal.<br>• Recommend monitoring QA bandwidth leading up to milestones.`;
+      } finally {
+        PaneStore.auditInProgress = false;
       }
-      PaneStore.auditInProgress = false;
     }
 
     async function aiDecomposeCurrentModalTask() {
@@ -2526,39 +2453,41 @@
       const btn = document.getElementById('btnAiDecomposeTask');
       if (btn) btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin"></i><span>Decomposing...</span>`;
 
-      const prompt = `Decompose the project management initiative "${title}" into 3 concise subtasks. Return a JSON array of strings only.`;
-      const reply = await callGeminiApi(prompt, true);
-      let subtasks = [];
       try {
-        if (reply) subtasks = JSON.parse(reply);
-      } catch (e) {}
-
-      if (!Array.isArray(subtasks) || !subtasks.length) {
-        subtasks = [
-          `Prepare initial architectural scope for ${title}`,
-          `Execute core verification & telemetry benchmarks for ${title}`,
-          `Conduct final stakeholder review for ${title}`
-        ];
-      }
-
-      const selectedProj = document.getElementById('newTaskProjectSelect')?.value || (PaneStore.projects[0] ? PaneStore.projects[0].name : 'General');
-      subtasks.forEach((st, idx) => {
-        PaneStore.tasks.push({
-          id: 'tsk-' + Date.now() + idx,
-          title: st,
-          project: selectedProj,
-          priority: 'medium',
-          stage: 'todo',
-          assignee: 'Karol Mathews',
-          dueDate: getRelativeShortDate(5)
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent?key=', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            contents: [{ parts: [{ text: `Decompose the project management initiative "${title}" into 3 concise subtasks. Return a JSON array of strings only.` }] }],
+            generationConfig: { responseMimeType: "application/json" }
+          })
         });
-      });
-      closeUniversalAddModal();
-      syncGlobalState();
-      renderTasksBoard();
-      showToast('Tasks Decomposed', `Created ${subtasks.length} actionable subtasks with AI.`);
-      PaneStore.decomposeInProgress = false;
-      if (btn) btn.innerHTML = `<i class="ph-bold ph-sparkle text-xs"></i><span>AI Decompose</span>`;
+        const data = await res.json();
+        const text = data.candidates?.[0]?.content?.parts?.[0]?.text;
+        const subtasks = JSON.parse(text || '[]');
+        if (Array.isArray(subtasks) && subtasks.length) {
+          const selectedProj = document.getElementById('newTaskProjectSelect')?.value || (PaneStore.projects[0] ? PaneStore.projects[0].name : 'General');
+          subtasks.forEach((st, idx) => {
+            PaneStore.tasks.push({
+              id: 'tsk-' + Date.now() + idx,
+              title: st,
+              project: selectedProj,
+              priority: 'medium',
+              stage: 'todo',
+              assignee: 'Karol Mathews',
+              dueDate: getRelativeShortDate(5)
+            });
+          });
+          closeUniversalAddModal();
+          syncGlobalState();
+          showToast('Tasks Decomposed', `Created ${subtasks.length} actionable subtasks with AI.`);
+        }
+      } catch (err) {
+        showToast('Decomposition Offline', 'Could not parse subtasks.');
+      } finally {
+        PaneStore.decomposeInProgress = false;
+        if (btn) btn.innerHTML = `<i class="ph-bold ph-sparkle text-xs"></i><span>AI Decompose</span>`;
+      }
     }
 
     function togglePomodoroTimer() {
@@ -2697,11 +2626,6 @@
       document.getElementById('newTaskTitleInput').value = '';
       closeUniversalAddModal();
       syncGlobalState();
-      renderTasksBoard();
-      if (PaneStore.currentView === 'project-detail') {
-        const activeProj = PaneStore.projects.find(p => p.id === activeCockpitProjectId);
-        if (activeProj) renderDetailProjectTasks(activeProj.name);
-      }
       showToast('Task Created', `Added "${title}" to ${project}`);
     }
 
@@ -2725,9 +2649,11 @@
       document.getElementById('newProjBudget').value = '120,000';
       document.getElementById('newProjMilestone').value = `Project ${nextNum} GA Release`;
 
+      // Set default input dates to actual live system dates
       document.getElementById('newProjStartDate').value = getISODateOffset(0);
       document.getElementById('newProjDueDate').value = getISODateOffset(30);
 
+      // Render assigned team members checkboxes
       const teamContainer = document.getElementById('newProjTeamMembersList');
       if (teamContainer) {
         teamContainer.innerHTML = '';
@@ -2757,9 +2683,7 @@
         const btn = document.getElementById(`tabBtn-${t}`);
         if (panel) panel.classList.toggle('hidden', t !== tabKey);
         if (btn) {
-          const isSelected = t === tabKey;
-          btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
-          if (isSelected) {
+          if (t === tabKey) {
             btn.className = 'px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-purple-400 border-b-2 border-purple-500 transition shrink-0 cursor-pointer text-xs';
           } else {
             btn.className = 'px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs';
@@ -2788,7 +2712,7 @@
       const row = document.createElement('div');
       row.className = 'flex items-center space-x-2';
       row.innerHTML = `
-        <input type="text" placeholder="Deliverable ${count}" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none" aria-label="Deliverable ${count}">
+        <input type="text" placeholder="Deliverable ${count}" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none">
         <button type="button" onclick="this.parentElement.remove()" class="p-1 text-slate-500 hover:text-rose-400 cursor-pointer" aria-label="Remove deliverable"><i class="ph-bold ph-trash"></i></button>
       `;
       container.appendChild(row);
@@ -2833,17 +2757,16 @@
       const risk = document.getElementById('newProjRaidRisk')?.value?.trim();
       const dep = document.getElementById('newProjRaidDep')?.value?.trim();
 
+      // Read team members
       const selectedMembers = [];
       document.querySelectorAll('.proj-team-member-chk:checked').forEach(chk => {
         selectedMembers.push(chk.value);
       });
       if (!selectedMembers.length) selectedMembers.push('Karol Mathews');
 
+      // Create Project in Store
       const newId = 'proj-' + (Date.now());
-      let parsedTargetDate = new Date(dueDate);
-      if (isNaN(parsedTargetDate.getTime())) parsedTargetDate = new Date();
-      const formattedTargetDate = parsedTargetDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
-      
+      const formattedTargetDate = new Date(dueDate).toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
       const bullets = [
         `Project initiated with ${selectedMembers.length} allocated resources.`,
         `Primary milestone set to ${milestone} target: ${formattedTargetDate}.`,
@@ -2870,6 +2793,7 @@
 
       PaneStore.projects.push(newProj);
 
+      // Create Deliverables as Tasks
       const deliverableInputs = document.querySelectorAll('.deliverable-item-input');
       deliverableInputs.forEach((inp, idx) => {
         const dTitle = inp.value.trim();
@@ -2917,9 +2841,6 @@
         { label: 'Go to Tasks & Kanban', action: () => navigateView('tasks') },
         { label: 'Go to Active Projects', action: () => navigateView('projects') },
         { label: 'Add New Project (Enterprise Intake)', action: () => openComprehensiveAddProjectModal() },
-        { label: 'Go to Calendar Schedule', action: () => navigateView('calendar') },
-        { label: 'Go to Insights & Analytics', action: () => navigateView('insights') },
-        { label: 'Go to Team Directory', action: () => navigateView('team') },
         { label: 'Go to Deleted Items (Trash)', action: () => navigateView('trash') },
         { label: 'Open Status Digest', action: () => openStatusDigestModal() }
       ];
@@ -2981,28 +2902,17 @@
     }
 
     async function downloadGitHubRepositoryZip() {
-      showToast('Exporting ZIP', 'Packaging AI Powered Project Management Dashboard...');
+      showToast('Exporting ZIP', "Packaging AI Powered Project Management Dashboard...");
       try {
         const zip = new JSZip();
-        zip.file('index.html', document.documentElement.outerHTML);
-        const readmeContent = [
-          '# AI Powered Project Management Dashboard',
-          '',
-          '> A Smarter Way to Get Things Done.',
-          '',
-          'Enterprise AI project intelligence dashboard powered by Gemini API, interactive Kanban, and C-suite 3-bullet execution cards.',
-          '',
-          'Author: Karol Mathews',
-          'Role: Project Manager',
-          'Exported: ' + new Date().toLocaleString()
-        ].join('\n');
-        zip.file('README.md', readmeContent);
-        zip.file('.nojekyll', '');
+        zip.file("index.html", document.documentElement.outerHTML);
+        zip.file("README.md", `# AI Powered Project Management Dashboard\n\n> A Smarter Way to Get Things Done.\n\nEnterprise AI project intelligence dashboard powered by Gemini API, interactive Kanban, and C-suite 3-bullet execution cards.\n\nAuthor: Karol Mathews\nRole: Project Manager\nExported: ${new Date().toLocaleString()}`);
+        zip.file(".nojekyll", "");
 
-        const blob = await zip.generateAsync({ type: 'blob' });
-        const a = document.createElement('a');
+        const blob = await zip.generateAsync({ type: "blob" });
+        const a = document.createElement("a");
         a.href = URL.createObjectURL(blob);
-        a.download = 'ai-powered-project-management-dashboard.zip';
+        a.download = "ai-powered-project-management-dashboard.zip";
         document.body.appendChild(a);
         a.click();
         document.body.removeChild(a);
@@ -3032,6 +2942,7 @@
       }, 3500);
     }
 
+    // Touch Swipe gestures for closing mobile drawer & Copilot
     function initTouchGestures() {
       let touchStartX = 0;
       let touchEndX = 0;
@@ -3050,16 +2961,19 @@
         const sidebar = document.getElementById('mainSidebar');
         const copilot = document.getElementById('aiCopilotDrawer');
 
+        // Swipe left from open sidebar to close it
         if (diffX < -60 && sidebar?.classList.contains('sidebar-open')) {
           toggleSidebarMobile(false);
         }
 
+        // Swipe right on open copilot to close it
         if (diffX > 60 && copilot && !copilot.classList.contains('translate-x-full')) {
           toggleAiCopilot();
         }
       }
     }
 
+    // Draggable Sidebar Resizer Handle (for Desktop viewports)
     function initSidebarResizer() {
       const handle = document.getElementById('sidebarResizeHandle');
       const sidebar = document.getElementById('mainSidebar');
@@ -3088,57 +3002,14 @@
       });
     }
 
-    function initKeyboardShortcuts() {
-      window.addEventListener('keydown', (e) => {
-        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
-        const modifier = isMac ? e.metaKey : e.ctrlKey;
-
-        if (modifier && e.key.toLowerCase() === 'k') {
-          e.preventDefault();
-          openCommandPalette();
-          return;
-        }
-
-        if (modifier && e.key.toLowerCase() === 'j') {
-          e.preventDefault();
-          toggleAiCopilot();
-          return;
-        }
-
-        if (e.key === 'Escape') {
-          document.getElementById('commandPaletteModal')?.classList.add('hidden');
-          document.getElementById('universalAddModal')?.classList.add('hidden');
-          document.getElementById('comprehensiveAddProjectModal')?.classList.add('hidden');
-          document.getElementById('statusDigestModal')?.classList.add('hidden');
-          document.getElementById('profilePictureMenu')?.classList.add('hidden');
-          const copilot = document.getElementById('aiCopilotDrawer');
-          if (copilot && !copilot.classList.contains('translate-x-full')) {
-            copilot.classList.add('translate-x-full');
-          }
-          toggleSidebarMobile(false);
-        }
-      });
-
-      window.addEventListener('resize', () => {
-        if (window.innerWidth >= 1024) {
-          document.body.style.overflow = '';
-          document.getElementById('mobileSidebarBackdrop')?.classList.add('hidden');
-          document.getElementById('mainSidebar')?.classList.remove('sidebar-open');
-        }
-      });
-
-      window.addEventListener('click', () => {
-        document.getElementById('profilePictureMenu')?.classList.add('hidden');
-      });
-    }
-
+    // App Initialization
     window.onload = () => {
       initSidebarResizer();
       initLiveClockTicker();
       initTouchGestures();
-      initKeyboardShortcuts();
       syncGlobalState();
       renderDynamicCalendar();
+      console.log("AI Powered Project Management Dashboard loaded with responsive touch & mobile optimization.");
     };
   </script>
 </body>
