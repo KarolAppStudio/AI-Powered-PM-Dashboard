@@ -2,7 +2,7 @@
 <html lang="en" class="dark">
 <head>
   <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
   <title>AI Powered Project Management Dashboard · A Smarter Way to Get Things Done.</title>
   
   <!-- Inter & JetBrains Mono Fonts -->
@@ -51,7 +51,7 @@
       background-color: #090d16;
       color: #f8fafc;
       overflow-x: hidden;
-      -webkit-tap-highlight-color: transparent;
+      touch-action: manipulation;
     }
     ::-webkit-scrollbar { width: 5px; height: 5px; }
     ::-webkit-scrollbar-track { background: rgba(15, 23, 42, 0.6); }
@@ -59,165 +59,167 @@
     ::-webkit-scrollbar-thumb:hover { background: #475569; }
     .no-scrollbar::-webkit-scrollbar { display: none; }
     .no-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
-    .view-transition { animation: fadeIn 0.2s cubic-bezier(0.16, 1, 0.3, 1); }
+    .view-transition { animation: fadeIn 0.18s cubic-bezier(0.16, 1, 0.3, 1); }
     @keyframes fadeIn {
       from { opacity: 0; transform: translateY(4px); }
       to { opacity: 1; transform: translateY(0); }
     }
-    /* Safe mobile viewport height */
-    .app-height {
-      height: 100vh;
-      height: 100dvh;
+    
+    /* Mobile responsive drawer styling */
+    @media (max-width: 1023px) {
+      #mainSidebar {
+        position: fixed !important;
+        top: 3.5rem;
+        bottom: 0;
+        left: 0;
+        z-index: 50;
+        width: min(85vw, 300px) !important;
+        transform: translateX(-100%);
+        transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+        box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.7);
+      }
+      #mainSidebar.sidebar-open {
+        transform: translateX(0);
+      }
     }
   </style>
 </head>
-<body class="bg-appDark text-slate-100 app-height flex flex-col selection:bg-purple-600 selection:text-white overflow-hidden">
+<body class="bg-appDark text-slate-100 min-h-screen flex flex-col selection:bg-purple-600 selection:text-white">
 
   <!-- Mobile Sidebar Backdrop Overlay -->
-  <div id="mobileSidebarBackdrop" onclick="toggleSidebarMobile(false)" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-40 hidden transition-opacity duration-300"></div>
+  <div id="mobileSidebarBackdrop" onclick="toggleSidebarMobile(false)" class="fixed inset-0 bg-black/75 backdrop-blur-xs z-40 hidden transition-opacity duration-200" aria-hidden="true"></div>
 
   <!-- Header Navigation -->
-  <header class="h-14 shrink-0 border-b border-appBorder bg-appDark/90 backdrop-blur-md sticky top-0 z-30 px-3 sm:px-4 flex items-center justify-between gap-2">
-    <!-- Left: Hamburger & Brand -->
-    <div class="flex items-center space-x-2 sm:space-x-3 min-w-0">
-      <button onclick="toggleSidebarMobile()" class="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition active:scale-95 shrink-0" aria-label="Toggle mobile navigation menu">
+  <header class="h-14 border-b border-appBorder bg-appDark/90 backdrop-blur-md sticky top-0 z-40 px-2 sm:px-4 flex items-center justify-between gap-2">
+    <div class="flex items-center space-x-2 sm:space-x-3 shrink-0">
+      <button onclick="toggleSidebarMobile()" class="lg:hidden p-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition active:scale-95" aria-label="Toggle mobile menu">
         <i class="ph-bold ph-list text-xl"></i>
       </button>
-
-      <div class="flex items-center space-x-2 min-w-0 cursor-pointer" onclick="navigateView('home')">
-        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-purple-500/20 font-black text-xs shrink-0 select-none">
+      <div class="flex items-center space-x-2">
+        <div class="w-8 h-8 rounded-xl bg-gradient-to-tr from-purple-600 via-indigo-600 to-blue-500 flex items-center justify-center text-white shadow-lg shadow-purple-500/20 font-black text-xs select-none shrink-0" aria-hidden="true">
           AI
         </div>
         <div class="min-w-0">
-          <span class="text-xs sm:text-sm font-black tracking-tight text-white block truncate leading-tight">AI Powered PM</span>
-          <span class="text-[9px] sm:text-[10px] text-purple-400 font-medium tracking-wide hidden xs:block truncate">A Smarter Way to Get Things Done.</span>
+          <span class="text-xs sm:text-sm font-black tracking-tight text-white block leading-tight truncate max-w-[140px] xs:max-w-[210px] sm:max-w-none">AI PM Dashboard</span>
+          <span class="hidden xs:block text-[9px] sm:text-[10px] text-purple-400 font-medium tracking-wide truncate">A Smarter Way to Get Things Done.</span>
         </div>
       </div>
     </div>
 
-    <!-- Center: Dynamic Island Pomodoro Focus Widget with Live Clock -->
-    <div class="flex items-center space-x-2 shrink-0">
-      <div id="dynamicIslandFocus" class="flex items-center space-x-1.5 sm:space-x-2.5 px-2.5 sm:px-3.5 py-1 sm:py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-inner text-xs transition-all duration-300">
-        <div class="w-2 h-2 rounded-full bg-slate-500" id="focusPulseDot"></div>
-        <span class="text-slate-400 font-mono text-[10px] sm:text-[11px] hidden sm:inline" id="focusTimerLabel">FOCUS</span>
-        <span class="text-white font-mono font-bold text-xs" id="focusTimerDisplay">25:00</span>
-        <button onclick="togglePomodoroTimer()" id="focusTimerToggleBtn" class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition" title="Start / Pause Pomodoro" aria-label="Toggle Pomodoro Timer">
-          <i class="ph-fill ph-play text-xs" id="focusTimerIcon"></i>
+    <!-- Center Dynamic Island Pomodoro Focus Widget with Live Clock -->
+    <div class="flex items-center space-x-1.5 sm:space-x-3 shrink-0">
+      <div id="dynamicIslandFocus" class="flex items-center space-x-1.5 sm:space-x-2 px-2.5 sm:px-3 py-1 sm:py-1.5 rounded-full bg-slate-900/90 border border-slate-700/80 shadow-inner text-xs transition-all duration-300" role="timer" aria-label="Pomodoro focus timer">
+        <div class="w-2 h-2 rounded-full bg-slate-500" id="focusPulseDot" aria-hidden="true"></div>
+        <span class="hidden sm:inline text-slate-400 font-mono text-[10px]" id="focusTimerLabel">FOCUS</span>
+        <span class="text-white font-mono font-bold text-[11px] sm:text-xs" id="focusTimerDisplay">25:00</span>
+        <button onclick="togglePomodoroTimer()" id="focusTimerToggleBtn" class="p-1 rounded-full text-slate-400 hover:text-white hover:bg-slate-800 transition active:scale-90" aria-label="Start or pause Pomodoro timer" title="Start / Pause Pomodoro">
+          <i class="ph-fill ph-play text-[11px] sm:text-xs" id="focusTimerIcon"></i>
         </button>
       </div>
 
       <!-- Real-time Live Header Clock Badge -->
-      <div class="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300">
-        <i class="ph-bold ph-clock text-purple-400 text-xs"></i>
+      <div class="hidden xl:flex items-center space-x-1.5 px-2.5 py-1 rounded-xl bg-slate-900 border border-slate-800 text-[11px] font-mono text-slate-300" aria-label="Current system time">
+        <i class="ph-bold ph-clock text-purple-400 text-xs" aria-hidden="true"></i>
         <span id="liveHeaderClock">--:--:--</span>
       </div>
     </div>
 
     <!-- Header Actions & Utility Controls -->
     <div class="flex items-center space-x-1.5 sm:space-x-2.5 shrink-0">
-      <button onclick="toggleAiCopilot()" class="flex items-center space-x-1 sm:space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-purple-500/20 transition cursor-pointer active:scale-95" aria-label="Open AI Copilot">
-        <i class="ph-bold ph-sparkle text-sm animate-pulse"></i>
+      <button onclick="toggleAiCopilot()" class="flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white text-xs font-semibold shadow-md shadow-purple-500/20 transition cursor-pointer active:scale-95" aria-label="Open AI Copilot drawer">
+        <i class="ph-bold ph-sparkle text-sm animate-pulse" aria-hidden="true"></i>
         <span class="hidden md:inline">AI Copilot</span>
         <kbd class="hidden xl:inline text-[9px] font-mono px-1 py-0.2 rounded bg-black/30 text-purple-200">⌘J</kbd>
       </button>
 
-      <button onclick="openCommandPalette()" class="hidden md:flex items-center space-x-2 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 border border-appBorder text-xs text-slate-400 hover:border-slate-700 hover:text-white transition cursor-pointer" aria-label="Search and Command Palette">
-        <i class="ph-bold ph-magnifying-glass"></i>
+      <button onclick="openCommandPalette()" class="hidden sm:flex items-center space-x-1.5 px-2.5 py-1.5 rounded-xl bg-slate-900 border border-appBorder text-xs text-slate-400 hover:border-slate-700 hover:text-white transition cursor-pointer" aria-label="Open search command palette">
+        <i class="ph-bold ph-magnifying-glass" aria-hidden="true"></i>
         <span class="hidden lg:inline">Search</span>
-        <kbd class="text-[9px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">⌘K</kbd>
+        <kbd class="text-[9px] font-mono px-1 py-0.5 rounded bg-slate-800 text-slate-400">⌘K</kbd>
       </button>
 
-      <button onclick="openUniversalAddModal()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-500 active:scale-95 text-white flex items-center justify-center transition shadow-md shadow-blue-500/20 cursor-pointer" title="Quick Add Task" aria-label="Add Task">
+      <button onclick="openUniversalAddModal()" class="w-8 h-8 rounded-xl bg-blue-600 hover:bg-blue-500 text-white flex items-center justify-center transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95" aria-label="Create new task" title="Quick Add Task">
         <i class="ph-bold ph-plus text-sm"></i>
       </button>
 
-      <button onclick="downloadGitHubRepositoryZip()" class="hidden sm:flex items-center space-x-1.5 px-2.5 sm:px-3 py-1.5 rounded-xl bg-slate-900 border border-appBorder hover:border-slate-700 text-slate-300 text-xs font-medium transition cursor-pointer" title="Export Deployment Zip">
-        <i class="ph-bold ph-file-zip text-sm text-blue-400"></i>
-        <span class="hidden md:inline">Export</span>
+      <button onclick="downloadGitHubRepositoryZip()" class="hidden md:flex items-center space-x-1.5 px-3 py-1.5 rounded-xl bg-slate-900 border border-appBorder hover:border-slate-700 text-slate-300 text-xs font-medium transition cursor-pointer" aria-label="Export project as ZIP file" title="Export Deployment Zip">
+        <i class="ph-bold ph-file-zip text-sm text-blue-400" aria-hidden="true"></i>
+        <span>Export</span>
       </button>
     </div>
   </header>
 
   <div class="flex-1 flex overflow-hidden relative">
     
-    <!-- Responsive Sidebar Navigation -->
-    <aside id="mainSidebar" class="shrink-0 bg-appDark border-r border-appBorder flex flex-col justify-between transition-transform duration-300 ease-in-out fixed lg:static top-14 bottom-0 left-0 z-50 shadow-2xl lg:shadow-none w-72 max-w-[85vw] lg:w-[var(--sidebar-width)] -translate-x-full lg:translate-x-0" style="--sidebar-width: 260px;">
-      <div class="p-3 space-y-5 overflow-y-auto flex-1 no-scrollbar">
-        
-        <!-- Mobile Sidebar Close Header -->
-        <div class="flex lg:hidden items-center justify-between pb-2 border-b border-appBorder">
-          <span class="text-xs font-bold text-slate-400 uppercase tracking-wider">Navigation Menu</span>
-          <button onclick="toggleSidebarMobile(false)" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800" aria-label="Close navigation">
-            <i class="ph-bold ph-x text-base"></i>
-          </button>
-        </div>
-
+    <!-- Sidebar Navigation -->
+    <aside id="mainSidebar" class="shrink-0 bg-appDark border-r border-appBorder flex flex-col justify-between transition-all duration-200" style="width: var(--sidebar-width);">
+      <div class="p-3 space-y-6 overflow-y-auto flex-1 no-scrollbar">
         <!-- Main Navigation Links -->
-        <nav class="space-y-1">
-          <button onclick="navigateView('home')" id="nav-btn-home" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white bg-slate-900 transition text-left cursor-pointer">
+        <nav class="space-y-1" aria-label="Main Navigation">
+          <button onclick="navigateView('home')" id="nav-btn-home" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-white bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-house text-base text-slate-300"></i>
+              <i class="ph-bold ph-house text-base text-slate-300" aria-hidden="true"></i>
               <span>Home Dashboard</span>
             </span>
           </button>
           
-          <button onclick="navigateView('executive')" id="nav-btn-executive" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('executive')" id="nav-btn-executive" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-presentation-chart text-base text-amber-400"></i>
+              <i class="ph-bold ph-presentation-chart text-base text-amber-400" aria-hidden="true"></i>
               <span>Executive Dashboard</span>
             </span>
           </button>
 
-          <button onclick="navigateView('tasks')" id="nav-btn-tasks" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('tasks')" id="nav-btn-tasks" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-kanban text-base text-blue-400"></i>
+              <i class="ph-bold ph-kanban text-base text-blue-400" aria-hidden="true"></i>
               <span>Tasks & Kanban</span>
             </span>
             <span id="navBadgeTasksCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">0</span>
           </button>
 
-          <button onclick="navigateView('projects')" id="nav-btn-projects" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('projects')" id="nav-btn-projects" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-folder-notch-open text-base text-purple-400"></i>
+              <i class="ph-bold ph-folder-notch-open text-base text-purple-400" aria-hidden="true"></i>
               <span>Active Projects</span>
             </span>
             <span id="navBadgeProjectsCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">6</span>
           </button>
 
-          <button onclick="navigateView('calendar')" id="nav-btn-calendar" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('calendar')" id="nav-btn-calendar" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-calendar-blank text-base text-emerald-400"></i>
+              <i class="ph-bold ph-calendar-blank text-base text-emerald-400" aria-hidden="true"></i>
               <span>Calendar Schedule</span>
             </span>
           </button>
 
-          <button onclick="navigateView('insights')" id="nav-btn-insights" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('insights')" id="nav-btn-insights" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-chart-donut text-base text-cyan-400"></i>
+              <i class="ph-bold ph-chart-donut text-base text-cyan-400" aria-hidden="true"></i>
               <span>Insights & Velocity</span>
             </span>
           </button>
 
-          <button onclick="navigateView('team')" id="nav-btn-team" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('team')" id="nav-btn-team" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-users-three text-base text-pink-400"></i>
+              <i class="ph-bold ph-users-three text-base text-pink-400" aria-hidden="true"></i>
               <span>Team Directory</span>
             </span>
             <span id="navBadgeTeamCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-slate-800 text-slate-400">7</span>
           </button>
 
           <!-- Deleted Items Tab -->
-          <button onclick="navigateView('trash')" id="nav-btn-trash" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('trash')" id="nav-btn-trash" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-trash text-base text-rose-400"></i>
+              <i class="ph-bold ph-trash text-base text-rose-400" aria-hidden="true"></i>
               <span>Deleted Items</span>
             </span>
             <span id="navBadgeTrashCount" class="text-[10px] font-mono px-1.5 py-0.5 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20 font-bold">0</span>
           </button>
 
-          <button onclick="navigateView('settings')" id="nav-btn-settings" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer">
+          <button onclick="navigateView('settings')" id="nav-btn-settings" class="nav-item w-full flex items-center justify-between px-3 py-2.5 rounded-xl text-xs font-medium text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer active:scale-[0.98]">
             <span class="flex items-center space-x-2.5">
-              <i class="ph-bold ph-gear text-base text-slate-400"></i>
+              <i class="ph-bold ph-gear text-base text-slate-400" aria-hidden="true"></i>
               <span>Workspace Settings</span>
             </span>
           </button>
@@ -236,11 +238,11 @@
       </div>
 
       <!-- User Profile Card in Sidebar Footer with Editable Avatar -->
-      <div class="p-3 border-t border-appBorder bg-slate-950/70 relative">
+      <div class="p-3 border-t border-appBorder bg-slate-950/60 relative">
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-2.5 min-w-0">
-            <div class="relative group/avatar cursor-pointer" onclick="openProfilePictureMenu(event, 'sidebar')">
-              <img id="sidebarUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6366f1/ffffff?text=KM'" class="w-8 h-8 rounded-full object-cover object-top border border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews">
+            <div class="relative group/avatar cursor-pointer shrink-0" onclick="openProfilePictureMenu(event, 'sidebar')">
+              <img id="sidebarUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6366f1/ffffff?text=KM'" class="w-8 h-8 rounded-full object-cover object-top border border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews avatar">
               <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition">
                 <i class="ph-bold ph-camera text-white text-xs"></i>
               </div>
@@ -250,39 +252,38 @@
               <div class="text-[10px] text-slate-400 truncate" id="sidebarUserRoleDisplay">Project Manager</div>
             </div>
           </div>
-          <button onclick="navigateView('settings')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" title="Profile & Preferences" aria-label="Settings">
+          <button onclick="navigateView('settings')" class="p-1.5 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" aria-label="Open Workspace Settings" title="Profile & Preferences">
             <i class="ph-bold ph-sliders text-sm"></i>
           </button>
         </div>
       </div>
 
-      <!-- Draggable Sidebar Resizer Handle (Desktop only) -->
+      <!-- Draggable Sidebar Resizer Handle (desktop only) -->
       <div id="sidebarResizeHandle" class="hidden lg:block absolute top-0 right-0 w-1.5 h-full cursor-col-resize hover:bg-purple-500 transition-colors z-40" title="Drag to resize sidebar"></div>
     </aside>
 
-    <!-- Main Scrollable Canvas -->
-    <main class="flex-1 bg-appDark overflow-y-auto overflow-x-hidden relative flex flex-col min-w-0" id="mainCanvas">
+    <main class="flex-1 bg-appDark overflow-y-auto overflow-x-hidden relative flex flex-col w-full" id="mainCanvas">
       
       <!-- Home Section -->
-      <section id="view-home" class="p-3 sm:p-5 md:p-6 space-y-5 sm:space-y-6 view-transition">
+      <section id="view-home" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition">
         <!-- Dashboard Hero Banner -->
         <div class="rounded-2xl p-4 sm:p-6 bg-gradient-to-r from-purple-900/30 via-slate-900 to-blue-900/20 border border-slate-800 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
-          <div class="space-y-1.5 z-10 min-w-0">
+          <div class="space-y-1.5 z-10">
             <div class="flex flex-wrap items-center gap-1.5 sm:gap-2">
-              <span class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2 sm:px-2.5 py-0.5 rounded-full border border-purple-500/20 truncate">A Smarter Way to Get Things Done.</span>
-              <span class="text-xs text-slate-500 hidden sm:inline">·</span>
+              <span class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-purple-400 bg-purple-500/10 px-2.5 py-0.5 rounded-full border border-purple-500/20">A Smarter Way to Get Things Done.</span>
+              <span class="text-xs text-slate-400 hidden sm:inline">·</span>
               <span class="text-[11px] sm:text-xs text-slate-300 font-mono" id="currentDateDisplay">Loading live date...</span>
             </div>
             <h1 class="text-xl sm:text-2xl md:text-3xl font-black text-white tracking-tight" id="homeGreetingHeader">Good day, Karol</h1>
-            <p class="text-xs sm:text-sm text-slate-400 max-w-xl leading-relaxed" id="homeHeroSummaryText">Welcome to your AI project intelligence cockpit. Real-time portfolio synchronization, task telemetry, and AI copilot support.</p>
+            <p class="text-xs sm:text-sm text-slate-400 max-w-xl" id="homeHeroSummaryText">Welcome to your AI project intelligence cockpit. Real-time portfolio synchronization, task telemetry, and AI copilot support.</p>
           </div>
           <div class="flex items-center space-x-2 sm:space-x-3 z-10 shrink-0">
-            <button onclick="navigateView('executive')" class="flex-1 sm:flex-none justify-center px-3 sm:px-3.5 py-2 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 text-xs font-semibold flex items-center space-x-2 transition cursor-pointer">
-              <i class="ph-bold ph-presentation-chart text-sm"></i>
+            <button onclick="navigateView('executive')" class="px-3 py-2 rounded-xl bg-amber-500/10 text-amber-300 border border-amber-500/30 hover:bg-amber-500/20 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95">
+              <i class="ph-bold ph-presentation-chart text-sm" aria-hidden="true"></i>
               <span>Executive Briefing</span>
             </button>
-            <button onclick="openUniversalAddModal()" class="flex-1 sm:flex-none justify-center px-3 sm:px-3.5 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-2 transition shadow-lg shadow-blue-500/20 cursor-pointer">
-              <i class="ph-bold ph-plus text-sm"></i>
+            <button onclick="openUniversalAddModal()" class="px-3 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-blue-500/20 cursor-pointer active:scale-95">
+              <i class="ph-bold ph-plus text-sm" aria-hidden="true"></i>
               <span>New Task</span>
             </button>
           </div>
@@ -293,7 +294,7 @@
           <!-- Concentric SVG Rings Card -->
           <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col items-center justify-center text-center relative">
             <div class="relative w-32 h-32 sm:w-36 sm:h-36 flex items-center justify-center">
-              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 120 120" role="img" aria-label="Activity completion breakdown">
                 <!-- Outer Ring: Tasks Done -->
                 <circle cx="60" cy="60" r="50" fill="none" stroke="#1e293b" stroke-width="8" />
                 <circle id="ringTasksCircle" cx="60" cy="60" r="50" fill="none" stroke="#6366f1" stroke-width="8" stroke-dasharray="314.15" stroke-dashoffset="69.11" stroke-linecap="round" class="transition-all duration-700" />
@@ -328,96 +329,96 @@
           </div>
 
           <!-- KPI 1: Active Initiatives -->
-          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between">
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Active Initiatives</span>
               <div class="p-2 rounded-xl bg-purple-500/10 text-purple-400">
-                <i class="ph-bold ph-rocket-launch text-base"></i>
+                <i class="ph-bold ph-rocket-launch text-base" aria-hidden="true"></i>
               </div>
             </div>
-            <div class="my-2">
-              <div class="text-2xl font-black text-white" id="homeKpiActiveProjects">6 Projects</div>
+            <div>
+              <div class="text-xl sm:text-2xl font-black text-white" id="homeKpiActiveProjects">6 Projects</div>
               <div class="text-[11px] text-emerald-400 flex items-center space-x-1 mt-0.5">
-                <i class="ph-bold ph-check-circle"></i>
+                <i class="ph-bold ph-check-circle" aria-hidden="true"></i>
                 <span id="homeKpiProjectHealthLabel">100% On-Track</span>
               </div>
             </div>
             <button onclick="navigateView('projects')" class="text-[11px] text-purple-400 hover:text-purple-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>View Roadmap</span>
-              <i class="ph-bold ph-arrow-right"></i>
+              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
 
           <!-- KPI 2: Team Capacity & Resources -->
-          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between">
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Resource Allocation</span>
               <div class="p-2 rounded-xl bg-blue-500/10 text-blue-400">
-                <i class="ph-bold ph-users-three text-base"></i>
+                <i class="ph-bold ph-users-three text-base" aria-hidden="true"></i>
               </div>
             </div>
-            <div class="my-2">
-              <div class="text-2xl font-black text-white" id="homeKpiTeammatesCount">7 Teammates</div>
+            <div>
+              <div class="text-xl sm:text-2xl font-black text-white" id="homeKpiTeammatesCount">7 Teammates</div>
               <div class="text-[11px] text-slate-400 mt-0.5">38.5h / person avg capacity</div>
             </div>
             <button onclick="navigateView('team')" class="text-[11px] text-blue-400 hover:text-blue-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>View Directory</span>
-              <i class="ph-bold ph-arrow-right"></i>
+              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
 
           <!-- KPI 3: Next Major Milestone -->
-          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between">
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 flex flex-col justify-between space-y-2">
             <div class="flex items-center justify-between">
               <span class="text-xs text-slate-400 font-medium">Nearest Milestone</span>
               <div class="p-2 rounded-xl bg-amber-500/10 text-amber-400">
-                <i class="ph-bold ph-flag-banner text-base"></i>
+                <i class="ph-bold ph-flag-banner text-base" aria-hidden="true"></i>
               </div>
             </div>
-            <div class="my-2">
+            <div>
               <div class="text-sm sm:text-base font-bold text-white truncate" id="homeNearestMilestoneTitle">Project 1 GA Release</div>
               <div class="text-[11px] text-amber-400 mt-0.5 font-mono truncate" id="homeNearestMilestoneDate">Checking calendar...</div>
             </div>
             <button onclick="navigateView('calendar')" class="text-[11px] text-amber-400 hover:text-amber-300 font-semibold text-left pt-2 border-t border-slate-800 flex items-center justify-between cursor-pointer">
               <span>Inspect Calendar</span>
-              <i class="ph-bold ph-arrow-right"></i>
+              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
         </div>
 
         <!-- Home Initiatives Quick Progress Overview -->
         <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-4">
-          <div class="flex items-center justify-between">
+          <div class="flex flex-col xs:flex-row xs:items-center justify-between gap-1">
             <div>
-              <h2 class="text-xs sm:text-sm font-bold text-white">Active Projects Progression</h2>
-              <p class="text-[11px] sm:text-xs text-slate-400">Live aggregate calculations across active initiatives</p>
+              <h2 class="text-sm font-bold text-white">Active Projects Progression</h2>
+              <p class="text-xs text-slate-400">Live aggregate calculations across active initiatives</p>
             </div>
-            <button onclick="navigateView('projects')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer">
-              <span>Manage</span>
-              <i class="ph-bold ph-arrow-right"></i>
+            <button onclick="navigateView('projects')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer self-start xs:self-auto">
+              <span>Manage all</span>
+              <i class="ph-bold ph-arrow-right" aria-hidden="true"></i>
             </button>
           </div>
-          <div id="homeProjectsProgressContainer" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+          <div id="homeProjectsProgressContainer" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
             <!-- Dynamically populated -->
           </div>
         </div>
       </section>
 
       <!-- Executive Overview Section -->
-      <section id="view-executive" class="p-3 sm:p-5 md:p-6 space-y-5 sm:space-y-6 view-transition hidden">
+      <section id="view-executive" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
         <div class="rounded-2xl p-4 sm:p-6 bg-gradient-to-r from-amber-950/30 via-slate-900 to-purple-950/30 border border-amber-900/40 relative overflow-hidden flex flex-col md:flex-row md:items-center justify-between gap-4">
           <div class="space-y-1">
             <div class="flex items-center space-x-2">
-              <span class="text-[10px] sm:text-xs font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">Executive Review</span>
+              <span class="text-xs font-mono font-bold uppercase tracking-wider text-amber-400 bg-amber-500/10 px-2.5 py-0.5 rounded-full border border-amber-500/20">Executive Review</span>
               <span class="text-xs text-slate-400">·</span>
-              <span class="text-[11px] sm:text-xs text-slate-300" id="executiveBriefingDateBadge">Portfolio Briefing</span>
+              <span class="text-xs text-slate-300" id="executiveBriefingDateBadge">Portfolio Briefing</span>
             </div>
             <h1 class="text-xl sm:text-2xl font-black text-white">Executive Overview</h1>
             <p class="text-xs sm:text-sm text-slate-400 max-w-2xl">Structured 3-bullet execution updates, dynamic project progress bars, and strategic portfolio tracking powered by Gemini AI.</p>
           </div>
           <div class="flex items-center space-x-2.5 shrink-0">
-            <button onclick="copyExecutiveBriefing()" class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs font-semibold flex items-center justify-center space-x-2 transition cursor-pointer">
-              <i class="ph-bold ph-copy text-sm text-amber-400"></i>
+            <button onclick="copyExecutiveBriefing()" class="w-full sm:w-auto px-3.5 py-2 rounded-xl bg-slate-900 border border-slate-700 hover:border-slate-600 text-slate-200 text-xs font-semibold flex items-center justify-center space-x-2 transition cursor-pointer active:scale-95" aria-label="Copy executive briefing to clipboard">
+              <i class="ph-bold ph-copy text-sm text-amber-400" aria-hidden="true"></i>
               <span>Copy Exec Summary</span>
             </button>
           </div>
@@ -434,75 +435,75 @@
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 class="text-lg sm:text-xl font-black text-white">Tasks & Deliverables</h1>
-            <p class="text-xs text-slate-400">Drag cards or tap any task to inspect details.</p>
+            <p class="text-xs text-slate-400">Drag cards or tap the advance arrow to move stages. Click any task to inspect its parent project.</p>
           </div>
           <div class="flex items-center space-x-2 self-start sm:self-auto">
-            <div class="flex rounded-xl bg-slate-900 p-1 border border-slate-800">
+            <div class="flex rounded-xl bg-slate-900 p-1 border border-slate-800" role="group" aria-label="Task view mode selector">
               <button onclick="setTaskViewMode('kanban')" id="taskViewModeKanbanBtn" class="px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer">Board</button>
               <button onclick="setTaskViewMode('list')" id="taskViewModeListBtn" class="px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer">List</button>
             </div>
-            <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer">
-              <i class="ph-bold ph-plus text-xs"></i>
+            <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Add task">
+              <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
               <span>Add Task</span>
             </button>
           </div>
         </div>
 
-        <!-- Kanban Board Columns (Mobile Responsive: 1-col on mobile, 2-col on md, 4-col on xl) -->
-        <div id="kanbanBoardContainer" class="grid grid-cols-1 sm:grid-cols-2 xl:grid-cols-4 gap-4 items-start">
+        <!-- Kanban Board Columns (Responsive Grid with Mobile Horizontal Scroll) -->
+        <div id="kanbanBoardContainer" class="grid grid-cols-1 md:grid-cols-2 xl:grid-cols-4 gap-4 items-start overflow-x-auto pb-4">
           <!-- Column: To do -->
-          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'todo')">
+          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'todo')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-slate-500"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-slate-500" aria-hidden="true"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">To Do</span>
               </div>
               <span id="badgeCountTodo" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-slate-800 text-slate-400 font-bold">0</span>
             </div>
-            <div id="colTodoCards" class="space-y-2.5 min-h-[90px]"></div>
+            <div id="colTodoCards" class="space-y-2.5 min-h-[140px]"></div>
           </div>
 
           <!-- Column: In progress -->
-          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_progress')">
+          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_progress')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-blue-500 animate-pulse" aria-hidden="true"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">In Progress</span>
               </div>
               <span id="badgeCountInProgress" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-blue-500/10 text-blue-400 border border-blue-500/20 font-bold">0</span>
             </div>
-            <div id="colInProgressCards" class="space-y-2.5 min-h-[90px]"></div>
+            <div id="colInProgressCards" class="space-y-2.5 min-h-[140px]"></div>
           </div>
 
           <!-- Column: In review -->
-          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_review')">
+          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'in_review')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-amber-500"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-amber-500" aria-hidden="true"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">In Review</span>
               </div>
               <span id="badgeCountInReview" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-amber-500/10 text-amber-400 border border-amber-500/20 font-bold">0</span>
             </div>
-            <div id="colInReviewCards" class="space-y-2.5 min-h-[90px]"></div>
+            <div id="colInReviewCards" class="space-y-2.5 min-h-[140px]"></div>
           </div>
 
           <!-- Column: Done -->
-          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'done')">
+          <div class="rounded-2xl bg-slate-900/60 border border-slate-800 p-3 space-y-3 min-w-[260px]" ondragover="handleDragOver(event)" ondragleave="handleDragLeave(event)" ondrop="handleDrop(event, 'done')">
             <div class="flex items-center justify-between px-1">
               <div class="flex items-center space-x-2">
-                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500"></span>
+                <span class="w-2.5 h-2.5 rounded-full bg-emerald-500" aria-hidden="true"></span>
                 <span class="text-xs font-bold text-white uppercase tracking-wider">Completed</span>
               </div>
               <span id="badgeCountDone" class="text-[10px] font-mono px-2 py-0.5 rounded-full bg-emerald-500/10 text-emerald-400 border border-emerald-500/20 font-bold">0</span>
             </div>
-            <div id="colDoneCards" class="space-y-2.5 min-h-[90px]"></div>
+            <div id="colDoneCards" class="space-y-2.5 min-h-[140px]"></div>
           </div>
         </div>
 
-        <!-- Alternative Task List View Table (with horizontal scroll for narrow screens) -->
+        <!-- Alternative Task List View Table -->
         <div id="tasksListContainer" class="rounded-2xl bg-appCard border border-appBorder overflow-hidden hidden">
-          <div class="overflow-x-auto w-full">
-            <table class="w-full text-left text-xs min-w-[580px]">
+          <div class="overflow-x-auto">
+            <table class="w-full text-left text-xs min-w-[600px]">
               <thead class="bg-slate-900/80 text-slate-400 border-b border-appBorder font-mono uppercase text-[10px]">
                 <tr>
                   <th class="p-3">Task</th>
@@ -511,6 +512,7 @@
                   <th class="p-3">Due Date</th>
                   <th class="p-3">Assignee</th>
                   <th class="p-3">Status</th>
+                  <th class="p-3 text-right">Action</th>
                 </tr>
               </thead>
               <tbody id="tasksTableBody" class="divide-y divide-appBorder"></tbody>
@@ -520,11 +522,2624 @@
       </section>
 
       <!-- Active Projects Section -->
-      <section id="view-projects" class="p-3 sm:p-5 md:p-6 space-y-5 sm:space-y-6 view-transition hidden">
+      <section id="view-projects" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
         <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
           <div>
             <h1 class="text-lg sm:text-xl font-black text-white">Enterprise Projects</h1>
             <p class="text-xs text-slate-400">Direct in-card status switcher, SharePoint document link, and dedicated weekly/monthly status notes.</p>
           </div>
           <div class="flex items-center space-x-2 self-start sm:self-auto">
-            <button onclick="openStatusDigestModal()" class="px-
+            <button onclick="openStatusDigestModal()" class="px-3 py-1.5 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Open portfolio status digest">
+              <i class="ph-bold ph-newspaper text-xs" aria-hidden="true"></i>
+              <span>Status Digest</span>
+            </button>
+            <button onclick="openComprehensiveAddProjectModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-md shadow-blue-500/20 cursor-pointer active:scale-95" aria-label="Open comprehensive add project intake modal">
+              <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+              <span>Add Project</span>
+            </button>
+          </div>
+        </div>
+
+        <!-- Project Cards Grid -->
+        <div id="projectsCardsGrid" class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 sm:gap-5">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Project Detail / Cockpit Section -->
+      <section id="view-project-detail" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div class="flex items-center space-x-2 text-xs text-slate-400">
+          <button onclick="navigateView('projects')" class="hover:text-white transition flex items-center space-x-1 cursor-pointer">
+            <i class="ph-bold ph-arrow-left" aria-hidden="true"></i>
+            <span>Back to Projects</span>
+          </button>
+          <span>/</span>
+          <span id="detailBreadcrumbProjName" class="text-white font-semibold truncate">Project 1</span>
+        </div>
+
+        <!-- Cockpit Header Banner -->
+        <div id="detailProjectHeaderBanner" class="rounded-2xl p-4 sm:p-6 bg-appCard border border-appBorder flex flex-col lg:flex-row lg:items-center justify-between gap-4 sm:gap-6">
+          <div class="space-y-2">
+            <div class="flex flex-wrap items-center gap-2 sm:gap-3">
+              <span id="detailProjBadgeTag" class="px-2.5 py-0.5 rounded-full text-xs font-mono font-bold bg-blue-500/10 text-blue-400 border border-blue-500/20">PROJECT 1</span>
+              <select id="detailProjStatusSelect" onchange="handleDetailStatusSelectChange(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer" aria-label="Update project status">
+                <option value="planning">📋 Planning</option>
+                <option value="in_progress">⚡ In progress</option>
+                <option value="in_review">🔍 In review</option>
+                <option value="shipped">🚀 Shipped</option>
+              </select>
+            </div>
+            <h1 id="detailProjTitle" class="text-xl sm:text-2xl font-black text-white">Project 1</h1>
+            <p id="detailProjDesc" class="text-xs sm:text-sm text-slate-400 max-w-2xl">Enterprise initiative description and milestones overview.</p>
+          </div>
+
+          <div class="flex items-center space-x-4 shrink-0">
+            <div class="text-left lg:text-right">
+              <div class="text-[10px] uppercase font-mono text-slate-400">Completion</div>
+              <div id="detailProjPct" class="text-xl sm:text-2xl font-black text-white">85%</div>
+            </div>
+            <div class="w-12 h-12 sm:w-14 sm:h-14 relative flex items-center justify-center">
+              <svg class="w-full h-full transform -rotate-90" viewBox="0 0 36 36" aria-hidden="true">
+                <circle cx="18" cy="18" r="15.9" fill="none" stroke="#1e293b" stroke-width="3" />
+                <circle id="detailProjSvgRing" cx="18" cy="18" r="15.9" fill="none" stroke="#6366f1" stroke-width="3" stroke-dasharray="100" stroke-dashoffset="15" stroke-linecap="round" />
+              </svg>
+            </div>
+          </div>
+        </div>
+
+        <!-- Cockpit Body: Tasks & Workspace Tools -->
+        <div class="grid grid-cols-1 lg:grid-cols-3 gap-4 sm:gap-6">
+          <!-- Left 2 Cols: Dedicated Tasks Inspector -->
+          <div class="lg:col-span-2 space-y-4">
+            <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-4">
+              <div class="flex items-center justify-between">
+                <div>
+                  <h2 class="text-sm font-bold text-white">Project Tasks & Stage Checklists</h2>
+                  <p class="text-xs text-slate-400">Click checkboxes to toggle completion</p>
+                </div>
+                <button onclick="openNewTaskModalForCurrentProject()" class="px-2.5 py-1 rounded-lg bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1 transition cursor-pointer active:scale-95" aria-label="Add task for this project">
+                  <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+                  <span>Add Task</span>
+                </button>
+              </div>
+
+              <div id="detailProjectTasksList" class="space-y-2">
+                <!-- Dynamically populated -->
+              </div>
+            </div>
+
+            <!-- In-Cockpit Weekly/Monthly Status Note -->
+            <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+              <div class="flex items-center justify-between">
+                <span class="text-xs font-bold text-white flex items-center space-x-1.5">
+                  <i class="ph-bold ph-note-pencil text-purple-400" aria-hidden="true"></i>
+                  <span>Project Status Note (Weekly / Monthly Rollup)</span>
+                </span>
+                <span id="detailNoteSavedTimestamp" class="text-[10px] text-slate-400 font-mono">Updated today</span>
+              </div>
+              <textarea id="detailProjStatusNoteArea" rows="3" placeholder="Provide notes on achievements, blockers, decisions or risks..." class="w-full bg-slate-900 border border-slate-800 rounded-xl p-3 text-xs text-slate-200 focus:outline-none focus:border-purple-500" aria-label="Project status note"></textarea>
+              <div class="flex justify-end">
+                <button onclick="saveDetailProjectNote()" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold transition cursor-pointer active:scale-95">
+                  Save Note
+                </button>
+              </div>
+            </div>
+          </div>
+
+          <!-- Right Col: SharePoint & Artefacts -->
+          <div class="space-y-4">
+            <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider">SharePoint Workspace</h3>
+              <p class="text-[11px] text-slate-400">Connected enterprise document library & Microsoft 365 hub.</p>
+              <div class="flex items-center space-x-2">
+                <input type="text" id="detailProjSharepointUrl" placeholder="https://company.sharepoint.com/..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none" aria-label="SharePoint document URL">
+                <button onclick="saveDetailProjectSharepoint()" class="px-3 py-2 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition cursor-pointer">Save</button>
+              </div>
+              <a id="detailProjSharepointLinkBtn" href="#" target="_blank" rel="noopener noreferrer" class="w-full py-2 rounded-xl bg-blue-600/10 text-blue-400 border border-blue-500/20 hover:bg-blue-600/20 flex items-center justify-center space-x-1.5 text-xs font-semibold transition" aria-label="Open SharePoint workspace in new tab">
+                <i class="ph-bold ph-arrow-square-out text-sm" aria-hidden="true"></i>
+                <span>Open in SharePoint</span>
+              </a>
+            </div>
+
+            <!-- Drag & Drop Artefacts -->
+            <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+              <h3 class="text-xs font-bold text-white uppercase tracking-wider">Project Artefacts</h3>
+              <div id="detailArtefactDropzone" class="border-2 border-dashed border-slate-700 hover:border-purple-500 rounded-xl p-4 text-center cursor-pointer transition" onclick="document.getElementById('detailFileInput').click()" role="button" aria-label="Upload project files">
+                <i class="ph-bold ph-cloud-arrow-up text-2xl text-slate-400 mb-1" aria-hidden="true"></i>
+                <div class="text-xs text-slate-300 font-medium">Click to upload or drag & drop files</div>
+                <div class="text-[10px] text-slate-500 mt-0.5">PDF, Figma, Excel, Docs up to 25MB</div>
+                <input type="file" id="detailFileInput" class="hidden" multiple onchange="handleDetailFileSelect(event)" aria-label="Select files to upload">
+              </div>
+              <div id="detailArtefactsList" class="space-y-1.5 pt-1"></div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Calendar Section -->
+      <section id="view-calendar" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-lg sm:text-xl font-black text-white">Calendar & Milestones</h1>
+            <p class="text-xs text-slate-400">Monthly schedule synchronized with your device's active calendar.</p>
+          </div>
+          <button onclick="openUniversalAddModal()" class="px-3 py-1.5 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Add new calendar event task">
+            <i class="ph-bold ph-plus text-xs" aria-hidden="true"></i>
+            <span>New Task Event</span>
+          </button>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-4 gap-4 sm:gap-6">
+          <div class="lg:col-span-3 rounded-2xl bg-appCard border border-appBorder p-3 sm:p-4 space-y-4">
+            <div class="flex items-center justify-between">
+              <h2 class="text-sm font-bold text-white" id="calendarMonthYearHeading">Current Month</h2>
+              <div class="text-[10px] sm:text-xs text-slate-400 font-mono" id="calendarSprintCycleBadge">Live Sprint Cycle</div>
+            </div>
+            <!-- Dynamic Real-time Days Grid -->
+            <div id="dynamicCalendarDaysGrid" class="grid grid-cols-7 gap-1 sm:gap-2 text-center text-xs">
+              <!-- Populated dynamically via JS -->
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Scheduled Today</h3>
+            <div class="space-y-2 text-xs" id="calendarScheduledTodayList">
+              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-semibold text-white">Project Alignment Standup</span>
+                  <span class="text-[10px] text-purple-400 font-mono">10:00 AM</span>
+                </div>
+                <div class="text-[11px] text-slate-400">Portfolio sync with engineering leads</div>
+              </div>
+              <div class="p-2.5 rounded-xl bg-slate-900 border border-slate-800 space-y-1">
+                <div class="flex items-center justify-between">
+                  <span class="font-semibold text-white">Architecture Review</span>
+                  <span class="text-[10px] text-blue-400 font-mono">2:30 PM</span>
+                </div>
+                <div class="text-[11px] text-slate-400">Next milestone checkpoints</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Insights Section -->
+      <section id="view-insights" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-lg sm:text-xl font-black text-white">Insights & Velocity Analytics</h1>
+            <p class="text-xs text-slate-400">Predictive burnup, team throughput, and AI-powered project risk audit.</p>
+          </div>
+          <button onclick="runAiVelocityAudit()" id="btnAiRiskAudit" class="px-3 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition shadow-lg shadow-purple-500/20 cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Run velocity risk audit with AI">
+            <i class="ph-bold ph-sparkle text-xs animate-pulse" aria-hidden="true"></i>
+            <span>Run AI Risk Audit</span>
+          </button>
+        </div>
+
+        <div id="aiRiskAuditResultsCard" class="hidden rounded-2xl bg-purple-950/30 border border-purple-500/40 p-4 space-y-2">
+          <div class="flex items-center justify-between">
+            <span class="text-xs font-bold text-purple-300 flex items-center space-x-1.5">
+              <i class="ph-bold ph-shield-check" aria-hidden="true"></i>
+              <span>Gemini AI Velocity Risk Assessment</span>
+            </span>
+            <button onclick="document.getElementById('aiRiskAuditResultsCard').classList.add('hidden')" class="text-slate-400 hover:text-white text-xs cursor-pointer" aria-label="Dismiss AI audit card">Dismiss</button>
+          </div>
+          <div id="aiRiskAuditResultsContent" class="text-xs text-slate-300 leading-relaxed space-y-1"></div>
+        </div>
+
+        <div class="grid grid-cols-1 lg:grid-cols-2 gap-4 sm:gap-6">
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Weekly Task Throughput</h3>
+            <div class="h-40 sm:h-44 flex items-end justify-between gap-2 pt-6 px-1 sm:px-2">
+              <div class="w-full flex flex-col items-center gap-1.5"><div class="w-full bg-blue-500/80 rounded-t-lg h-20 sm:h-24"></div><span class="text-[9px] sm:text-[10px] text-slate-400">Prev 3</span></div>
+              <div class="w-full flex flex-col items-center gap-1.5"><div class="w-full bg-blue-500/80 rounded-t-lg h-28 sm:h-32"></div><span class="text-[9px] sm:text-[10px] text-slate-400">Prev 2</span></div>
+              <div class="w-full flex flex-col items-center gap-1.5"><div class="w-full bg-blue-500/80 rounded-t-lg h-24 sm:h-28"></div><span class="text-[9px] sm:text-[10px] text-slate-400">Prev 1</span></div>
+              <div class="w-full flex flex-col items-center gap-1.5"><div class="w-full bg-purple-500 rounded-t-lg h-36 sm:h-40"></div><span class="text-[9px] sm:text-[10px] text-purple-300 font-bold">This Week</span></div>
+            </div>
+          </div>
+
+          <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+            <h3 class="text-xs font-bold text-white uppercase tracking-wider">Effort Breakdown by Project</h3>
+            <div id="insightsProjectsDonutLegend" class="space-y-2 pt-2 text-xs">
+              <!-- Dynamically populated -->
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <!-- Team Section -->
+      <section id="view-team" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-lg sm:text-xl font-black text-white">Team Directory & Workload</h1>
+            <p class="text-xs text-slate-400">Team members across Product, Engineering, Design, and Marketing.</p>
+          </div>
+        </div>
+
+        <div id="teamDirectoryCardsGrid" class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-3 sm:gap-4">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Trash Section -->
+      <section id="view-trash" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div class="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+          <div>
+            <h1 class="text-lg sm:text-xl font-black text-white">Deleted Items (Trash)</h1>
+            <p class="text-xs text-slate-400">Safely recover archived or deleted initiatives back into the active workspace.</p>
+          </div>
+          <button onclick="emptyAllTrashItems()" class="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer self-start sm:self-auto active:scale-95" aria-label="Empty trash permanently">
+            <i class="ph-bold ph-trash text-xs" aria-hidden="true"></i>
+            <span>Empty Trash</span>
+          </button>
+        </div>
+
+        <div id="trashItemsContainer" class="space-y-3">
+          <!-- Dynamically populated -->
+        </div>
+      </section>
+
+      <!-- Settings Section -->
+      <section id="view-settings" class="p-3 sm:p-5 md:p-6 space-y-4 sm:space-y-6 view-transition hidden">
+        <div>
+          <h1 class="text-lg sm:text-xl font-black text-white">Workspace Settings</h1>
+          <p class="text-xs text-slate-400">Configure profile, role, brand preferences, and application properties.</p>
+        </div>
+
+        <!-- Profile Configuration Card with Editable Avatar & Role -->
+        <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-4">
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">User Profile & Role</h2>
+          <div class="flex flex-col sm:flex-row sm:items-center gap-4">
+            <div class="relative group/avatar cursor-pointer self-start shrink-0" onclick="openProfilePictureMenu(event, 'settings')">
+              <img id="settingsUserAvatar" src="Profile Pic 3.jpeg" onerror="this.onerror=null; this.src='https://placehold.co/96x96/6366f1/ffffff?text=KM'" class="w-14 h-14 sm:w-16 sm:h-16 rounded-full object-cover object-top border-2 border-slate-700 group-hover/avatar:border-purple-500 transition" alt="Karol Mathews avatar">
+              <div class="absolute inset-0 bg-black/40 rounded-full opacity-0 group-hover/avatar:opacity-100 flex items-center justify-center transition">
+                <i class="ph-bold ph-camera text-white text-base"></i>
+              </div>
+            </div>
+            <div class="space-y-1.5">
+              <div class="text-sm sm:text-base font-bold text-white">Karol Mathews</div>
+              <div class="flex flex-wrap items-center gap-2">
+                <span class="text-xs text-slate-400">Role:</span>
+                <select id="userRoleSelect" onchange="updateUserRole(this.value)" class="bg-slate-900 border border-slate-700 text-xs text-white rounded-lg px-2.5 py-1 focus:outline-none cursor-pointer" aria-label="Select user role">
+                  <option value="Project Manager" selected>Project Manager</option>
+                  <option value="Program Manager">Program Manager</option>
+                </select>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Brand Details Card -->
+        <div class="rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 space-y-3">
+          <h2 class="text-xs font-bold text-white uppercase tracking-wider">About This App</h2>
+          <div class="text-xs text-slate-300 space-y-1">
+            <div class="font-bold text-white">AI Powered Project Management Dashboard</div>
+            <div class="text-purple-400 font-medium">A Smarter Way to Get Things Done.</div>
+            <p class="text-slate-400 pt-1 leading-relaxed">Version 3.2 · Enterprise Edition powered by Gemini AI with multimodal assistance, automated decomposition, and real-time project synchronization.</p>
+          </div>
+        </div>
+      </section>
+
+    </main>
+  </div>
+
+  <!-- Comprehensive Add Project Intake Modal (Multi-Tab) -->
+  <div id="comprehensiveAddProjectModal" onclick="if(event.target === this) closeComprehensiveAddProjectModal()" class="fixed inset-0 bg-black/80 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="addProjectModalTitle">
+    <div class="bg-appCard border border-appBorder rounded-t-2xl sm:rounded-2xl w-full max-w-3xl max-h-[92dvh] sm:max-h-[90vh] flex flex-col shadow-2xl overflow-hidden animate-fadeIn" onclick="event.stopPropagation()">
+      <!-- Modal Header -->
+      <div class="p-3 sm:p-4 border-b border-appBorder bg-slate-950/70 flex items-center justify-between">
+        <div class="flex items-center space-x-2 sm:space-x-2.5 min-w-0">
+          <div class="w-7 h-7 sm:w-8 sm:h-8 rounded-xl bg-purple-600/20 text-purple-400 border border-purple-500/30 flex items-center justify-center shrink-0">
+            <i class="ph-bold ph-folder-plus text-sm sm:text-base" aria-hidden="true"></i>
+          </div>
+          <div class="min-w-0">
+            <h3 id="addProjectModalTitle" class="text-xs sm:text-sm font-bold text-white truncate">Create Enterprise Project</h3>
+            <p class="text-[10px] sm:text-[11px] text-slate-400 truncate hidden xs:block">Intake charter, billing terms, team assignments, and RAID log</p>
+          </div>
+        </div>
+        <div class="flex items-center space-x-2 shrink-0">
+          <button onclick="autoFillSampleProject()" class="text-[10px] text-purple-400 hover:text-purple-300 font-mono bg-purple-500/10 px-2 py-1 rounded-lg border border-purple-500/20 cursor-pointer active:scale-95">
+            Auto-fill
+          </button>
+          <button onclick="closeComprehensiveAddProjectModal()" class="text-slate-400 hover:text-white p-1 rounded-lg hover:bg-slate-800 transition cursor-pointer" aria-label="Close add project modal">
+            <i class="ph-bold ph-x text-base"></i>
+          </button>
+        </div>
+      </div>
+
+      <!-- Navigation Tabs -->
+      <div class="flex border-b border-appBorder bg-slate-900/60 text-xs px-2 sm:px-4 overflow-x-auto no-scrollbar" role="tablist" aria-label="Add project steps">
+        <button onclick="switchAddProjectTab('general')" id="tabBtn-general" role="tab" aria-selected="true" class="px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-purple-400 border-b-2 border-purple-500 transition shrink-0 cursor-pointer text-xs">1. General</button>
+        <button onclick="switchAddProjectTab('financial')" id="tabBtn-financial" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">2. Financial</button>
+        <button onclick="switchAddProjectTab('team')" id="tabBtn-team" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">3. Team</button>
+        <button onclick="switchAddProjectTab('tracking')" id="tabBtn-tracking" role="tab" aria-selected="false" class="px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs">4. Tracking & RAID</button>
+      </div>
+
+      <!-- Modal Body (Tab Panels) -->
+      <div class="flex-1 overflow-y-auto p-4 sm:p-5 text-xs text-slate-300 space-y-4">
+        
+        <!-- Tab 1: General Details -->
+        <div id="addProjTab-general" role="tabpanel" class="space-y-4">
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="sm:col-span-2 space-y-1">
+              <label for="newProjTitle" class="font-semibold text-slate-300">Project Name / Title <span class="text-rose-400">*</span></label>
+              <input type="text" id="newProjTitle" placeholder="e.g. AI NextGen Platform Rollout" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+            <div class="space-y-1">
+              <label for="newProjCode" class="font-semibold text-slate-300">Project Code / ID</label>
+              <input type="text" id="newProjCode" placeholder="e.g. PRJ-701" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label for="newProjClient" class="font-semibold text-slate-300">Client / Account / Internal Department</label>
+              <input type="text" id="newProjClient" placeholder="e.g. Global Retail Banking or Enterprise Core" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+            <div class="space-y-1">
+              <label for="newProjTag" class="font-semibold text-slate-300">Domain / Category Tag</label>
+              <select id="newProjTag" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
+                <option value="INFRA">INFRA (Infrastructure)</option>
+                <option value="MOBILE">MOBILE (iOS / Android)</option>
+                <option value="DESIGN">DESIGN (Design System / UX)</option>
+                <option value="GROWTH">GROWTH (Product & Funnels)</option>
+                <option value="MARKETING">MARKETING (Brand & GTM)</option>
+                <option value="DATA">DATA (Pipelines & AI)</option>
+                <option value="FINTECH">FINTECH (Billing & Ledger)</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-3 gap-3">
+            <div class="space-y-1">
+              <label for="newProjStartDate" class="font-semibold text-slate-300">Kickoff / Start Date</label>
+              <input type="date" id="newProjStartDate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+            <div class="space-y-1">
+              <label for="newProjDueDate" class="font-semibold text-slate-300">Target Delivery / Due Date</label>
+              <input type="date" id="newProjDueDate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+            <div class="space-y-1">
+              <label for="newProjStatus" class="font-semibold text-slate-300">Initial Project Status</label>
+              <select id="newProjStatus" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
+                <option value="planning" selected>📋 Planning / Not Started</option>
+                <option value="in_progress">⚡ In Progress (Active)</option>
+                <option value="in_review">🔍 In Review / Amber</option>
+                <option value="shipped">🚀 Shipped / Green</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="space-y-1">
+            <label for="newProjMilestone" class="font-semibold text-slate-300">Primary Milestone Target</label>
+            <input type="text" id="newProjMilestone" placeholder="e.g. Architecture V1 Sign-off & Alpha Cluster" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+          </div>
+
+          <div class="space-y-1">
+            <span class="font-semibold text-slate-300 block">Color Accent Theme</span>
+            <div class="flex items-center space-x-3 pt-1" id="newProjColorPicker">
+              <button type="button" onclick="selectNewProjColor('purple')" data-color="purple" class="w-7 h-7 rounded-full bg-purple-500 ring-2 ring-white transition cursor-pointer" aria-label="Purple"></button>
+              <button type="button" onclick="selectNewProjColor('blue')" data-color="blue" class="w-7 h-7 rounded-full bg-blue-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Blue"></button>
+              <button type="button" onclick="selectNewProjColor('pink')" data-color="pink" class="w-7 h-7 rounded-full bg-pink-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Pink"></button>
+              <button type="button" onclick="selectNewProjColor('emerald')" data-color="emerald" class="w-7 h-7 rounded-full bg-emerald-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Emerald"></button>
+              <button type="button" onclick="selectNewProjColor('amber')" data-color="amber" class="w-7 h-7 rounded-full bg-amber-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Amber"></button>
+              <button type="button" onclick="selectNewProjColor('cyan')" data-color="cyan" class="w-7 h-7 rounded-full bg-cyan-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer" aria-label="Cyan"></button>
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 2: Financial & Billing -->
+        <div id="addProjTab-financial" role="tabpanel" class="space-y-4 hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label for="newProjBudget" class="font-semibold text-slate-300">Total Budget (USD / Spending Cap)</label>
+              <div class="relative">
+                <span class="absolute left-3 top-2 text-slate-500 font-mono" aria-hidden="true">$</span>
+                <input type="text" id="newProjBudget" placeholder="125,000" class="w-full bg-slate-900 border border-slate-800 rounded-xl pl-7 pr-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+              </div>
+            </div>
+            <div class="space-y-1">
+              <label for="newProjBillingType" class="font-semibold text-slate-300">Billing Type</label>
+              <select id="newProjBillingType" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
+                <option value="Fixed Fee" selected>Fixed Fee / Milestone</option>
+                <option value="Time & Materials">Time & Materials (T&M)</option>
+                <option value="Monthly Retainer">Monthly Retainer</option>
+                <option value="Non-Billable (Internal)">Non-Billable / Internal R&D</option>
+              </select>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label for="newProjBillingRate" class="font-semibold text-slate-300">Default Labor / Billing Rate</label>
+              <input type="text" id="newProjBillingRate" placeholder="e.g. $175 / hr blended" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white font-mono focus:outline-none focus:border-purple-500">
+            </div>
+            <div class="space-y-1">
+              <label for="newProjBillingContact" class="font-semibold text-slate-300">Billing Contact / Finance Sign-off</label>
+              <input type="text" id="newProjBillingContact" placeholder="e.g. Sarah Jenkins (billing@enterprise.com)" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+          </div>
+
+          <div class="p-3 rounded-xl bg-slate-900/50 border border-slate-800 text-[11px] text-slate-400 space-y-1">
+            <span class="font-semibold text-slate-300 flex items-center space-x-1.5">
+              <i class="ph-bold ph-receipt text-purple-400" aria-hidden="true"></i>
+              <span>Budget Governance Policy</span>
+            </span>
+            <p>Spending velocity will trigger automatic C-Suite notifications when 80% and 95% budget utilization thresholds are crossed.</p>
+          </div>
+        </div>
+
+        <!-- Tab 3: Team & Ownership -->
+        <div id="addProjTab-team" role="tabpanel" class="space-y-4 hidden">
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+            <div class="space-y-1">
+              <label for="newProjOwner" class="font-semibold text-slate-300">Project Manager / Owner <span class="text-rose-400">*</span></label>
+              <select id="newProjOwner" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500 cursor-pointer">
+                <option value="Karol Mathews" selected>Karol Mathews (Project Manager)</option>
+                <option value="Siddharth Rao">Siddharth Rao (Growth PM)</option>
+                <option value="Marcus Vance">Marcus Vance (Principal Architect)</option>
+              </select>
+            </div>
+            <div class="space-y-1">
+              <label for="newProjSponsor" class="font-semibold text-slate-300">Executive Sponsor / Stakeholder</label>
+              <input type="text" id="newProjSponsor" placeholder="e.g. VP Engineering / Chief Product Officer" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+            </div>
+          </div>
+
+          <div class="space-y-1.5">
+            <span class="font-semibold text-slate-300 block">Allocated Team Members / Resources</span>
+            <div id="newProjTeamMembersList" class="grid grid-cols-1 sm:grid-cols-2 gap-2 bg-slate-900 border border-slate-800 p-3 rounded-xl max-h-48 overflow-y-auto">
+              <!-- Dynamically populated checkboxes -->
+            </div>
+          </div>
+        </div>
+
+        <!-- Tab 4: Tracking, RAID & Docs -->
+        <div id="addProjTab-tracking" role="tabpanel" class="space-y-4 hidden">
+          <!-- Deliverables -->
+          <div class="space-y-2">
+            <div class="flex items-center justify-between">
+              <span class="font-semibold text-slate-300">Initial Deliverables / Milestones (Kanban Items)</span>
+              <button type="button" onclick="addNewDeliverableRow()" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer" aria-label="Add deliverable row">
+                <i class="ph-bold ph-plus" aria-hidden="true"></i>
+                <span>Add Row</span>
+              </button>
+            </div>
+            <div id="newProjDeliverablesContainer" class="space-y-2">
+              <div class="flex items-center space-x-2">
+                <input type="text" placeholder="Deliverable 1 (e.g. Core Architecture Setup)" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none" aria-label="Deliverable 1">
+              </div>
+            </div>
+          </div>
+
+          <!-- RAID Log -->
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <span class="font-semibold text-slate-300 flex items-center space-x-1.5">
+              <i class="ph-bold ph-shield-warning text-amber-400" aria-hidden="true"></i>
+              <span>RAID Log (Risks, Assumptions, Issues, Dependencies)</span>
+            </span>
+            <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+              <div>
+                <label for="newProjRaidRisk" class="text-[10px] text-rose-400 font-mono font-bold block">Key Risk:</label>
+                <input type="text" id="newProjRaidRisk" placeholder="e.g. Multi-region latency overhead" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white text-xs mt-0.5 focus:outline-none">
+              </div>
+              <div>
+                <label for="newProjRaidDep" class="text-[10px] text-blue-400 font-mono font-bold block">Critical Dependency:</label>
+                <input type="text" id="newProjRaidDep" placeholder="e.g. Identity provider migration sign-off" class="w-full bg-slate-900 border border-slate-800 rounded-lg p-2 text-white text-xs mt-0.5 focus:outline-none">
+              </div>
+            </div>
+          </div>
+
+          <!-- Documents & Workspace Settings -->
+          <div class="space-y-2 pt-2 border-t border-slate-800">
+            <label for="newProjSharepoint" class="font-semibold text-slate-300 block">SharePoint Workspace / Document URL</label>
+            <input type="text" id="newProjSharepoint" placeholder="https://company.sharepoint.com/teams/project-..." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+          </div>
+
+          <div class="grid grid-cols-1 sm:grid-cols-2 gap-2">
+            <div>
+              <label for="newProjTemplate" class="font-semibold text-slate-300 block">Governance Template</label>
+              <select id="newProjTemplate" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer">
+                <option value="Agile Scrum">Enterprise Agile Scrum</option>
+                <option value="Continuous Flow">Continuous Kanban Flow</option>
+                <option value="C-Suite Governance" selected>C-Suite Governance (3-Bullet)</option>
+              </select>
+            </div>
+            <div>
+              <label for="newProjInitialNote" class="font-semibold text-slate-300 block">Initial Executive Status Note</label>
+              <input type="text" id="newProjInitialNote" placeholder="Kickoff alignment complete. Scope signed off." class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none">
+            </div>
+          </div>
+        </div>
+
+      </div>
+
+      <!-- Modal Footer -->
+      <div class="p-3 sm:p-4 border-t border-appBorder bg-slate-950/70 flex items-center justify-between gap-2">
+        <button onclick="closeComprehensiveAddProjectModal()" class="px-3.5 py-2 rounded-xl bg-slate-900 hover:bg-slate-800 text-slate-400 hover:text-white transition font-medium cursor-pointer active:scale-95">
+          Cancel
+        </button>
+        <button onclick="saveComprehensiveNewProject()" class="px-4 sm:px-5 py-2 rounded-xl bg-gradient-to-r from-purple-600 to-blue-600 hover:from-purple-500 hover:to-blue-500 text-white font-bold transition shadow-lg shadow-purple-500/20 flex items-center space-x-1.5 cursor-pointer active:scale-95">
+          <i class="ph-bold ph-check text-xs" aria-hidden="true"></i>
+          <span>Create Project</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Universal Add Task Modal with AI Decomposition -->
+  <div id="universalAddModal" onclick="if(event.target === this) closeUniversalAddModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-end sm:items-center justify-center p-0 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="addTaskModalTitle">
+    <div class="bg-appCard border border-appBorder rounded-t-2xl sm:rounded-2xl w-full max-w-md p-4 sm:p-5 space-y-4 shadow-2xl animate-fadeIn" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between">
+        <h3 id="addTaskModalTitle" class="text-sm font-bold text-white">Create New Task</h3>
+        <button onclick="closeUniversalAddModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close add task modal"><i class="ph-bold ph-x text-base"></i></button>
+      </div>
+      <div class="space-y-3 text-xs">
+        <div>
+          <label for="newTaskTitleInput" class="block text-slate-400 mb-1">Task Title <span class="text-rose-400">*</span></label>
+          <input type="text" id="newTaskTitleInput" placeholder="e.g. Conduct compliance audit" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none focus:border-purple-500">
+        </div>
+        <div class="grid grid-cols-1 sm:grid-cols-2 gap-3">
+          <div>
+            <label for="newTaskProjectSelect" class="block text-slate-400 mb-1">Project</label>
+            <select id="newTaskProjectSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer"></select>
+          </div>
+          <div>
+            <label for="newTaskPrioritySelect" class="block text-slate-400 mb-1">Priority</label>
+            <select id="newTaskPrioritySelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer">
+              <option value="high">High</option>
+              <option value="medium" selected>Medium</option>
+              <option value="low">Low</option>
+            </select>
+          </div>
+        </div>
+        <div>
+          <label for="newTaskAssigneeSelect" class="block text-slate-400 mb-1">Assignee</label>
+          <select id="newTaskAssigneeSelect" class="w-full bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-white focus:outline-none cursor-pointer"></select>
+        </div>
+      </div>
+      <div class="pt-2 flex items-center justify-between border-t border-slate-800 gap-2">
+        <button onclick="aiDecomposeCurrentModalTask()" id="btnAiDecomposeTask" class="px-3 py-2 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Decompose task into subtasks using AI">
+          <i class="ph-bold ph-sparkle text-xs" aria-hidden="true"></i>
+          <span>AI Decompose</span>
+        </button>
+        <button onclick="saveNewModalTask()" class="px-4 py-2 rounded-xl bg-blue-600 hover:bg-blue-500 text-white text-xs font-semibold transition cursor-pointer active:scale-95">
+          Create Task
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- AI Copilot Drawer -->
+  <aside id="aiCopilotDrawer" class="fixed top-14 right-0 w-full sm:w-96 bottom-0 bg-appDark border-l border-appBorder z-50 transform translate-x-full transition-transform duration-300 flex flex-col shadow-2xl" aria-label="AI Project Copilot drawer">
+    <div class="p-3.5 border-b border-appBorder flex items-center justify-between bg-slate-950/60">
+      <div class="flex items-center space-x-2">
+        <div class="w-6 h-6 rounded-lg bg-gradient-to-tr from-purple-600 to-blue-500 flex items-center justify-center text-white text-xs" aria-hidden="true">
+          <i class="ph-bold ph-sparkle"></i>
+        </div>
+        <div>
+          <span class="text-xs font-bold text-white block">AI Copilot</span>
+          <span class="text-[9px] text-purple-400 font-mono">A Smarter Way to Get Things Done.</span>
+        </div>
+      </div>
+      <button onclick="toggleAiCopilot()" class="p-1 rounded-lg text-slate-400 hover:text-white hover:bg-slate-800 transition cursor-pointer" aria-label="Close AI Copilot">
+        <i class="ph-bold ph-x text-sm"></i>
+      </button>
+    </div>
+
+    <!-- Copilot Conversation Log -->
+    <div id="aiCopilotMessages" class="flex-1 overflow-y-auto p-4 space-y-3 text-xs" aria-live="polite">
+      <div class="p-3 rounded-xl bg-purple-950/20 border border-purple-500/20 text-slate-300 space-y-1.5">
+        <div class="font-bold text-purple-300 flex items-center space-x-1.5">
+          <i class="ph-bold ph-sparkle" aria-hidden="true"></i>
+          <span>Welcome, Karol!</span>
+        </div>
+        <p>I'm your AI project intelligence partner inside the AI Powered Project Management Dashboard. Ask me about milestone risks, team allocations, blockers, or request draft standup updates.</p>
+      </div>
+    </div>
+
+    <!-- Copilot Quick Prompts -->
+    <div class="p-2 border-t border-appBorder/60 bg-slate-950/40 flex items-center space-x-1.5 overflow-x-auto no-scrollbar text-[11px]">
+      <button onclick="sendQuickCopilotPrompt('Summarize key blockers across projects')" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white shrink-0 cursor-pointer">Blockers?</button>
+      <button onclick="sendQuickCopilotPrompt('Generate executive standup draft')" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white shrink-0 cursor-pointer">Standup draft</button>
+      <button onclick="sendQuickCopilotPrompt('Assess team capacity across projects')" class="px-2.5 py-1 rounded-lg bg-slate-900 border border-slate-800 text-slate-300 hover:text-white shrink-0 cursor-pointer">Team capacity</button>
+    </div>
+
+    <!-- Copilot Input Field -->
+    <form onsubmit="handleCopilotSubmit(event)" class="p-3 border-t border-appBorder bg-slate-950/80 flex items-center space-x-2">
+      <input type="text" id="aiCopilotInput" placeholder="Ask anything about your projects..." class="flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-2 text-xs text-white focus:outline-none focus:border-purple-500" aria-label="AI Copilot input prompt">
+      <button type="submit" id="aiCopilotSendBtn" class="p-2 rounded-xl bg-purple-600 hover:bg-purple-500 text-white transition cursor-pointer active:scale-95" aria-label="Send query to Copilot">
+        <i class="ph-bold ph-paper-plane-right text-xs"></i>
+      </button>
+    </form>
+  </aside>
+
+  <!-- Command Palette Modal (⌘K) -->
+  <div id="commandPaletteModal" onclick="if(event.target === this) document.getElementById('commandPaletteModal').classList.add('hidden')" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-start justify-center pt-14 sm:pt-20 p-3 sm:p-4 hidden" role="dialog" aria-modal="true" aria-label="Command palette">
+    <div class="bg-appCard border border-appBorder rounded-2xl w-full max-w-lg overflow-hidden shadow-2xl" onclick="event.stopPropagation()">
+      <div class="p-3 border-b border-appBorder flex items-center space-x-2">
+        <i class="ph-bold ph-magnifying-glass text-slate-400" aria-hidden="true"></i>
+        <input type="text" id="commandPaletteInput" oninput="handleCommandPaletteSearch(this.value)" placeholder="Search tasks, projects, actions..." class="w-full bg-transparent text-xs sm:text-sm text-white focus:outline-none" aria-label="Search items in dashboard">
+        <kbd class="text-[9px] sm:text-[10px] font-mono px-1.5 py-0.5 rounded bg-slate-800 text-slate-400">ESC</kbd>
+      </div>
+      <div id="commandPaletteResults" class="p-2 max-h-72 overflow-y-auto space-y-1 text-xs"></div>
+    </div>
+  </div>
+
+  <!-- Profile Picture Edit Menu Popover -->
+  <div id="profilePictureMenu" class="fixed bg-slate-900 border border-slate-700 rounded-2xl p-1.5 shadow-2xl z-50 hidden space-y-1 text-xs min-w-[160px]" role="menu" aria-label="Profile photo options">
+    <button onclick="triggerAvatarUpload()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-slate-200 hover:text-white hover:bg-slate-800 transition text-left cursor-pointer" role="menuitem">
+      <i class="ph-bold ph-upload-simple text-sm text-purple-400" aria-hidden="true"></i>
+      <span>Upload photo</span>
+    </button>
+    <button onclick="removeUserAvatar()" class="w-full flex items-center space-x-2 px-3 py-2 rounded-xl text-rose-400 hover:text-rose-300 hover:bg-rose-500/10 transition text-left cursor-pointer" role="menuitem">
+      <i class="ph-bold ph-trash text-sm" aria-hidden="true"></i>
+      <span>Remove photo</span>
+    </button>
+  </div>
+  <input type="file" id="hiddenAvatarFileInput" class="hidden" accept="image/*" onchange="handleAvatarFileChosen(event)" aria-label="Upload profile photo">
+
+  <!-- Status Digest Modal -->
+  <div id="statusDigestModal" onclick="if(event.target === this) closeStatusDigestModal()" class="fixed inset-0 bg-black/75 backdrop-blur-sm z-50 flex items-center justify-center p-3 sm:p-4 hidden" role="dialog" aria-modal="true" aria-labelledby="statusDigestTitle">
+    <div class="bg-appCard border border-appBorder rounded-2xl w-full max-w-2xl p-4 sm:p-5 space-y-4 shadow-2xl max-h-[85vh] flex flex-col" onclick="event.stopPropagation()">
+      <div class="flex items-center justify-between">
+        <div>
+          <h3 id="statusDigestTitle" class="text-xs sm:text-sm font-bold text-white">AI Powered Project Management Dashboard · Status Digest</h3>
+          <p class="text-[11px] sm:text-xs text-purple-400">A Smarter Way to Get Things Done.</p>
+        </div>
+        <button onclick="closeStatusDigestModal()" class="text-slate-400 hover:text-white cursor-pointer" aria-label="Close digest modal"><i class="ph-bold ph-x text-base"></i></button>
+      </div>
+      <div class="flex-1 overflow-y-auto bg-slate-900 border border-slate-800 rounded-xl p-3 sm:p-4 text-xs font-mono text-slate-200 space-y-3 whitespace-pre-wrap select-all" id="statusDigestContent"></div>
+      <div class="flex justify-end space-x-2 pt-2 border-t border-slate-800">
+        <button onclick="copyStatusDigestToClipboard()" class="px-3.5 py-1.5 rounded-xl bg-purple-600 hover:bg-purple-500 text-white text-xs font-semibold flex items-center space-x-1.5 transition cursor-pointer active:scale-95" aria-label="Copy status digest">
+          <i class="ph-bold ph-copy text-xs" aria-hidden="true"></i>
+          <span>Copy Digest</span>
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Notification Toast Container -->
+  <div id="toastContainer" class="fixed bottom-3 right-3 sm:bottom-4 sm:right-4 z-50 space-y-2 pointer-events-none max-w-[calc(100vw-24px)]" aria-live="assertive"></div>
+
+  <script>
+    const KAROL_AVATAR = 'Profile Pic 3.jpeg';
+
+    const PaneStore = {
+      user: {
+        name: 'Karol Mathews',
+        role: 'Project Manager',
+        email: 'karol@aipm.app',
+        avatar: KAROL_AVATAR
+      },
+      currentView: 'home',
+      activeFilter: 'all',
+      taskViewMode: 'kanban',
+      focusIsRunning: false,
+      focusSecondsRemaining: 1500,
+      focusInterval: null,
+      copilotInProgress: false,
+      auditInProgress: false,
+      decomposeInProgress: false,
+      projects: [
+        {
+          id: 'proj-1',
+          name: 'Project 1',
+          color: 'purple',
+          tag: 'INFRA',
+          cost: '$145,000',
+          client: 'Enterprise Core Infra',
+          status: 'in_progress',
+          progress: 88,
+          milestone: 'GA Release Deployment',
+          targetDate: getRelativeDateString(4),
+          sharepointUrl: 'https://sharepoint.com/teams/project-1',
+          statusNote: 'Architecture sign-off complete. Load testing in progress with zero regression.',
+          bullets: [
+            'Achieved 99.98% benchmark pass rate in staging clusters.',
+            'Finalizing telemetry integration prior to Friday release.',
+            'No critical blockers; waiting on final security sign-off.'
+          ],
+          artefacts: [
+            { id: 'art-1', name: 'Release_Architecture_v2.pdf', size: '2.4 MB' }
+          ],
+          resources: ['Karol Mathews', 'Elena Rostova', 'Marcus Vance']
+        },
+        {
+          id: 'proj-2',
+          name: 'Project 2',
+          color: 'blue',
+          tag: 'MOBILE',
+          cost: '$92,500',
+          client: 'Consumer Banking',
+          status: 'in_progress',
+          progress: 74,
+          milestone: 'iOS TestFlight Beta Build',
+          targetDate: getRelativeDateString(7),
+          sharepointUrl: 'https://sharepoint.com/teams/project-2',
+          statusNote: 'Biometric login and push notification pipelines verified.',
+          bullets: [
+            'Completed Apple Keychain and Android Keystore auth modules.',
+            'Internal dogfooding ongoing with 32 active testers.',
+            'Need UX refinement on offline sync status indicator.'
+          ],
+          artefacts: [
+            { id: 'art-2', name: 'Mobile_Design_Specs.fig', size: '14.1 MB' }
+          ],
+          resources: ['Karol Mathews', 'Chloe Bennett', 'David Kim']
+        },
+        {
+          id: 'proj-3',
+          name: 'Project 3',
+          color: 'pink',
+          tag: 'DESIGN',
+          cost: '$58,000',
+          client: 'Design Operations',
+          status: 'in_review',
+          progress: 92,
+          milestone: 'Design Token System Release',
+          targetDate: getRelativeDateString(2),
+          sharepointUrl: 'https://sharepoint.com/teams/project-3',
+          statusNote: 'All Figma design libraries published. Token sync to CSS verified.',
+          bullets: [
+            'Mapped 480 core tokens across web, iOS, and Android surfaces.',
+            'Component documentation published on internal portal.',
+            'Final review scheduled with front-end engineering leads.'
+          ],
+          artefacts: [],
+          resources: ['Aria Stark', 'Marcus Vance']
+        },
+        {
+          id: 'proj-4',
+          name: 'Project 4',
+          color: 'emerald',
+          tag: 'GROWTH',
+          cost: '$110,000',
+          client: 'Product Growth',
+          status: 'in_progress',
+          progress: 65,
+          milestone: 'Interactive Onboarding Funnel',
+          targetDate: getRelativeDateString(14),
+          sharepointUrl: 'https://sharepoint.com/teams/project-4',
+          statusNote: 'A/B testing running across 10% of new cohort signups.',
+          bullets: [
+            'Implemented 3-step interactive setup wizard.',
+            'Initial analytics show 18% improvement in D1 retention.',
+            'Optimizing loading speed for low-bandwidth mobile users.'
+          ],
+          artefacts: [],
+          resources: ['Chloe Bennett', 'Siddharth Rao']
+        },
+        {
+          id: 'proj-5',
+          name: 'Project 5',
+          color: 'amber',
+          tag: 'MARKETING',
+          cost: '$75,000',
+          client: 'Global Brand & Comms',
+          status: 'planning',
+          progress: 40,
+          milestone: 'Brand Narrative Kickoff',
+          targetDate: getRelativeDateString(21),
+          sharepointUrl: 'https://sharepoint.com/teams/project-5',
+          statusNote: 'Brand guidelines aligned with executive team.',
+          bullets: [
+            'Key messaging pillars defined for Q4 promotion.',
+            'Securing agency contracts for visual assets.',
+            'Budget approval scheduled for Thursday leadership sync.'
+          ],
+          artefacts: [],
+          resources: ['Elena Rostova', 'Siddharth Rao']
+        },
+        {
+          id: 'proj-6',
+          name: 'Project 6',
+          color: 'cyan',
+          tag: 'DATA',
+          cost: '$130,000',
+          client: 'Data & Analytics',
+          status: 'in_progress',
+          progress: 58,
+          milestone: 'Telemetry Pipeline Migration',
+          targetDate: getRelativeDateString(28),
+          sharepointUrl: 'https://sharepoint.com/teams/project-6',
+          statusNote: 'ClickHouse data pipelines processing 2M events/sec.',
+          bullets: [
+            'Cut query latency by 4x for real-time dashboards.',
+            'Backfilling historical data for cohort retention queries.',
+            'Monitoring memory overhead on ingestion workers.'
+          ],
+          artefacts: [],
+          resources: ['David Kim', 'Aria Stark']
+        }
+      ],
+      deletedProjects: [],
+      tasks: [
+        { id: 'tsk-1', title: 'Validate zero-regression benchmarks', project: 'Project 1', priority: 'high', stage: 'done', assignee: 'Karol Mathews', dueDate: getRelativeShortDate(-1) },
+        { id: 'tsk-2', title: 'Verify staging load cluster', project: 'Project 1', priority: 'high', stage: 'in_progress', assignee: 'Marcus Vance', dueDate: getRelativeShortDate(2) },
+        { id: 'tsk-3', title: 'Conduct final security sign-off', project: 'Project 1', priority: 'medium', stage: 'todo', assignee: 'Elena Rostova', dueDate: getRelativeShortDate(4) },
+        { id: 'tsk-4', title: 'Keychain authentication module', project: 'Project 2', priority: 'high', stage: 'done', assignee: 'Chloe Bennett', dueDate: getRelativeShortDate(-2) },
+        { id: 'tsk-5', title: 'Offline sync visual indicators', project: 'Project 2', priority: 'medium', stage: 'in_progress', assignee: 'David Kim', dueDate: getRelativeShortDate(3) },
+        { id: 'tsk-6', title: 'Deploy internal TestFlight build', project: 'Project 2', priority: 'high', stage: 'todo', assignee: 'Karol Mathews', dueDate: getRelativeShortDate(5) },
+        { id: 'tsk-7', title: 'Cross-platform design token sync', project: 'Project 3', priority: 'medium', stage: 'done', assignee: 'Aria Stark', dueDate: getRelativeShortDate(-3) },
+        { id: 'tsk-8', title: 'Figma component documentation', project: 'Project 3', priority: 'low', stage: 'in_review', assignee: 'Marcus Vance', dueDate: getRelativeShortDate(3) },
+        { id: 'tsk-9', title: 'A/B testing telemetry capture', project: 'Project 4', priority: 'high', stage: 'in_progress', assignee: 'Siddharth Rao', dueDate: getRelativeShortDate(6) },
+        { id: 'tsk-10', title: 'Optimize low-bandwidth onboarding', project: 'Project 4', priority: 'medium', stage: 'todo', assignee: 'Chloe Bennett', dueDate: getRelativeShortDate(10) },
+        { id: 'tsk-11', title: 'Brand messaging review', project: 'Project 5', priority: 'medium', stage: 'todo', assignee: 'Elena Rostova', dueDate: getRelativeShortDate(14) },
+        { id: 'tsk-12', title: 'ClickHouse query latency benchmark', project: 'Project 6', priority: 'high', stage: 'in_progress', assignee: 'David Kim', dueDate: getRelativeShortDate(4) }
+      ],
+      team: [
+        { name: 'Karol Mathews', role: 'Project Manager', dept: 'Product', avatar: KAROL_AVATAR, email: 'karol@aipm.app', location: 'New York (EDT)' },
+        { name: 'Elena Rostova', role: 'Staff Security Engineer', dept: 'Engineering', avatar: 'https://placehold.co/80x80/ec4899/ffffff?text=ER', email: 'elena@aipm.app', location: 'London (BST)' },
+        { name: 'Marcus Vance', role: 'Principal Architect', dept: 'Engineering', avatar: 'https://placehold.co/80x80/3b82f6/ffffff?text=MV', email: 'marcus@aipm.app', location: 'San Francisco (PDT)' },
+        { name: 'Chloe Bennett', role: 'Senior iOS Lead', dept: 'Engineering', avatar: 'https://placehold.co/80x80/10b981/ffffff?text=CB', email: 'chloe@aipm.app', location: 'Seattle (PDT)' },
+        { name: 'David Kim', role: 'Data Systems Engineer', dept: 'Data', avatar: 'https://placehold.co/80x80/06b6d4/ffffff?text=DK', email: 'david@aipm.app', location: 'Austin (CDT)' },
+        { name: 'Aria Stark', role: 'Lead Design Systems', dept: 'Design', avatar: 'https://placehold.co/80x80/f59e0b/ffffff?text=AS', email: 'aria@aipm.app', location: 'Toronto (EDT)' },
+        { name: 'Siddharth Rao', role: 'Growth Product Manager', dept: 'Product', avatar: 'https://placehold.co/80x80/8b5cf6/ffffff?text=SR', email: 'siddharth@aipm.app', location: 'Bangalore (IST)' }
+      ]
+    };
+
+    let activeCockpitProjectId = 'proj-1';
+    let selectedAddProjColor = 'purple';
+
+    /* Helper date formatting utilities for relative dates */
+    function getRelativeDateString(daysOffset) {
+      const d = new Date();
+      d.setDate(d.getDate() + daysOffset);
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+    }
+
+    function getRelativeShortDate(daysOffset) {
+      const d = new Date();
+      d.setDate(d.getDate() + daysOffset);
+      return d.toLocaleDateString(undefined, { month: 'short', day: 'numeric' });
+    }
+
+    function getISODateOffset(daysOffset) {
+      const d = new Date();
+      d.setDate(d.getDate() + daysOffset);
+      try {
+        return d.toISOString().split('T')[0];
+      } catch (e) {
+        return '';
+      }
+    }
+
+    /* Helper to convert stage name to DOM column ID safe PascalCase */
+    function getStageElementId(stage) {
+      if (stage === 'todo') return 'colTodoCards';
+      if (stage === 'in_progress') return 'colInProgressCards';
+      if (stage === 'in_review') return 'colInReviewCards';
+      if (stage === 'done') return 'colDoneCards';
+      return 'colTodoCards';
+    }
+
+    function getNextStage(currentStage) {
+      const flow = ['todo', 'in_progress', 'in_review', 'done'];
+      const idx = flow.indexOf(currentStage);
+      if (idx === -1 || idx === flow.length - 1) return flow[0];
+      return flow[idx + 1];
+    }
+
+    /* Live Real-time System Time & Greeting Engine */
+    function updateSystemTimeDisplay() {
+      const now = new Date();
+
+      const dateOptions = { weekday: 'long', year: 'numeric', month: 'long', day: 'numeric' };
+      const formattedDate = now.toLocaleDateString(undefined, dateOptions);
+      
+      const dateEl = document.getElementById('currentDateDisplay');
+      if (dateEl) dateEl.textContent = formattedDate;
+
+      const clockEl = document.getElementById('liveHeaderClock');
+      if (clockEl) {
+        clockEl.textContent = now.toLocaleTimeString(undefined, { hour: '2-digit', minute: '2-digit', second: '2-digit' });
+      }
+
+      const execDateBadge = document.getElementById('executiveBriefingDateBadge');
+      if (execDateBadge) {
+        execDateBadge.textContent = now.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' }) + ' Briefing';
+      }
+
+      const hour = now.getHours();
+      let greeting = 'Good morning';
+      if (hour >= 12 && hour < 17) greeting = 'Good afternoon';
+      else if (hour >= 17) greeting = 'Good evening';
+
+      const greetingEl = document.getElementById('homeGreetingHeader');
+      if (greetingEl) {
+        greetingEl.textContent = `${greeting}, ${PaneStore.user.name.split(' ')[0]}`;
+      }
+    }
+
+    function initLiveClockTicker() {
+      updateSystemTimeDisplay();
+      setInterval(updateSystemTimeDisplay, 1000);
+    }
+
+    /* Calendar Grid Population based on Active System Month */
+    function renderDynamicCalendar() {
+      const now = new Date();
+      const currentYear = now.getFullYear();
+      const currentMonth = now.getMonth();
+      const todayDate = now.getDate();
+
+      const monthName = now.toLocaleString(undefined, { month: 'long' });
+      const heading = document.getElementById('calendarMonthYearHeading');
+      if (heading) heading.textContent = `${monthName} ${currentYear}`;
+
+      const grid = document.getElementById('dynamicCalendarDaysGrid');
+      if (!grid) return;
+      grid.innerHTML = '';
+
+      const daysOfWeek = ['Mon', 'Tue', 'Wed', 'Thu', 'Fri', 'Sat', 'Sun'];
+      daysOfWeek.forEach(d => {
+        const header = document.createElement('div');
+        header.className = 'text-slate-500 font-bold py-1 uppercase font-mono text-[10px] tracking-wider';
+        header.textContent = d;
+        grid.appendChild(header);
+      });
+
+      const firstDayOfMonth = new Date(currentYear, currentMonth, 1).getDay();
+      const startOffset = (firstDayOfMonth === 0 ? 6 : firstDayOfMonth - 1);
+      const daysInMonth = new Date(currentYear, currentMonth + 1, 0).getDate();
+      const prevMonthDays = new Date(currentYear, currentMonth, 0).getDate();
+
+      for (let i = startOffset - 1; i >= 0; i--) {
+        const prevDay = prevMonthDays - i;
+        const cell = document.createElement('div');
+        cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/30 text-slate-600 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
+        cell.innerHTML = `<span class="text-[11px] font-mono">${prevDay}</span>`;
+        grid.appendChild(cell);
+      }
+
+      for (let day = 1; day <= daysInMonth; day++) {
+        const cell = document.createElement('div');
+        const isToday = day === todayDate;
+
+        const matchedProjects = PaneStore.projects.filter(p => {
+          const pDate = new Date(p.targetDate);
+          return !isNaN(pDate.getTime()) && pDate.getFullYear() === currentYear && pDate.getMonth() === currentMonth && pDate.getDate() === day;
+        });
+
+        if (isToday) {
+          cell.className = 'p-2 sm:p-3 rounded-xl bg-purple-600/20 border border-purple-500/50 text-white font-bold relative shadow-md shadow-purple-500/10 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
+          cell.innerHTML = `
+            <div class="flex items-center justify-between">
+              <span class="text-xs font-mono font-bold">${day}</span>
+              <span class="text-[9px] text-purple-300 font-mono uppercase bg-purple-500/30 px-1 py-0.2 rounded">TODAY</span>
+            </div>
+            ${matchedProjects.length ? `<span class="text-[9px] text-purple-200 truncate mt-1 block font-normal">🚩 ${sanitize(matchedProjects[0].name)}</span>` : '<span class="text-[9px] text-purple-300/70 font-normal mt-1 block">Standup active</span>'}
+          `;
+        } else if (matchedProjects.length) {
+          const p = matchedProjects[0];
+          cell.className = 'p-2 sm:p-3 rounded-xl bg-amber-500/10 border border-amber-500/30 text-amber-300 font-bold min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left cursor-pointer hover:bg-amber-500/20 transition';
+          cell.onclick = () => openProjectDetailView(p.id);
+          cell.innerHTML = `
+            <span class="text-xs font-mono">${day}</span>
+            <span class="text-[8px] sm:text-[9px] truncate mt-1 block text-amber-200">🚩 ${sanitize(p.milestone)}</span>
+          `;
+        } else {
+          cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/60 text-slate-300 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left hover:bg-slate-900 transition';
+          cell.innerHTML = `<span class="text-xs font-mono text-slate-400">${day}</span>`;
+        }
+        grid.appendChild(cell);
+      }
+
+      const totalRendered = startOffset + daysInMonth;
+      const nextMonthDays = (7 - (totalRendered % 7)) % 7;
+      for (let n = 1; n <= nextMonthDays; n++) {
+        const cell = document.createElement('div');
+        cell.className = 'p-2 sm:p-3 rounded-xl bg-slate-900/30 text-slate-600 min-h-[64px] sm:min-h-[76px] flex flex-col justify-between text-left';
+        cell.innerHTML = `<span class="text-[11px] font-mono">${n}</span>`;
+        grid.appendChild(cell);
+      }
+    }
+
+    function sanitize(str) {
+      if (str === null || str === undefined) return '';
+      return String(str)
+        .replace(/&/g, '&amp;')
+        .replace(/</g, '&lt;')
+        .replace(/>/g, '&gt;')
+        .replace(/"/g, '&quot;')
+        .replace(/'/g, '&#39;');
+    }
+
+    function sanitizeUrl(url) {
+      if (!url) return '#';
+      try {
+        const parsed = new URL(url, window.location.origin);
+        if (['http:', 'https:'].includes(parsed.protocol)) {
+          return sanitize(parsed.href);
+        }
+      } catch (e) {}
+      return '#';
+    }
+
+    function getColorTokens(color) {
+      const map = {
+        purple: { text: 'text-purple-400', bgBadge: 'bg-purple-500/10', borderBadge: 'border-purple-500/20', bar: 'from-purple-500 to-indigo-500', dot: 'bg-purple-400' },
+        blue: { text: 'text-blue-400', bgBadge: 'bg-blue-500/10', borderBadge: 'border-blue-500/20', bar: 'from-blue-500 to-cyan-500', dot: 'bg-blue-400' },
+        pink: { text: 'text-pink-400', bgBadge: 'bg-pink-500/10', borderBadge: 'border-pink-500/20', bar: 'from-pink-500 to-rose-500', dot: 'bg-pink-400' },
+        emerald: { text: 'text-emerald-400', bgBadge: 'bg-emerald-500/10', borderBadge: 'border-emerald-500/20', bar: 'from-emerald-500 to-teal-500', dot: 'bg-emerald-400' },
+        amber: { text: 'text-amber-400', bgBadge: 'bg-amber-500/10', borderBadge: 'border-amber-500/20', bar: 'from-amber-500 to-orange-500', dot: 'bg-amber-400' },
+        cyan: { text: 'text-cyan-400', bgBadge: 'bg-cyan-500/10', borderBadge: 'border-cyan-500/20', bar: 'from-cyan-500 to-blue-500', dot: 'bg-cyan-400' }
+      };
+      return map[color] || map.purple;
+    }
+
+    function copyTextSafely(text) {
+      return new Promise((resolve) => {
+        try {
+          const textArea = document.createElement('textarea');
+          textArea.value = text;
+          textArea.style.position = 'fixed';
+          textArea.style.top = '-9999px';
+          textArea.style.left = '-9999px';
+          textArea.style.opacity = '0';
+          textArea.setAttribute('readonly', '');
+          document.body.appendChild(textArea);
+          textArea.focus();
+          textArea.select();
+          textArea.setSelectionRange(0, 99999);
+          const successful = document.execCommand('copy');
+          document.body.removeChild(textArea);
+          if (successful) {
+            resolve(true);
+            return;
+          }
+        } catch (e) {
+          console.warn('execCommand fallback issue:', e);
+        }
+
+        if (navigator.clipboard && navigator.clipboard.writeText) {
+          navigator.clipboard.writeText(text)
+            .then(() => resolve(true))
+            .catch(() => resolve(false));
+        } else {
+          resolve(false);
+        }
+      });
+    }
+
+    function toggleSidebarMobile(forceState) {
+      const s = document.getElementById('mainSidebar');
+      const b = document.getElementById('mobileSidebarBackdrop');
+      if (!s) return;
+      
+      const isOpen = s.classList.contains('sidebar-open');
+      const nextState = forceState !== undefined ? forceState : !isOpen;
+
+      if (nextState) {
+        s.classList.add('sidebar-open');
+        b?.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      } else {
+        s.classList.remove('sidebar-open');
+        b?.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+
+    function navigateView(viewId) {
+      PaneStore.currentView = viewId;
+      const views = ['home', 'executive', 'tasks', 'projects', 'project-detail', 'calendar', 'insights', 'team', 'trash', 'settings'];
+      views.forEach(v => {
+        const el = document.getElementById(`view-${v}`);
+        if (el) el.classList.toggle('hidden', v !== viewId);
+      });
+
+      document.querySelectorAll('.nav-item').forEach(btn => {
+        btn.classList.remove('bg-slate-900', 'text-white');
+        btn.classList.add('text-slate-400');
+      });
+      const activeNavBtn = document.getElementById(`nav-btn-${viewId}`);
+      if (activeNavBtn) {
+        activeNavBtn.classList.remove('text-slate-400');
+        activeNavBtn.classList.add('bg-slate-900', 'text-white');
+      }
+
+      if (window.innerWidth < 1024) {
+        toggleSidebarMobile(false);
+      }
+
+      const canvas = document.getElementById('mainCanvas');
+      if (canvas) canvas.scrollTop = 0;
+
+      if (viewId === 'home') syncGlobalState();
+      if (viewId === 'executive') renderExecutiveDashboard();
+      if (viewId === 'tasks') renderTasksBoard();
+      if (viewId === 'projects') renderProjectsCards();
+      if (viewId === 'calendar') renderDynamicCalendar();
+      if (viewId === 'team') renderTeamDirectory();
+      if (viewId === 'trash') renderTrashItems();
+      if (viewId === 'insights') renderInsightsCharts();
+    }
+
+    function syncGlobalState() {
+      PaneStore.projects.forEach(p => {
+        const pTasks = PaneStore.tasks.filter(t => t.project === p.name);
+        if (pTasks.length > 0) {
+          const doneCount = pTasks.filter(t => t.stage === 'done').length;
+          p.progress = Math.round((doneCount / pTasks.length) * 100);
+        }
+      });
+
+      const totalTasks = PaneStore.tasks.length;
+      const doneTasks = PaneStore.tasks.filter(t => t.stage === 'done').length;
+      const pct = totalTasks ? Math.round((doneTasks / totalTasks) * 100) : 0;
+
+      const rateDisplay = document.getElementById('overallCompletionRateDisplay');
+      if (rateDisplay) rateDisplay.textContent = `${pct}%`;
+
+      const kpiDone = document.getElementById('kpiDoneTasksCount');
+      if (kpiDone) kpiDone.textContent = `${doneTasks}/${totalTasks}`;
+
+      const tasksBadge = document.getElementById('navBadgeTasksCount');
+      if (tasksBadge) tasksBadge.textContent = totalTasks;
+
+      const projectsBadge = document.getElementById('navBadgeProjectsCount');
+      if (projectsBadge) projectsBadge.textContent = PaneStore.projects.length;
+
+      const trashBadge = document.getElementById('navBadgeTrashCount');
+      if (trashBadge) trashBadge.textContent = PaneStore.deletedProjects.length;
+
+      const teamBadge = document.getElementById('navBadgeTeamCount');
+      if (teamBadge) teamBadge.textContent = PaneStore.team.length;
+
+      const homeProjKpi = document.getElementById('homeKpiActiveProjects');
+      if (homeProjKpi) homeProjKpi.textContent = `${PaneStore.projects.length} Projects`;
+
+      const homeTeamKpi = document.getElementById('homeKpiTeammatesCount');
+      if (homeTeamKpi) homeTeamKpi.textContent = `${PaneStore.team.length} Teammates`;
+
+      if (PaneStore.projects.length > 0) {
+        const sorted = [...PaneStore.projects].sort((a, b) => new Date(a.targetDate) - new Date(b.targetDate));
+        const nearest = sorted[0];
+        const mTitle = document.getElementById('homeNearestMilestoneTitle');
+        const mDate = document.getElementById('homeNearestMilestoneDate');
+        if (mTitle) mTitle.textContent = nearest.milestone;
+        if (mDate) mDate.textContent = nearest.targetDate;
+      }
+
+      const ringTasks = document.getElementById('ringTasksCircle');
+      if (ringTasks) {
+        const circ = 314.15;
+        const offset = circ - (circ * (pct / 100));
+        ringTasks.style.strokeDashoffset = offset;
+      }
+
+      const homeProjContainer = document.getElementById('homeProjectsProgressContainer');
+      if (homeProjContainer) {
+        homeProjContainer.innerHTML = '';
+        if (PaneStore.projects.length === 0) {
+          homeProjContainer.innerHTML = `<div class="col-span-full p-6 text-center text-slate-500 text-xs">No active initiatives found. Click "Add Project" to begin.</div>`;
+        } else {
+          PaneStore.projects.forEach(p => {
+            const tokens = getColorTokens(p.color);
+            const card = document.createElement('div');
+            card.className = 'p-3 rounded-xl bg-slate-900 border border-slate-800 hover:border-slate-700 transition cursor-pointer';
+            card.onclick = () => openProjectDetailView(p.id);
+            card.innerHTML = `
+              <div class="flex items-center justify-between mb-1.5">
+                <span class="font-bold text-white text-xs truncate max-w-[70%]">${sanitize(p.name)}</span>
+                <span class="text-[10px] font-mono text-purple-400 font-bold">${p.progress}%</span>
+              </div>
+              <div class="w-full h-1.5 bg-slate-800 rounded-full overflow-hidden mb-2">
+                <div class="h-full bg-gradient-to-r ${tokens.bar} rounded-full" style="width: ${p.progress}%"></div>
+              </div>
+              <div class="text-[10px] text-slate-400 truncate flex items-center justify-between">
+                <span class="truncate">${sanitize(p.milestone)}</span>
+                <span class="font-mono shrink-0 ml-1">${sanitize(p.targetDate)}</span>
+              </div>
+            `;
+            homeProjContainer.appendChild(card);
+          });
+        }
+      }
+
+      renderSidebarPinnedProjects();
+    }
+
+    function renderSidebarPinnedProjects() {
+      const container = document.getElementById('sidebarPinnedProjectsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+      PaneStore.projects.slice(0, 4).forEach(p => {
+        const tokens = getColorTokens(p.color);
+        const btn = document.createElement('button');
+        btn.onclick = () => openProjectDetailView(p.id);
+        btn.className = 'w-full flex items-center justify-between px-3 py-1.5 rounded-xl text-xs text-slate-400 hover:text-white hover:bg-slate-900 transition text-left cursor-pointer';
+        btn.innerHTML = `
+          <div class="flex items-center space-x-2 truncate">
+            <span class="w-2 h-2 rounded-full ${tokens.dot} shrink-0"></span>
+            <span class="truncate">${sanitize(p.name)}</span>
+          </div>
+          <span class="text-[10px] font-mono text-slate-500">${p.progress}%</span>
+        `;
+        container.appendChild(btn);
+      });
+    }
+
+    function renderExecutiveDashboard() {
+      const container = document.getElementById('executiveProjectsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (PaneStore.projects.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 text-center text-slate-500 text-xs">No active projects available to review in Executive Overview.</div>`;
+        return;
+      }
+
+      PaneStore.projects.forEach(p => {
+        const tokens = getColorTokens(p.color);
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition';
+        
+        const bulletsText = (p.bullets || []).map(b => `• ${b}`).join('\n');
+
+        card.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-2">
+                <span class="w-2.5 h-2.5 rounded-full ${tokens.dot}"></span>
+                <span class="font-black text-white text-sm">${sanitize(p.name)}</span>
+              </div>
+              <span class="text-[10px] font-mono px-2 py-0.5 rounded-full ${tokens.bgBadge} ${tokens.text} border ${tokens.borderBadge} uppercase font-bold">
+                ${sanitize((p.status || 'planning').replace('_', ' '))}
+              </span>
+            </div>
+
+            <!-- Dynamic Progress Bar -->
+            <div class="space-y-1">
+              <div class="flex items-center justify-between text-[11px]">
+                <span class="text-slate-400 truncate max-w-[70%]">${sanitize(p.milestone)}</span>
+                <span class="font-mono font-bold text-white">${p.progress}%</span>
+              </div>
+              <div class="w-full h-2 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+                <div class="h-full bg-gradient-to-r ${tokens.bar} rounded-full" style="width: ${p.progress}%"></div>
+              </div>
+            </div>
+
+            <!-- Clubbed 3-Bullet Strategic Notes Box -->
+            <div class="space-y-1.5 pt-1">
+              <div class="flex items-center justify-between">
+                <span class="text-[10px] font-mono uppercase text-slate-400 font-bold">Strategic Status (3 Bullets)</span>
+                <button onclick="aiDraftProjectBullets('${p.id}')" class="text-[10px] text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer active:scale-95" aria-label="Generate bullets with AI">
+                  <i class="ph-bold ph-sparkle"></i>
+                  <span>AI Draft</span>
+                </button>
+              </div>
+              <textarea id="execBullets_${p.id}" rows="4" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2.5 text-xs text-slate-200 focus:outline-none focus:border-amber-500 font-sans leading-relaxed" placeholder="• Bullet 1\n• Bullet 2\n• Bullet 3" aria-label="Strategic 3-bullet update">${sanitize(bulletsText)}</textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-800/80">
+            <button onclick="saveProjectClubbedBullets('${p.id}')" class="px-3 py-1.5 rounded-xl bg-slate-800 hover:bg-slate-700 text-white text-xs font-semibold transition cursor-pointer active:scale-95">
+              Save Bullets
+            </button>
+            <button onclick="openProjectDetailView('${p.id}')" class="text-xs text-purple-400 hover:text-purple-300 font-semibold flex items-center space-x-1 cursor-pointer">
+              <span>View Cockpit</span>
+              <i class="ph-bold ph-arrow-right"></i>
+            </button>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function saveProjectClubbedBullets(projId) {
+      const p = PaneStore.projects.find(x => x.id === projId);
+      if (!p) return;
+      const textarea = document.getElementById('execBullets_' + projId);
+      if (!textarea) return;
+
+      const lines = textarea.value.split('\n')
+        .map(l => {
+          let str = l.trim();
+          while (str.startsWith('•') || str.startsWith('-') || str.startsWith('*')) {
+            str = str.substring(1).trim();
+          }
+          return str;
+        })
+        .filter(l => l.length > 0);
+
+      p.bullets = lines;
+      showToast('Saved', 'Strategic bullets updated for ' + p.name);
+    }
+
+    function copyExecutiveBriefing() {
+      let report = `AI Powered Project Management Dashboard · Executive Briefing\nTagline: A Smarter Way to Get Things Done.\nGenerated on: ${new Date().toLocaleString()}\n\n`;
+      PaneStore.projects.forEach(p => {
+        report += `=== ${p.name.toUpperCase()} (${p.progress}% | ${(p.status || '').toUpperCase()}) ===\n`;
+        report += `Milestone: ${p.milestone} (Target: ${p.targetDate})\n`;
+        (p.bullets || []).forEach(b => {
+          report += `• ${b}\n`;
+        });
+        report += `\n`;
+      });
+      copyTextSafely(report).then((success) => {
+        if (success) {
+          showToast('Copied to Clipboard', 'Executive briefing ready for Slack or Email.');
+        } else {
+          showToast('Copy Notice', 'Please copy briefing text manually from summary dialog.');
+        }
+      });
+    }
+
+    function renderTasksBoard() {
+      const stages = ['todo', 'in_progress', 'in_review', 'done'];
+      stages.forEach(s => {
+        const col = document.getElementById(getStageElementId(s));
+        if (col) col.innerHTML = '';
+      });
+
+      const counts = { todo: 0, in_progress: 0, in_review: 0, done: 0 };
+
+      PaneStore.tasks.forEach(t => {
+        counts[t.stage] = (counts[t.stage] || 0) + 1;
+        const col = document.getElementById(getStageElementId(t.stage));
+        if (!col) return;
+
+        const card = document.createElement('div');
+        card.draggable = true;
+        card.ondragstart = (e) => { e.dataTransfer.setData('text/plain', t.id); };
+        card.className = 'p-3 rounded-xl bg-appCard border border-appBorder hover:border-purple-500/80 transition cursor-pointer space-y-2 group shadow-sm active:scale-[0.98]';
+        card.innerHTML = `
+          <div class="flex items-center justify-between text-[10px]">
+            <span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 font-bold">${sanitize(t.project)}</span>
+            <div class="flex items-center space-x-1.5">
+              <span class="font-mono uppercase text-slate-500">${sanitize(t.priority)}</span>
+              <!-- Quick Stage Advance Button for Mobile/Touch -->
+              <button onclick="advanceTaskStage(event, '${t.id}')" class="p-1 rounded hover:bg-slate-800 text-slate-400 hover:text-white transition" title="Move to next stage" aria-label="Advance task stage">
+                <i class="ph-bold ph-arrow-right text-[11px]"></i>
+              </button>
+            </div>
+          </div>
+          <div onclick="handleTaskCardClick('${t.id}')" class="text-xs font-semibold text-white group-hover:text-purple-300 transition">${sanitize(t.title)}</div>
+          <div class="flex items-center justify-between pt-1 border-t border-slate-800 text-[10px] text-slate-400">
+            <span>${sanitize(t.assignee)}</span>
+            <span onclick="handleTaskCardClick('${t.id}')" class="font-mono text-purple-400 hover:underline">View in Proj &rarr;</span>
+          </div>
+        `;
+        col.appendChild(card);
+      });
+
+      const bTodo = document.getElementById('badgeCountTodo'); if (bTodo) bTodo.textContent = counts.todo;
+      const bInProg = document.getElementById('badgeCountInProgress'); if (bInProg) bInProg.textContent = counts.in_progress;
+      const bInRev = document.getElementById('badgeCountInReview'); if (bInRev) bInRev.textContent = counts.in_review;
+      const bDone = document.getElementById('badgeCountDone'); if (bDone) bDone.textContent = counts.done;
+
+      renderTasksTable();
+    }
+
+    function advanceTaskStage(event, taskId) {
+      if (event) event.stopPropagation();
+      const task = PaneStore.tasks.find(t => t.id === taskId);
+      if (!task) return;
+      task.stage = getNextStage(task.stage);
+      renderTasksBoard();
+      syncGlobalState();
+      showToast('Stage Updated', `Moved to ${task.stage.replace('_', ' ')}`);
+    }
+
+    function renderTasksTable() {
+      const tbody = document.getElementById('tasksTableBody');
+      if (!tbody) return;
+      tbody.innerHTML = '';
+      if (PaneStore.tasks.length === 0) {
+        tbody.innerHTML = `<tr><td colspan="7" class="p-4 text-center text-slate-500">No deliverables found.</td></tr>`;
+        return;
+      }
+      PaneStore.tasks.forEach(t => {
+        const tr = document.createElement('tr');
+        tr.className = 'hover:bg-slate-900/60 transition';
+        tr.innerHTML = `
+          <td class="p-3 font-semibold text-white cursor-pointer" onclick="handleTaskCardClick('${t.id}')">${sanitize(t.title)}</td>
+          <td class="p-3 text-slate-400">${sanitize(t.project)}</td>
+          <td class="p-3 uppercase font-mono text-[10px] text-slate-400">${sanitize(t.priority)}</td>
+          <td class="p-3 font-mono text-slate-400">${sanitize(t.dueDate)}</td>
+          <td class="p-3 text-slate-300">${sanitize(t.assignee)}</td>
+          <td class="p-3"><span class="px-2 py-0.5 rounded-full bg-slate-800 text-slate-300 text-[10px]">${sanitize(t.stage.replace('_', ' '))}</span></td>
+          <td class="p-3 text-right">
+            <button onclick="advanceTaskStage(event, '${t.id}')" class="px-2 py-1 rounded bg-slate-800 hover:bg-slate-700 text-slate-300 text-[11px] transition" title="Advance Stage">Next Stage &rarr;</button>
+          </td>
+        `;
+        tbody.appendChild(tr);
+      });
+    }
+
+    function handleTaskCardClick(taskId) {
+      const task = PaneStore.tasks.find(t => t.id === taskId);
+      if (!task) return;
+      const proj = PaneStore.projects.find(p => p.name === task.project);
+      if (proj) {
+        openProjectDetailView(proj.id);
+        showToast('Navigated to Project', `Inspecting task inside ${proj.name}`);
+      }
+    }
+
+    function handleDragOver(e) {
+      e.preventDefault();
+      e.currentTarget.classList.add('border-purple-500/50');
+    }
+    function handleDragLeave(e) {
+      e.currentTarget.classList.remove('border-purple-500/50');
+    }
+    function handleDrop(e, stage) {
+      e.preventDefault();
+      e.currentTarget.classList.remove('border-purple-500/50');
+      const taskId = e.dataTransfer.getData('text/plain');
+      const task = PaneStore.tasks.find(t => t.id === taskId);
+      if (task) {
+        task.stage = stage;
+        renderTasksBoard();
+        syncGlobalState();
+      }
+    }
+
+    function setTaskViewMode(mode) {
+      PaneStore.taskViewMode = mode;
+      const isKanban = mode === 'kanban';
+      document.getElementById('kanbanBoardContainer')?.classList.toggle('hidden', !isKanban);
+      document.getElementById('tasksListContainer')?.classList.toggle('hidden', isKanban);
+      
+      const kbBtn = document.getElementById('taskViewModeKanbanBtn');
+      const lstBtn = document.getElementById('taskViewModeListBtn');
+      if (kbBtn && lstBtn) {
+        kbBtn.className = isKanban ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer' : 'px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer';
+        lstBtn.className = !isKanban ? 'px-2.5 py-1 rounded-lg text-xs font-semibold bg-slate-800 text-white transition cursor-pointer' : 'px-2.5 py-1 rounded-lg text-xs font-semibold text-slate-400 hover:text-white transition cursor-pointer';
+      }
+      if (!isKanban) renderTasksTable();
+    }
+
+    function renderProjectsCards() {
+      const container = document.getElementById('projectsCardsGrid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (PaneStore.projects.length === 0) {
+        container.innerHTML = `<div class="col-span-full p-8 sm:p-10 text-center text-slate-500 text-xs border border-dashed border-slate-800 rounded-2xl">No active initiatives found. Click "Add Project" to create one.</div>`;
+        return;
+      }
+
+      PaneStore.projects.forEach(p => {
+        const tokens = getColorTokens(p.color);
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl bg-appCard border border-appBorder p-4 sm:p-5 flex flex-col justify-between space-y-4 hover:border-slate-700 transition relative group';
+        
+        card.innerHTML = `
+          <div class="space-y-3">
+            <div class="flex items-center justify-between">
+              <div class="flex items-center space-x-1.5">
+                <span class="px-2.5 py-0.5 rounded-full text-[10px] font-mono font-bold ${tokens.bgBadge} ${tokens.text} border ${tokens.borderBadge}">
+                  ${sanitize(p.tag || 'PROJ')}
+                </span>
+                ${p.cost ? `<span class="px-2 py-0.5 rounded-full text-[10px] font-mono font-bold bg-emerald-500/10 text-emerald-400 border border-emerald-500/20">${sanitize(p.cost)}</span>` : ''}
+              </div>
+
+              <!-- Direct In-Card Status Selector -->
+              <select onchange="updateProjectStatusDirect(event, '${p.id}', this.value)" class="bg-slate-900 border border-slate-700 text-[11px] text-white rounded-lg px-2 py-0.5 focus:outline-none cursor-pointer" aria-label="Change status for ${sanitize(p.name)}">
+                <option value="planning" ${p.status === 'planning' ? 'selected' : ''}>📋 Planning</option>
+                <option value="in_progress" ${p.status === 'in_progress' ? 'selected' : ''}>⚡ In progress</option>
+                <option value="in_review" ${p.status === 'in_review' ? 'selected' : ''}>🔍 In review</option>
+                <option value="shipped" ${p.status === 'shipped' ? 'selected' : ''}>🚀 Shipped</option>
+              </select>
+            </div>
+
+            <div onclick="openProjectDetailView('${p.id}')" class="cursor-pointer space-y-1">
+              <h2 class="text-base font-bold text-white group-hover:text-purple-300 transition">${sanitize(p.name)}</h2>
+              ${p.client ? `<div class="text-[11px] text-purple-400 font-medium">${sanitize(p.client)}</div>` : ''}
+              <div class="text-[11px] text-slate-400 flex items-center justify-between pt-1">
+                <span class="truncate max-w-[70%]">Milestone: ${sanitize(p.milestone)}</span>
+                <span class="font-mono text-white font-bold">${p.progress}%</span>
+              </div>
+            </div>
+
+            <div class="w-full h-1.5 bg-slate-900 rounded-full overflow-hidden border border-slate-800">
+              <div class="h-full bg-gradient-to-r ${tokens.bar} rounded-full" style="width: ${p.progress}%"></div>
+            </div>
+
+            <!-- In-Card Status Note Box -->
+            <div class="space-y-1 pt-1">
+              <label for="cardNote_${p.id}" class="block text-[10px] uppercase font-mono text-slate-400 font-bold">Status Note (Weekly / Monthly Rollup)</label>
+              <textarea id="cardNote_${p.id}" rows="2" class="w-full bg-slate-900 border border-slate-800 rounded-xl p-2 text-xs text-slate-200 focus:outline-none focus:border-purple-500" placeholder="Add status notes...">${sanitize(p.statusNote || '')}</textarea>
+            </div>
+          </div>
+
+          <div class="flex items-center justify-between pt-3 border-t border-slate-800/80 text-xs">
+            <button onclick="saveCardStatusNote('${p.id}')" class="px-2.5 py-1 rounded-lg bg-slate-800 hover:bg-slate-700 text-white font-semibold transition text-[11px] cursor-pointer active:scale-95">
+              Save Note
+            </button>
+            <div class="flex items-center space-x-2">
+              <button onclick="softDeleteProject('${p.id}')" class="p-1.5 rounded-lg text-slate-500 hover:text-rose-400 transition cursor-pointer active:scale-95" aria-label="Delete ${sanitize(p.name)}" title="Delete Project">
+                <i class="ph-bold ph-trash"></i>
+              </button>
+              <button onclick="openProjectDetailView('${p.id}')" class="px-2.5 py-1 rounded-lg bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 font-semibold transition text-[11px] cursor-pointer active:scale-95">
+                Cockpit →
+              </button>
+            </div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function updateProjectStatusDirect(event, projId, newStatus) {
+      if (event) event.stopPropagation();
+      const p = PaneStore.projects.find(x => x.id === projId);
+      if (!p) return;
+      p.status = newStatus;
+      showToast('Status Updated', `${p.name} is now ${newStatus.replace('_', ' ')}`);
+      syncGlobalState();
+      if (PaneStore.currentView === 'project-detail' && activeCockpitProjectId === projId) {
+        const sel = document.getElementById('detailProjStatusSelect');
+        if (sel) sel.value = newStatus;
+      }
+    }
+
+    function handleDetailStatusSelectChange(newStatus) {
+      updateProjectStatusDirect(null, activeCockpitProjectId, newStatus);
+    }
+
+    function saveCardStatusNote(projId) {
+      const p = PaneStore.projects.find(x => x.id === projId);
+      if (!p) return;
+      const ta = document.getElementById(`cardNote_${projId}`);
+      if (ta) {
+        p.statusNote = ta.value;
+        showToast('Saved', `Status note saved for ${p.name}`);
+      }
+    }
+
+    function openProjectDetailView(projId) {
+      activeCockpitProjectId = projId;
+      const p = PaneStore.projects.find(x => x.id === projId);
+      if (!p) return;
+
+      document.getElementById('detailBreadcrumbProjName').textContent = p.name;
+      document.getElementById('detailProjTitle').textContent = p.name;
+      document.getElementById('detailProjBadgeTag').textContent = p.tag;
+      document.getElementById('detailProjPct').textContent = `${p.progress}%`;
+      
+      const statusSelect = document.getElementById('detailProjStatusSelect');
+      if (statusSelect) statusSelect.value = p.status;
+
+      const noteArea = document.getElementById('detailProjStatusNoteArea');
+      if (noteArea) noteArea.value = p.statusNote || '';
+
+      const spInput = document.getElementById('detailProjSharepointUrl');
+      if (spInput) spInput.value = p.sharepointUrl || '';
+
+      const spLink = document.getElementById('detailProjSharepointLinkBtn');
+      if (spLink) spLink.href = sanitizeUrl(p.sharepointUrl);
+
+      const ring = document.getElementById('detailProjSvgRing');
+      if (ring) {
+        const offset = 100 - p.progress;
+        ring.style.strokeDashoffset = offset;
+      }
+
+      renderDetailProjectTasks(p.name);
+      renderDetailArtefacts(p);
+
+      navigateView('project-detail');
+    }
+
+    function renderDetailProjectTasks(projectName) {
+      const container = document.getElementById('detailProjectTasksList');
+      if (!container) return;
+      container.innerHTML = '';
+      const projTasks = PaneStore.tasks.filter(t => t.project === projectName);
+
+      if (!projTasks.length) {
+        container.innerHTML = `<div class="p-4 text-center text-slate-500 text-xs">No tasks recorded for this project yet.</div>`;
+        return;
+      }
+
+      projTasks.forEach(t => {
+        const isDone = t.stage === 'done';
+        const item = document.createElement('div');
+        item.className = `p-3 rounded-xl border ${isDone ? 'bg-slate-950/40 border-slate-900 opacity-60' : 'bg-slate-900 border-slate-800'} flex items-center justify-between text-xs transition`;
+        item.innerHTML = `
+          <div class="flex items-center space-x-3 min-w-0 pr-2">
+            <button onclick="toggleTaskCompletion('${t.id}')" class="w-4 h-4 rounded border ${isDone ? 'bg-emerald-500 border-emerald-400 text-white' : 'border-slate-700 hover:border-slate-500'} flex items-center justify-center transition cursor-pointer shrink-0" aria-label="Toggle completion for ${sanitize(t.title)}">
+              ${isDone ? '<i class="ph-bold ph-check text-[10px]"></i>' : ''}
+            </button>
+            <span class="${isDone ? 'line-through text-slate-500' : 'text-white font-medium'} truncate">${sanitize(t.title)}</span>
+          </div>
+          <div class="flex items-center space-x-2 text-[10px] text-slate-400 shrink-0">
+            <span class="font-mono hidden sm:inline">${sanitize(t.dueDate)}</span>
+            <span class="px-2 py-0.5 rounded-full bg-slate-800">${sanitize(t.assignee)}</span>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function toggleTaskCompletion(taskId) {
+      const task = PaneStore.tasks.find(t => t.id === taskId);
+      if (!task) return;
+      task.stage = task.stage === 'done' ? 'in_progress' : 'done';
+      
+      const p = PaneStore.projects.find(x => x.name === task.project);
+      if (p) {
+        renderDetailProjectTasks(p.name);
+        const pTasks = PaneStore.tasks.filter(t => t.project === p.name);
+        const doneCount = pTasks.filter(t => t.stage === 'done').length;
+        p.progress = Math.round((doneCount / pTasks.length) * 100);
+        document.getElementById('detailProjPct').textContent = `${p.progress}%`;
+        const ring = document.getElementById('detailProjSvgRing');
+        if (ring) ring.style.strokeDashoffset = 100 - p.progress;
+      }
+      syncGlobalState();
+    }
+
+    function saveDetailProjectNote() {
+      const p = PaneStore.projects.find(x => x.id === activeCockpitProjectId);
+      if (!p) return;
+      const ta = document.getElementById('detailProjStatusNoteArea');
+      if (ta) {
+        p.statusNote = ta.value;
+        const ts = document.getElementById('detailNoteSavedTimestamp');
+        if (ts) ts.textContent = `Saved at ${new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' })}`;
+        showToast('Saved', 'Cockpit note updated');
+      }
+    }
+
+    function saveDetailProjectSharepoint() {
+      const p = PaneStore.projects.find(x => x.id === activeCockpitProjectId);
+      if (!p) return;
+      const input = document.getElementById('detailProjSharepointUrl');
+      if (input) {
+        p.sharepointUrl = input.value;
+        const spLink = document.getElementById('detailProjSharepointLinkBtn');
+        if (spLink) spLink.href = sanitizeUrl(p.sharepointUrl);
+        showToast('Updated', 'SharePoint workspace URL saved');
+      }
+    }
+
+    function renderDetailArtefacts(project) {
+      const list = document.getElementById('detailArtefactsList');
+      if (!list) return;
+      list.innerHTML = '';
+      (project.artefacts || []).forEach(art => {
+        const item = document.createElement('div');
+        item.className = 'p-2 rounded-xl bg-slate-900 border border-slate-800 flex items-center justify-between text-xs';
+        item.innerHTML = `
+          <div class="flex items-center space-x-2 truncate">
+            <i class="ph-bold ph-file-text text-purple-400"></i>
+            <span class="text-white truncate">${sanitize(art.name)}</span>
+          </div>
+          <span class="text-[10px] text-slate-500 font-mono shrink-0">${sanitize(art.size)}</span>
+        `;
+        list.appendChild(item);
+      });
+    }
+
+    function handleDetailFileSelect(event) {
+      const files = event.target.files;
+      if (!files.length) return;
+      const p = PaneStore.projects.find(x => x.id === activeCockpitProjectId);
+      if (!p) return;
+      if (!p.artefacts) p.artefacts = [];
+
+      Array.from(files).forEach(f => {
+        const sizeMb = (f.size / (1024 * 1024)).toFixed(1);
+        p.artefacts.push({
+          id: 'art-' + Date.now() + Math.random().toString(36).substr(2, 4),
+          name: f.name,
+          size: `${sizeMb} MB`
+        });
+      });
+
+      renderDetailArtefacts(p);
+      showToast('Files Attached', `${files.length} document(s) added to ${p.name}`);
+    }
+
+    function softDeleteProject(projId) {
+      const index = PaneStore.projects.findIndex(p => p.id === projId);
+      if (index === -1) return;
+      const [removed] = PaneStore.projects.splice(index, 1);
+      removed.deletedAt = new Date().toLocaleString();
+      PaneStore.deletedProjects.push(removed);
+
+      renderProjectsCards();
+      syncGlobalState();
+      showToast('Moved to Trash', `${removed.name} moved to Deleted Items`);
+    }
+
+    function renderTrashItems() {
+      const container = document.getElementById('trashItemsContainer');
+      if (!container) return;
+      container.innerHTML = '';
+
+      if (!PaneStore.deletedProjects.length) {
+        container.innerHTML = `
+          <div class="p-8 text-center text-slate-500 border border-dashed border-slate-800 rounded-2xl">
+            <i class="ph-bold ph-trash text-3xl mb-2 text-slate-600 block"></i>
+            <p class="text-sm">Trash is completely empty.</p>
+          </div>
+        `;
+        return;
+      }
+
+      PaneStore.deletedProjects.forEach(p => {
+        const item = document.createElement('div');
+        item.className = 'p-3 sm:p-4 rounded-2xl bg-appCard border border-appBorder flex flex-col sm:flex-row sm:items-center justify-between gap-3';
+        item.innerHTML = `
+          <div>
+            <div class="font-bold text-white text-sm">${sanitize(p.name)}</div>
+            <div class="text-[11px] text-slate-400">Deleted: ${sanitize(p.deletedAt)}</div>
+          </div>
+          <div class="flex items-center space-x-2 self-start sm:self-auto">
+            <button onclick="restoreProjectFromTrash('${p.id}')" class="px-3 py-1.5 rounded-xl bg-purple-600/20 text-purple-300 border border-purple-500/30 hover:bg-purple-600/30 text-xs font-semibold transition cursor-pointer active:scale-95">
+              Restore
+            </button>
+            <button onclick="deleteProjectPermanently('${p.id}')" class="px-3 py-1.5 rounded-xl bg-rose-500/10 text-rose-400 border border-rose-500/30 hover:bg-rose-500/20 text-xs font-semibold transition cursor-pointer active:scale-95">
+              Delete Forever
+            </button>
+          </div>
+        `;
+        container.appendChild(item);
+      });
+    }
+
+    function restoreProjectFromTrash(projId) {
+      const idx = PaneStore.deletedProjects.findIndex(p => p.id === projId);
+      if (idx === -1) return;
+      const [restored] = PaneStore.deletedProjects.splice(idx, 1);
+      delete restored.deletedAt;
+      PaneStore.projects.push(restored);
+
+      renderTrashItems();
+      syncGlobalState();
+      showToast('Project Restored', `${restored.name} restored to active projects`);
+    }
+
+    function deleteProjectPermanently(projId) {
+      const idx = PaneStore.deletedProjects.findIndex(p => p.id === projId);
+      if (idx === -1) return;
+      const [deleted] = PaneStore.deletedProjects.splice(idx, 1);
+      renderTrashItems();
+      syncGlobalState();
+      showToast('Permanently Removed', `${deleted.name} was permanently purged.`);
+    }
+
+    function emptyAllTrashItems() {
+      if (!PaneStore.deletedProjects.length) return;
+      const count = PaneStore.deletedProjects.length;
+      PaneStore.deletedProjects = [];
+      renderTrashItems();
+      syncGlobalState();
+      showToast('Trash Cleared', `${count} item(s) permanently removed.`);
+    }
+
+    function renderTeamDirectory() {
+      const container = document.getElementById('teamDirectoryCardsGrid');
+      if (!container) return;
+      container.innerHTML = '';
+
+      PaneStore.team.forEach(m => {
+        const card = document.createElement('div');
+        card.className = 'rounded-2xl bg-appCard border border-appBorder p-3.5 sm:p-4 space-y-3';
+        card.innerHTML = `
+          <div class="flex items-center space-x-3">
+            <img src="${sanitize(m.avatar)}" onerror="this.onerror=null; this.src='https://placehold.co/80x80/6366f1/ffffff?text=${encodeURIComponent(m.name[0])}'" class="w-10 h-10 rounded-full object-cover object-top border border-slate-700" alt="${sanitize(m.name)}">
+            <div class="min-w-0">
+              <div class="font-bold text-white text-xs truncate">${sanitize(m.name)}</div>
+              <div class="text-[10px] text-purple-400 truncate">${sanitize(m.role)}</div>
+            </div>
+          </div>
+          <div class="text-[10px] text-slate-400 space-y-1 pt-1 border-t border-slate-800">
+            <div class="flex items-center justify-between"><span>Dept:</span><span class="text-white">${sanitize(m.dept)}</span></div>
+            <div class="flex items-center justify-between"><span>Timezone:</span><span class="font-mono text-white truncate ml-1">${sanitize(m.location)}</span></div>
+            <div class="flex items-center justify-between"><span>Contact:</span><span class="text-slate-300 font-mono truncate ml-1">${sanitize(m.email)}</span></div>
+          </div>
+        `;
+        container.appendChild(card);
+      });
+    }
+
+    function renderInsightsCharts() {
+      const legend = document.getElementById('insightsProjectsDonutLegend');
+      if (!legend) return;
+      legend.innerHTML = '';
+
+      PaneStore.projects.forEach(p => {
+        const count = PaneStore.tasks.filter(t => t.project === p.name).length;
+        const tokens = getColorTokens(p.color);
+        const row = document.createElement('div');
+        row.className = 'flex items-center justify-between';
+        row.innerHTML = `
+          <div class="flex items-center space-x-2 truncate">
+            <span class="w-2 h-2 rounded-full ${tokens.dot} shrink-0"></span>
+            <span class="text-white truncate">${sanitize(p.name)}</span>
+          </div>
+          <span class="text-slate-400 font-mono shrink-0">${count} tasks</span>
+        `;
+        legend.appendChild(row);
+      });
+    }
+
+    function toggleAiCopilot() {
+      const drawer = document.getElementById('aiCopilotDrawer');
+      if (drawer) {
+        drawer.classList.toggle('translate-x-full');
+      }
+    }
+
+    function sendQuickCopilotPrompt(promptText) {
+      const input = document.getElementById('aiCopilotInput');
+      if (input) {
+        input.value = promptText;
+        handleCopilotSubmit(new Event('submit'));
+      }
+    }
+
+    async function callGeminiApi(promptText, isJson = false) {
+      try {
+        const payload = {
+          contents: [{ parts: [{ text: promptText }] }]
+        };
+        if (isJson) {
+          payload.generationConfig = { responseMimeType: "application/json" };
+        }
+        const res = await fetch('https://generativelanguage.googleapis.com/v1beta/models/gemini-3-flash-preview:generateContent', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify(payload)
+        });
+        if (!res.ok) throw new Error('API Offline');
+        const data = await res.json();
+        return data.candidates?.[0]?.content?.parts?.[0]?.text || null;
+      } catch (err) {
+        return null;
+      }
+    }
+
+    async function handleCopilotSubmit(e) {
+      if (e && e.preventDefault) e.preventDefault();
+      if (PaneStore.copilotInProgress) return;
+
+      const input = document.getElementById('aiCopilotInput');
+      const query = input?.value?.trim();
+      if (!query) return;
+
+      PaneStore.copilotInProgress = true;
+      appendCopilotMessage('user', query);
+      input.value = '';
+
+      appendCopilotMessage('assistant', 'Analyzing workspace state...');
+      try {
+        const workspaceContext = {
+          app: "AI Powered Project Management Dashboard",
+          tagline: "A Smarter Way to Get Things Done.",
+          user: PaneStore.user,
+          currentTime: new Date().toISOString(),
+          projects: PaneStore.projects.map(p => ({ name: p.name, progress: p.progress, status: p.status, milestone: p.milestone, targetDate: p.targetDate })),
+          tasks: PaneStore.tasks.map(t => ({ title: t.title, project: t.project, stage: t.stage, priority: t.priority, dueDate: t.dueDate }))
+        };
+
+        const prompt = `You are the AI Project Copilot inside "AI Powered Project Management Dashboard" with the tagline "A Smarter Way to Get Things Done."\nWorkspace Context:\n${JSON.stringify(workspaceContext)}\n\nUser Question: ${query}`;
+        const reply = await callGeminiApi(prompt);
+        
+        if (reply) {
+          updateLastCopilotMessage(reply);
+        } else {
+          const q = query.toLowerCase();
+          let localReply = `Here is an assessment of your active workspace: Across your ${PaneStore.projects.length} initiatives, average progress is tracking at ${document.getElementById('overallCompletionRateDisplay')?.textContent || '78%'}.`;
+          if (q.includes('blocker') || q.includes('risk')) {
+            localReply = `Current Risk & Blocker Assessment:\n• Project 1 has an upcoming milestone (${PaneStore.projects[0]?.milestone || 'GA Release'}) on ${PaneStore.projects[0]?.targetDate || 'schedule'}. Final security sign-off is pending.\n• Team capacity across Product & Engineering is running at nominal 38.5h/week bounds with zero critical path regressions.`;
+          } else if (q.includes('standup') || q.includes('draft')) {
+            localReply = `Draft Standup for Karol Mathews:\n1. Yesterday: Coordinated cross-platform milestone telemetry and verified staging cluster benchmark pass rates.\n2. Today: Reviewing iOS build distribution and aligning design token releases with Marcus and Aria.\n3. Blockers: Awaiting final compliance sign-off on mobile gateway components.`;
+          } else if (q.includes('team') || q.includes('capacity')) {
+            localReply = `Team Allocation Summary:\n• 7 teammates active across Product, Engineering, Design, and Data.\n• Engineering leads (Marcus Vance, Elena Rostova, Chloe Bennett) are fully allocated to Project 1 & Project 2.\n• Design & Growth capacity available for sprint planning.`;
+          }
+          updateLastCopilotMessage(localReply);
+        }
+      } catch (err) {
+        updateLastCopilotMessage('All project systems nominal. Local intelligence ready.');
+      } finally {
+        PaneStore.copilotInProgress = false;
+      }
+    }
+
+    function appendCopilotMessage(sender, text) {
+      const log = document.getElementById('aiCopilotMessages');
+      if (!log) return;
+      const msg = document.createElement('div');
+      msg.className = `p-3 rounded-xl text-xs ${sender === 'user' ? 'bg-purple-600 text-white ml-6' : 'bg-slate-900 border border-slate-800 text-slate-200 mr-6'}`;
+      msg.innerHTML = sanitize(text).replace(/\n/g, '<br>');
+      log.appendChild(msg);
+      log.scrollTop = log.scrollHeight;
+    }
+
+    function updateLastCopilotMessage(text) {
+      const log = document.getElementById('aiCopilotMessages');
+      if (!log) return;
+      const last = log.lastElementChild;
+      if (last) {
+        last.innerHTML = sanitize(text).replace(/\n/g, '<br>');
+        log.scrollTop = log.scrollHeight;
+      }
+    }
+
+    async function aiDraftProjectBullets(projId) {
+      const p = PaneStore.projects.find(x => x.id === projId);
+      if (!p) return;
+
+      const textarea = document.getElementById(`execBullets_${projId}`);
+      if (textarea) textarea.value = '• Generating strategic bullet points...';
+
+      const prompt = `Generate exactly 3 concise, high-impact C-suite executive status bullet points for project "${p.name}".\nMilestone: ${p.milestone}, Target Date: ${p.targetDate}, Status: ${p.status}, Progress: ${p.progress}%. Output each on a new line prefixed with •.`;
+      const reply = await callGeminiApi(prompt);
+      
+      if (reply && textarea) {
+        textarea.value = reply.trim();
+        saveProjectClubbedBullets(projId);
+      } else if (textarea) {
+        textarea.value = `• Milestone delivery tracking on schedule for ${p.targetDate}.\n• Core validation suites performing within target latency bounds with zero regressions.\n• Strategic dependencies aligned with engineering leadership.`;
+        saveProjectClubbedBullets(projId);
+      }
+    }
+
+    async function runAiVelocityAudit() {
+      if (PaneStore.auditInProgress) return;
+      const card = document.getElementById('aiRiskAuditResultsCard');
+      const content = document.getElementById('aiRiskAuditResultsContent');
+      if (!card || !content) return;
+
+      PaneStore.auditInProgress = true;
+      card.classList.remove('hidden');
+      content.innerHTML = `<i class="ph-bold ph-spinner animate-spin mr-1"></i> Running multi-project risk and velocity analysis...`;
+
+      const payload = PaneStore.projects.map(p => ({
+        name: p.name,
+        progress: p.progress,
+        milestone: p.milestone,
+        targetDate: p.targetDate,
+        tasksCount: PaneStore.tasks.filter(t => t.project === p.name).length
+      }));
+
+      const prompt = `Analyze the delivery health and capacity risks across these projects: ${JSON.stringify(payload)}. Provide 3 crisp, executive risk audit findings with specific action items.`;
+      const reply = await callGeminiApi(prompt);
+
+      if (reply) {
+        content.innerHTML = sanitize(reply).replace(/\n/g, '<br>');
+      } else {
+        content.innerHTML = `• All ${PaneStore.projects.length} initiatives currently tracking within standard sprint velocity bounds.<br>• Resource allocations across Project 1 (Infra) and Project 2 (Mobile) are optimal with 85%+ deliverable burn-down.<br>• Recommendation: Monitor QA cluster availability ahead of Friday milestone cutoff.`;
+      }
+      PaneStore.auditInProgress = false;
+    }
+
+    async function aiDecomposeCurrentModalTask() {
+      if (PaneStore.decomposeInProgress) return;
+      const titleInput = document.getElementById('newTaskTitleInput');
+      const title = titleInput?.value?.trim();
+      if (!title) {
+        showToast('Specify Title', 'Enter a task title first to decompose.');
+        return;
+      }
+      PaneStore.decomposeInProgress = true;
+      const btn = document.getElementById('btnAiDecomposeTask');
+      if (btn) btn.innerHTML = `<i class="ph-bold ph-spinner animate-spin"></i><span>Decomposing...</span>`;
+
+      const prompt = `Decompose the project management initiative "${title}" into 3 concise subtasks. Return a JSON array of strings only.`;
+      const reply = await callGeminiApi(prompt, true);
+      let subtasks = [];
+      try {
+        if (reply) subtasks = JSON.parse(reply);
+      } catch (e) {}
+
+      if (!Array.isArray(subtasks) || !subtasks.length) {
+        subtasks = [
+          `Prepare initial architectural scope for ${title}`,
+          `Execute core verification & telemetry benchmarks for ${title}`,
+          `Conduct final stakeholder review for ${title}`
+        ];
+      }
+
+      const selectedProj = document.getElementById('newTaskProjectSelect')?.value || (PaneStore.projects[0] ? PaneStore.projects[0].name : 'General');
+      subtasks.forEach((st, idx) => {
+        PaneStore.tasks.push({
+          id: 'tsk-' + Date.now() + idx,
+          title: st,
+          project: selectedProj,
+          priority: 'medium',
+          stage: 'todo',
+          assignee: 'Karol Mathews',
+          dueDate: getRelativeShortDate(5)
+        });
+      });
+      closeUniversalAddModal();
+      syncGlobalState();
+      renderTasksBoard();
+      showToast('Tasks Decomposed', `Created ${subtasks.length} actionable subtasks with AI.`);
+      PaneStore.decomposeInProgress = false;
+      if (btn) btn.innerHTML = `<i class="ph-bold ph-sparkle text-xs"></i><span>AI Decompose</span>`;
+    }
+
+    function togglePomodoroTimer() {
+      if (PaneStore.focusIsRunning) {
+        clearInterval(PaneStore.focusInterval);
+        PaneStore.focusInterval = null;
+        PaneStore.focusIsRunning = false;
+        document.getElementById('focusTimerIcon').className = 'ph-fill ph-play text-[11px] sm:text-xs';
+        document.getElementById('focusPulseDot').className = 'w-2 h-2 rounded-full bg-slate-500';
+      } else {
+        PaneStore.focusIsRunning = true;
+        document.getElementById('focusTimerIcon').className = 'ph-fill ph-pause text-[11px] sm:text-xs';
+        document.getElementById('focusPulseDot').className = 'w-2 h-2 rounded-full bg-emerald-400 animate-pulse';
+        PaneStore.focusInterval = setInterval(() => {
+          if (PaneStore.focusSecondsRemaining > 0) {
+            PaneStore.focusSecondsRemaining--;
+            updateFocusTimerDisplay();
+          } else {
+            clearInterval(PaneStore.focusInterval);
+            PaneStore.focusInterval = null;
+            PaneStore.focusIsRunning = false;
+            document.getElementById('focusTimerIcon').className = 'ph-fill ph-play text-[11px] sm:text-xs';
+            document.getElementById('focusPulseDot').className = 'w-2 h-2 rounded-full bg-slate-500';
+            showToast('Session Complete', 'Great work! Take a 5-minute break.');
+          }
+        }, 1000);
+      }
+    }
+
+    function updateFocusTimerDisplay() {
+      const m = Math.floor(PaneStore.focusSecondsRemaining / 60);
+      const s = PaneStore.focusSecondsRemaining % 60;
+      const text = `${m.toString().padStart(2, '0')}:${s.toString().padStart(2, '0')}`;
+      const el = document.getElementById('focusTimerDisplay');
+      if (el) el.textContent = text;
+    }
+
+    function updateUserRole(newRole) {
+      PaneStore.user.role = newRole;
+      const sidebarRole = document.getElementById('sidebarUserRoleDisplay');
+      if (sidebarRole) sidebarRole.textContent = newRole;
+
+      const karolTeam = PaneStore.team.find(m => m.name === 'Karol Mathews');
+      if (karolTeam) karolTeam.role = newRole;
+
+      showToast('Role Updated', `Active role set to ${newRole}`);
+    }
+
+    function openProfilePictureMenu(e, source) {
+      if (e) e.stopPropagation();
+      const menu = document.getElementById('profilePictureMenu');
+      if (!menu) return;
+      menu.classList.remove('hidden');
+      menu.style.top = `${Math.min(e.clientY - 40, window.innerHeight - 120)}px`;
+      menu.style.left = `${Math.min(e.clientX + 10, window.innerWidth - 180)}px`;
+    }
+
+    function triggerAvatarUpload() {
+      document.getElementById('profilePictureMenu')?.classList.add('hidden');
+      document.getElementById('hiddenAvatarFileInput')?.click();
+    }
+
+    function handleAvatarFileChosen(event) {
+      const file = event.target.files[0];
+      if (!file) return;
+      const reader = new FileReader();
+      reader.onload = (e) => {
+        const newUrl = e.target.result;
+        PaneStore.user.avatar = newUrl;
+        document.getElementById('sidebarUserAvatar').src = newUrl;
+        document.getElementById('settingsUserAvatar').src = newUrl;
+        const km = PaneStore.team.find(m => m.name === 'Karol Mathews');
+        if (km) km.avatar = newUrl;
+        showToast('Avatar Updated', 'Profile picture successfully changed.');
+      };
+      reader.readAsDataURL(file);
+    }
+
+    function removeUserAvatar() {
+      document.getElementById('profilePictureMenu')?.classList.add('hidden');
+      const fallback = 'https://placehold.co/80x80/6366f1/ffffff?text=KM';
+      PaneStore.user.avatar = fallback;
+      document.getElementById('sidebarUserAvatar').src = fallback;
+      document.getElementById('settingsUserAvatar').src = fallback;
+      showToast('Avatar Removed', 'Reverted to default avatar.');
+    }
+
+    function openUniversalAddModal() {
+      const sel = document.getElementById('newTaskProjectSelect');
+      if (sel) {
+        sel.innerHTML = '';
+        PaneStore.projects.forEach(p => {
+          const opt = document.createElement('option');
+          opt.value = p.name;
+          opt.textContent = p.name;
+          sel.appendChild(opt);
+        });
+      }
+      const aSel = document.getElementById('newTaskAssigneeSelect');
+      if (aSel) {
+        aSel.innerHTML = '';
+        PaneStore.team.forEach(m => {
+          const opt = document.createElement('option');
+          opt.value = m.name;
+          opt.textContent = `${m.name} (${m.dept})`;
+          aSel.appendChild(opt);
+        });
+      }
+      document.getElementById('universalAddModal')?.classList.remove('hidden');
+    }
+
+    function closeUniversalAddModal() {
+      document.getElementById('universalAddModal')?.classList.add('hidden');
+    }
+
+    function saveNewModalTask() {
+      const title = document.getElementById('newTaskTitleInput')?.value?.trim();
+      if (!title) {
+        showToast('Missing Title', 'Please enter a task title.');
+        return;
+      }
+      const project = document.getElementById('newTaskProjectSelect')?.value || (PaneStore.projects[0] ? PaneStore.projects[0].name : 'General');
+      const priority = document.getElementById('newTaskPrioritySelect')?.value || 'medium';
+      const assignee = document.getElementById('newTaskAssigneeSelect')?.value || 'Karol Mathews';
+
+      PaneStore.tasks.push({
+        id: 'tsk-' + Date.now(),
+        title,
+        project,
+        priority,
+        stage: 'todo',
+        assignee,
+        dueDate: getRelativeShortDate(7)
+      });
+
+      document.getElementById('newTaskTitleInput').value = '';
+      closeUniversalAddModal();
+      syncGlobalState();
+      renderTasksBoard();
+      if (PaneStore.currentView === 'project-detail') {
+        const activeProj = PaneStore.projects.find(p => p.id === activeCockpitProjectId);
+        if (activeProj) renderDetailProjectTasks(activeProj.name);
+      }
+      showToast('Task Created', `Added "${title}" to ${project}`);
+    }
+
+    function openNewTaskModalForCurrentProject() {
+      openUniversalAddModal();
+      const p = PaneStore.projects.find(x => x.id === activeCockpitProjectId);
+      if (p) {
+        const sel = document.getElementById('newTaskProjectSelect');
+        if (sel) sel.value = p.name;
+      }
+    }
+
+    function openComprehensiveAddProjectModal() {
+      const modal = document.getElementById('comprehensiveAddProjectModal');
+      if (!modal) return;
+
+      const nextNum = PaneStore.projects.length + 1;
+      document.getElementById('newProjTitle').value = `Project ${nextNum}`;
+      document.getElementById('newProjCode').value = `PRJ-${700 + nextNum}`;
+      document.getElementById('newProjClient').value = 'Enterprise Core';
+      document.getElementById('newProjBudget').value = '120,000';
+      document.getElementById('newProjMilestone').value = `Project ${nextNum} GA Release`;
+
+      document.getElementById('newProjStartDate').value = getISODateOffset(0);
+      document.getElementById('newProjDueDate').value = getISODateOffset(30);
+
+      const teamContainer = document.getElementById('newProjTeamMembersList');
+      if (teamContainer) {
+        teamContainer.innerHTML = '';
+        PaneStore.team.forEach(m => {
+          const label = document.createElement('label');
+          label.className = 'flex items-center space-x-2 text-xs text-slate-300 cursor-pointer hover:text-white';
+          label.innerHTML = `
+            <input type="checkbox" value="${sanitize(m.name)}" class="proj-team-member-chk rounded bg-slate-800 border-slate-700 text-purple-600 focus:ring-0" ${m.name === 'Karol Mathews' ? 'checked' : ''}>
+            <span class="truncate">${sanitize(m.name)} (${sanitize(m.dept)})</span>
+          `;
+          teamContainer.appendChild(label);
+        });
+      }
+
+      switchAddProjectTab('general');
+      modal.classList.remove('hidden');
+    }
+
+    function closeComprehensiveAddProjectModal() {
+      document.getElementById('comprehensiveAddProjectModal')?.classList.add('hidden');
+    }
+
+    function switchAddProjectTab(tabKey) {
+      const tabs = ['general', 'financial', 'team', 'tracking'];
+      tabs.forEach(t => {
+        const panel = document.getElementById(`addProjTab-${t}`);
+        const btn = document.getElementById(`tabBtn-${t}`);
+        if (panel) panel.classList.toggle('hidden', t !== tabKey);
+        if (btn) {
+          const isSelected = t === tabKey;
+          btn.setAttribute('aria-selected', isSelected ? 'true' : 'false');
+          if (isSelected) {
+            btn.className = 'px-3 sm:px-4 py-2 sm:py-2.5 font-bold text-purple-400 border-b-2 border-purple-500 transition shrink-0 cursor-pointer text-xs';
+          } else {
+            btn.className = 'px-3 sm:px-4 py-2 sm:py-2.5 font-medium text-slate-400 hover:text-slate-200 border-b-2 border-transparent transition shrink-0 cursor-pointer text-xs';
+          }
+        }
+      });
+    }
+
+    function selectNewProjColor(color) {
+      selectedAddProjColor = color;
+      const btns = document.querySelectorAll('#newProjColorPicker button');
+      btns.forEach(b => {
+        const c = b.getAttribute('data-color');
+        if (c === color) {
+          b.className = `w-7 h-7 rounded-full bg-${c}-500 ring-2 ring-white transition cursor-pointer`;
+        } else {
+          b.className = `w-7 h-7 rounded-full bg-${c}-500 ring-0 hover:ring-2 hover:ring-slate-400 transition cursor-pointer`;
+        }
+      });
+    }
+
+    function addNewDeliverableRow() {
+      const container = document.getElementById('newProjDeliverablesContainer');
+      if (!container) return;
+      const count = container.querySelectorAll('.deliverable-item-input').length + 1;
+      const row = document.createElement('div');
+      row.className = 'flex items-center space-x-2';
+      row.innerHTML = `
+        <input type="text" placeholder="Deliverable ${count}" class="deliverable-item-input flex-1 bg-slate-900 border border-slate-800 rounded-xl px-3 py-1.5 text-white focus:outline-none" aria-label="Deliverable ${count}">
+        <button type="button" onclick="this.parentElement.remove()" class="p-1 text-slate-500 hover:text-rose-400 cursor-pointer" aria-label="Remove deliverable"><i class="ph-bold ph-trash"></i></button>
+      `;
+      container.appendChild(row);
+    }
+
+    function autoFillSampleProject() {
+      const nextNum = PaneStore.projects.length + 1;
+      document.getElementById('newProjTitle').value = `Project ${nextNum} - AI Edge Hub`;
+      document.getElementById('newProjCode').value = `PRJ-${800 + nextNum}`;
+      document.getElementById('newProjClient').value = 'Automotive & IoT Services';
+      document.getElementById('newProjBudget').value = '210,000';
+      document.getElementById('newProjBillingType').value = 'Time & Materials';
+      document.getElementById('newProjBillingRate').value = '$190 / hr';
+      document.getElementById('newProjBillingContact').value = 'Rachel Zane (finance@edgehub.io)';
+      document.getElementById('newProjMilestone').value = 'Edge Gateway V1 Firmware Sign-off';
+      document.getElementById('newProjStartDate').value = getISODateOffset(0);
+      document.getElementById('newProjDueDate').value = getISODateOffset(30);
+      document.getElementById('newProjRaidRisk').value = 'Chipset hardware delivery lead time';
+      document.getElementById('newProjRaidDep').value = 'Third-party encryption module compliance audit';
+      document.getElementById('newProjInitialNote').value = 'Executive stakeholder kickoff concluded with signed charter and budget approvals.';
+      selectNewProjColor('cyan');
+      showToast('Form Auto-filled', 'Sample enterprise charter loaded.');
+    }
+
+    function saveComprehensiveNewProject() {
+      const name = document.getElementById('newProjTitle')?.value?.trim();
+      if (!name) {
+        showToast('Required Field', 'Please enter a project title.');
+        switchAddProjectTab('general');
+        return;
+      }
+
+      const client = document.getElementById('newProjClient')?.value?.trim() || 'Internal Initiative';
+      const tag = document.getElementById('newProjTag')?.value || 'PROJ';
+      const status = document.getElementById('newProjStatus')?.value || 'planning';
+      const milestone = document.getElementById('newProjMilestone')?.value?.trim() || 'V1 Project Delivery';
+      const dueDate = document.getElementById('newProjDueDate')?.value || getISODateOffset(30);
+      const budget = document.getElementById('newProjBudget')?.value?.trim() || '100,000';
+      const sharepoint = document.getElementById('newProjSharepoint')?.value?.trim() || 'https://sharepoint.com/teams/project';
+      const statusNote = document.getElementById('newProjInitialNote')?.value?.trim() || 'Project charter initialized.';
+      
+      const risk = document.getElementById('newProjRaidRisk')?.value?.trim();
+      const dep = document.getElementById('newProjRaidDep')?.value?.trim();
+
+      const selectedMembers = [];
+      document.querySelectorAll('.proj-team-member-chk:checked').forEach(chk => {
+        selectedMembers.push(chk.value);
+      });
+      if (!selectedMembers.length) selectedMembers.push('Karol Mathews');
+
+      const newId = 'proj-' + (Date.now());
+      let parsedTargetDate = new Date(dueDate);
+      if (isNaN(parsedTargetDate.getTime())) parsedTargetDate = new Date();
+      const formattedTargetDate = parsedTargetDate.toLocaleDateString(undefined, { month: 'short', day: 'numeric', year: 'numeric' });
+      
+      const bullets = [
+        `Project initiated with ${selectedMembers.length} allocated resources.`,
+        `Primary milestone set to ${milestone} target: ${formattedTargetDate}.`,
+        risk ? `Key identified risk: ${risk}` : (dep ? `Critical dependency: ${dep}` : 'Zero critical path blockers reported.')
+      ];
+
+      const newProj = {
+        id: newId,
+        name,
+        color: selectedAddProjColor,
+        tag,
+        cost: budget ? `$${budget.replace(/^\$/, '')}` : '$100,000',
+        client,
+        status,
+        progress: 0,
+        milestone,
+        targetDate: formattedTargetDate,
+        sharepointUrl: sharepoint,
+        statusNote,
+        bullets,
+        artefacts: [],
+        resources: selectedMembers
+      };
+
+      PaneStore.projects.push(newProj);
+
+      const deliverableInputs = document.querySelectorAll('.deliverable-item-input');
+      deliverableInputs.forEach((inp, idx) => {
+        const dTitle = inp.value.trim();
+        if (dTitle) {
+          PaneStore.tasks.push({
+            id: 'tsk-' + Date.now() + idx,
+            title: dTitle,
+            project: name,
+            priority: 'medium',
+            stage: 'todo',
+            assignee: selectedMembers[0] || 'Karol Mathews',
+            dueDate: getRelativeShortDate(12)
+          });
+        }
+      });
+
+      closeComprehensiveAddProjectModal();
+      syncGlobalState();
+      renderProjectsCards();
+      navigateView('projects');
+      showToast('Project Created', `${name} successfully added to workspace.`);
+    }
+
+    function openCommandPalette() {
+      const m = document.getElementById('commandPaletteModal');
+      if (!m) return;
+      m.classList.remove('hidden');
+      const inp = document.getElementById('commandPaletteInput');
+      if (inp) {
+        inp.value = '';
+        inp.focus();
+        handleCommandPaletteSearch('');
+      }
+    }
+
+    function handleCommandPaletteSearch(query) {
+      const container = document.getElementById('commandPaletteResults');
+      if (!container) return;
+      container.innerHTML = '';
+      const q = query.toLowerCase().trim();
+
+      const items = [
+        { label: 'Go to Home Dashboard', action: () => navigateView('home') },
+        { label: 'Go to Executive Dashboard', action: () => navigateView('executive') },
+        { label: 'Go to Tasks & Kanban', action: () => navigateView('tasks') },
+        { label: 'Go to Active Projects', action: () => navigateView('projects') },
+        { label: 'Add New Project (Enterprise Intake)', action: () => openComprehensiveAddProjectModal() },
+        { label: 'Go to Calendar Schedule', action: () => navigateView('calendar') },
+        { label: 'Go to Insights & Analytics', action: () => navigateView('insights') },
+        { label: 'Go to Team Directory', action: () => navigateView('team') },
+        { label: 'Go to Deleted Items (Trash)', action: () => navigateView('trash') },
+        { label: 'Open Status Digest', action: () => openStatusDigestModal() }
+      ];
+
+      PaneStore.projects.forEach(p => {
+        items.push({
+          label: `Open Cockpit: ${p.name}`,
+          action: () => openProjectDetailView(p.id)
+        });
+      });
+
+      const filtered = items.filter(it => it.label.toLowerCase().includes(q));
+      filtered.forEach(it => {
+        const btn = document.createElement('button');
+        btn.className = 'w-full text-left px-3 py-2 rounded-xl text-slate-300 hover:text-white hover:bg-slate-800 transition flex items-center justify-between cursor-pointer';
+        btn.innerHTML = `<span>${sanitize(it.label)}</span><i class="ph-bold ph-arrow-right text-slate-500"></i>`;
+        btn.onclick = () => {
+          document.getElementById('commandPaletteModal')?.classList.add('hidden');
+          it.action();
+        };
+        container.appendChild(btn);
+      });
+    }
+
+    function openStatusDigestModal() {
+      const modal = document.getElementById('statusDigestModal');
+      const content = document.getElementById('statusDigestContent');
+      if (!modal || !content) return;
+
+      let digest = `AI POWERED PROJECT MANAGEMENT DASHBOARD · STATUS DIGEST\nTagline: A Smarter Way to Get Things Done.\nPrepared by: Karol Mathews (Project Manager)\nGenerated: ${new Date().toLocaleString()}\n\n`;
+      PaneStore.projects.forEach(p => {
+        digest += `--------------------------------------------------------\n`;
+        digest += `PROJECT: ${p.name.toUpperCase()} [${(p.status || '').toUpperCase()}]\n`;
+        digest += `Progress: ${p.progress}% | Nearest Milestone: ${p.milestone} (${p.targetDate})\n`;
+        if (p.cost) digest += `Budget: ${p.cost}\n`;
+        digest += `Status Note: ${p.statusNote || 'No notes entered.'}\n`;
+        digest += `Strategic Bullets:\n`;
+        (p.bullets || []).forEach(b => digest += `  • ${b}\n`);
+        digest += `\n`;
+      });
+
+      content.textContent = digest;
+      modal.classList.remove('hidden');
+    }
+
+    function closeStatusDigestModal() {
+      document.getElementById('statusDigestModal')?.classList.add('hidden');
+    }
+
+    function copyStatusDigestToClipboard() {
+      const text = document.getElementById('statusDigestContent')?.textContent || '';
+      copyTextSafely(text).then((success) => {
+        if (success) {
+          showToast('Copied', 'Status digest copied to clipboard.');
+        } else {
+          showToast('Copy Notice', 'Please copy digest text directly from the dialog.');
+        }
+      });
+    }
+
+    async function downloadGitHubRepositoryZip() {
+      showToast('Exporting ZIP', 'Packaging AI Powered Project Management Dashboard...');
+      try {
+        const zip = new JSZip();
+        zip.file('index.html', document.documentElement.outerHTML);
+        const readmeContent = [
+          '# AI Powered Project Management Dashboard',
+          '',
+          '> A Smarter Way to Get Things Done.',
+          '',
+          'Enterprise AI project intelligence dashboard powered by Gemini API, interactive Kanban, and C-suite 3-bullet execution cards.',
+          '',
+          'Author: Karol Mathews',
+          'Role: Project Manager',
+          'Exported: ' + new Date().toLocaleString()
+        ].join('\n');
+        zip.file('README.md', readmeContent);
+        zip.file('.nojekyll', '');
+
+        const blob = await zip.generateAsync({ type: 'blob' });
+        const a = document.createElement('a');
+        a.href = URL.createObjectURL(blob);
+        a.download = 'ai-powered-project-management-dashboard.zip';
+        document.body.appendChild(a);
+        a.click();
+        document.body.removeChild(a);
+        showToast('Download Complete', 'ZIP archive generated successfully.');
+      } catch (err) {
+        showToast('Export Failed', 'Could not package repository.');
+      }
+    }
+
+    function showToast(title, desc) {
+      const c = document.getElementById('toastContainer');
+      if (!c) return;
+      const t = document.createElement('div');
+      t.className = 'px-4 py-2.5 rounded-xl bg-slate-900 border border-slate-700 text-white shadow-xl text-xs flex items-center space-x-2.5 pointer-events-auto transform translate-y-2 transition duration-200';
+      t.innerHTML = `
+        <div class="w-2 h-2 rounded-full bg-purple-400"></div>
+        <div>
+          <span class="font-bold">${sanitize(title)}</span>
+          <span class="text-slate-400 ml-1">${sanitize(desc)}</span>
+        </div>
+      `;
+      c.appendChild(t);
+      setTimeout(() => t.classList.remove('translate-y-2'), 10);
+      setTimeout(() => {
+        t.classList.add('opacity-0');
+        setTimeout(() => t.remove(), 200);
+      }, 3500);
+    }
+
+    function initTouchGestures() {
+      let touchStartX = 0;
+      let touchEndX = 0;
+
+      window.addEventListener('touchstart', (e) => {
+        touchStartX = e.changedTouches[0].screenX;
+      }, { passive: true });
+
+      window.addEventListener('touchend', (e) => {
+        touchEndX = e.changedTouches[0].screenX;
+        handleSwipeGesture();
+      }, { passive: true });
+
+      function handleSwipeGesture() {
+        const diffX = touchEndX - touchStartX;
+        const sidebar = document.getElementById('mainSidebar');
+        const copilot = document.getElementById('aiCopilotDrawer');
+
+        if (diffX < -60 && sidebar?.classList.contains('sidebar-open')) {
+          toggleSidebarMobile(false);
+        }
+
+        if (diffX > 60 && copilot && !copilot.classList.contains('translate-x-full')) {
+          toggleAiCopilot();
+        }
+      }
+    }
+
+    function initSidebarResizer() {
+      const handle = document.getElementById('sidebarResizeHandle');
+      const sidebar = document.getElementById('mainSidebar');
+      if (!handle || !sidebar) return;
+
+      let isResizing = false;
+
+      handle.addEventListener('mousedown', (e) => {
+        isResizing = true;
+        document.body.style.cursor = 'col-resize';
+        document.body.style.userSelect = 'none';
+      });
+
+      window.addEventListener('mousemove', (e) => {
+        if (!isResizing) return;
+        const newWidth = Math.min(Math.max(e.clientX, 200), 450);
+        document.documentElement.style.setProperty('--sidebar-width', `${newWidth}px`);
+      });
+
+      window.addEventListener('mouseup', () => {
+        if (isResizing) {
+          isResizing = false;
+          document.body.style.cursor = '';
+          document.body.style.userSelect = '';
+        }
+      });
+    }
+
+    function initKeyboardShortcuts() {
+      window.addEventListener('keydown', (e) => {
+        const isMac = navigator.platform.toUpperCase().indexOf('MAC') >= 0;
+        const modifier = isMac ? e.metaKey : e.ctrlKey;
+
+        if (modifier && e.key.toLowerCase() === 'k') {
+          e.preventDefault();
+          openCommandPalette();
+          return;
+        }
+
+        if (modifier && e.key.toLowerCase() === 'j') {
+          e.preventDefault();
+          toggleAiCopilot();
+          return;
+        }
+
+        if (e.key === 'Escape') {
+          document.getElementById('commandPaletteModal')?.classList.add('hidden');
+          document.getElementById('universalAddModal')?.classList.add('hidden');
+          document.getElementById('comprehensiveAddProjectModal')?.classList.add('hidden');
+          document.getElementById('statusDigestModal')?.classList.add('hidden');
+          document.getElementById('profilePictureMenu')?.classList.add('hidden');
+          const copilot = document.getElementById('aiCopilotDrawer');
+          if (copilot && !copilot.classList.contains('translate-x-full')) {
+            copilot.classList.add('translate-x-full');
+          }
+          toggleSidebarMobile(false);
+        }
+      });
+
+      window.addEventListener('resize', () => {
+        if (window.innerWidth >= 1024) {
+          document.body.style.overflow = '';
+          document.getElementById('mobileSidebarBackdrop')?.classList.add('hidden');
+          document.getElementById('mainSidebar')?.classList.remove('sidebar-open');
+        }
+      });
+
+      window.addEventListener('click', () => {
+        document.getElementById('profilePictureMenu')?.classList.add('hidden');
+      });
+    }
+
+    window.onload = () => {
+      initSidebarResizer();
+      initLiveClockTicker();
+      initTouchGestures();
+      initKeyboardShortcuts();
+      syncGlobalState();
+      renderDynamicCalendar();
+    };
+  </script>
+</body>
+</html>
